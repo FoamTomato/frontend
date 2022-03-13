@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>redis锁</title>
+    <url>/2022/02/23/redis%E9%94%81/</url>
+    <content><![CDATA[<p>暂时没时间整细节，给个粗略的记录一下</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.util.qunar;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.service.qunar.FQunarSearchService;</span><br><span class="line"><span class="keyword">import</span> com.service.zl.ValidationCabinAndPrice_QNR;</span><br><span class="line"><span class="keyword">import</span> org.apache.log4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.redisson.Redisson;</span><br><span class="line"><span class="keyword">import</span> org.redisson.api.RLock;</span><br><span class="line"><span class="keyword">import</span> org.redisson.api.RedissonClient;</span><br><span class="line"><span class="keyword">import</span> org.redisson.config.Config;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.InitializingBean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.TimeUnit;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RedissonTemplate</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span> RedissonClient redissonClient;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String LOCK_TITLE = <span class="string">&quot;QNRLock_&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 加锁</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> lockName</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> waitTime</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> timeOutSecond</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">acquireSecond</span><span class="params">(String lockName, Integer waitTime, Integer timeOutSecond)</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            String key = LOCK_TITLE + lockName;</span><br><span class="line">            RLock mylock = redisLock().getLock(key);</span><br><span class="line">            <span class="comment">//lock提供带timeout参数，timeout结束强制解锁，防止死锁</span></span><br><span class="line">            <span class="comment">//先尝试在超时时间内获取锁，如果没有获取到，此时如果等待时间还有剩余进入循环不断取尝试获取锁 直到时间结束退出  循环中是订阅，时间结束取消订阅</span></span><br><span class="line">            <span class="keyword">return</span> mylock.tryLock(waitTime, timeOutSecond, TimeUnit.SECONDS);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            System.out.println(e);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 连接redis</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> RedissonClient <span class="title">redisLock</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(redissonClient == <span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (FQunarSearchService.class)&#123;</span><br><span class="line">                <span class="keyword">if</span>(redissonClient == <span class="keyword">null</span>)&#123;</span><br><span class="line">                    Config config = <span class="keyword">new</span> Config();</span><br><span class="line">                    config.useSingleServer().setAddress(<span class="string">&quot;redis://127.0.0.1:6379&quot;</span>)</span><br><span class="line">                            .setPassword(<span class="string">&quot;123&quot;</span>)</span><br><span class="line">                            .setDatabase(<span class="number">17</span>);</span><br><span class="line">                    redissonClient = Redisson.create(config);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> redissonClient;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 解锁</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> lockName</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">release</span><span class="params">(String lockName)</span></span>&#123;</span><br><span class="line">        String key = LOCK_TITLE + lockName;</span><br><span class="line">        RLock mylock = redissonClient.getLock(key);</span><br><span class="line">        mylock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>分布式锁</tag>
+        <tag>redis</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>redis存储Data truncation: Incorrect datetime value</title>
     <url>/2022/03/07/redis%E5%AD%98%E5%82%A8Data-truncation-Incorrect-datetime-value/</url>
     <content><![CDATA[<p>最近在编写项目时，用redis存储结果一直报转换异常<br><img src="https://gitee.com/foam077/images/raw/master/img/f0a78853cfed40ad8b8a8b35800a7f52.png" alt="在这里插入图片描述"><br>对此我有了以下思路<br>1.在mysql进行格式转换<br>2.在java先转换<br>3.存json之前就进行格式转换</p>
@@ -13,19 +23,9 @@
 <p>第一个红框是我用gson进行json转换<br>第二个红框是序列化后强转为原对象</p>
 ]]></content>
       <tags>
+        <tag>redis</tag>
         <tag>java</tag>
-        <tag>redis</tag>
         <tag>bug</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>redis锁</title>
-    <url>/2022/02/23/redis%E9%94%81/</url>
-    <content><![CDATA[<p>暂时没时间整细节，给个粗略的记录一下</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.util.qunar;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.service.qunar.FQunarSearchService;</span><br><span class="line"><span class="keyword">import</span> com.service.zl.ValidationCabinAndPrice_QNR;</span><br><span class="line"><span class="keyword">import</span> org.apache.log4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.redisson.Redisson;</span><br><span class="line"><span class="keyword">import</span> org.redisson.api.RLock;</span><br><span class="line"><span class="keyword">import</span> org.redisson.api.RedissonClient;</span><br><span class="line"><span class="keyword">import</span> org.redisson.config.Config;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.InitializingBean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.TimeUnit;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RedissonTemplate</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span> RedissonClient redissonClient;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String LOCK_TITLE = <span class="string">&quot;QNRLock_&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 加锁</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> lockName</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> waitTime</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> timeOutSecond</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">acquireSecond</span><span class="params">(String lockName, Integer waitTime, Integer timeOutSecond)</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            String key = LOCK_TITLE + lockName;</span><br><span class="line">            RLock mylock = redisLock().getLock(key);</span><br><span class="line">            <span class="comment">//lock提供带timeout参数，timeout结束强制解锁，防止死锁</span></span><br><span class="line">            <span class="comment">//先尝试在超时时间内获取锁，如果没有获取到，此时如果等待时间还有剩余进入循环不断取尝试获取锁 直到时间结束退出  循环中是订阅，时间结束取消订阅</span></span><br><span class="line">            <span class="keyword">return</span> mylock.tryLock(waitTime, timeOutSecond, TimeUnit.SECONDS);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            System.out.println(e);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 连接redis</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> RedissonClient <span class="title">redisLock</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(redissonClient == <span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (FQunarSearchService.class)&#123;</span><br><span class="line">                <span class="keyword">if</span>(redissonClient == <span class="keyword">null</span>)&#123;</span><br><span class="line">                    Config config = <span class="keyword">new</span> Config();</span><br><span class="line">                    config.useSingleServer().setAddress(<span class="string">&quot;redis://127.0.0.1:6379&quot;</span>)</span><br><span class="line">                            .setPassword(<span class="string">&quot;123&quot;</span>)</span><br><span class="line">                            .setDatabase(<span class="number">17</span>);</span><br><span class="line">                    redissonClient = Redisson.create(config);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> redissonClient;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 解锁</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> lockName</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">release</span><span class="params">(String lockName)</span></span>&#123;</span><br><span class="line">        String key = LOCK_TITLE + lockName;</span><br><span class="line">        RLock mylock = redissonClient.getLock(key);</span><br><span class="line">        mylock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-      <tags>
-        <tag>redis</tag>
-        <tag>分布式锁</tag>
       </tags>
   </entry>
   <entry>
@@ -119,62 +119,59 @@
 <p><code>缺陷</code>在哨兵模式或者主从模式下，如果 master实例宕机的时候，可能导致多个客户端同时完成加锁。</p>
 ]]></content>
       <tags>
-        <tag>redis</tag>
         <tag>分布式锁</tag>
+        <tag>redis</tag>
       </tags>
   </entry>
   <entry>
-    <title>初探xxljob</title>
-    <url>/2022/02/13/%E5%88%9D%E6%8E%A2xxljob/</url>
-    <content><![CDATA[<p><a href="http://gitee.com/xuxueli0323/xxl-job/releases">下载地址</a></p>
-<p>搭建xxljob需要提前准备好</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">maven3+</span><br><span class="line">jdk8+</span><br><span class="line">mysql5.7+</span><br></pre></td></tr></table></figure>
-
-<h3 id="1-首先初始化SQL脚本建立必须的库和表"><a href="#1-首先初始化SQL脚本建立必须的库和表" class="headerlink" title="1.首先初始化SQL脚本建立必须的库和表"></a>1.首先初始化SQL脚本建立必须的库和表</h3><p><img src="https://img-blog.csdnimg.cn/41e36ffb828147959d17e4668e4fcde1.png#pic_center" alt="在这里插入图片描述"></p>
-<h3 id="2-对于解压的文件分为三个模块"><a href="#2-对于解压的文件分为三个模块" class="headerlink" title="2.对于解压的文件分为三个模块"></a>2.对于解压的文件分为三个模块</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">xxl-job-admin：调度中心</span><br><span class="line">xxl-job-core：公共依赖</span><br><span class="line">xxl-job-executor-samples：执行器Sample示例（选择合适的版本执行器，可直接使用，也可以参考其并将现有项目改造成执行器）</span><br><span class="line">    ：xxl-job-executor-sample-springboot：Springboot版本，通过Springboot管理执行器，推荐这种方式；</span><br><span class="line">    ：xxl-job-executor-sample-frameless：无框架版本；</span><br></pre></td></tr></table></figure>
-
-<p>其中：xxl-job-core是需要引入的源码包后续我们可以用以下形式引入</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.xuxueli<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>xxl-job-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.3.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>xxl-job-admin是我们的调度中心，我们只需要把这个项目单独拿出来运行就行了，下面是运行结果</p>
-<p><img src="https://img-blog.csdnimg.cn/aa9e342bd215486daaa05d8783dd5f35.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBARm9hbeeVquiMhA==,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
-<p>xxl-job-executor-sample-springboot是我们后续用boot可以参照的模板，当然也可以直接用来使用</p>
-<h3 id="3-xxl-job-admin配置"><a href="#3-xxl-job-admin配置" class="headerlink" title="3.xxl-job-admin配置"></a>3.xxl-job-admin配置</h3><p>先修改数据库的地址，也就是上面初始化的地址</p>
-<p><label style="color:#843900">注意在数据库地址哪里加上时区属性，否则乱码</label></p>
-<p><img src="https://img-blog.csdnimg.cn/5f6ad4958e8940e19977bdfbd74a6d56.png#pic_center" alt="在这里插入图片描述"></p>
-<p>然后修改警报邮箱配置</p>
-<p><img src="https://img-blog.csdnimg.cn/fdce9d1b4aa744269bdfcd5706c83abc.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBARm9hbeeVquiMhA==,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
-<h3 id="4-警报邮箱配置"><a href="#4-警报邮箱配置" class="headerlink" title="4.警报邮箱配置"></a>4.警报邮箱配置</h3><p><img src="https://img-blog.csdnimg.cn/f59f8bc6828343909ba1c178b8ed6e72.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBARm9hbeeVquiMhA==,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
-<p>去自己对应邮箱的设置里面找到smtp并开启</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">注意：spring.mail.password的密码是QQ邮箱开启SMTP的授权码而非QQ密码</span><br></pre></td></tr></table></figure>
-
-<p><label style="color:#843900">这里需要注意不同邮箱有不同的收发件host</label></p>
-<p>比如新浪</p>
-<p>发件:POP3服务器为：pop3.sina.com.cn<br>收件:SMTP服务器为：smtp.sina.com.cn</p>
-<p>qq</p>
-<p>发件:POP3服务器为：pop.qq.com<br>收件:SMTP服务器为：smtp.qq.com</p>
-<p>注意 不能自己邮箱发自己邮箱，否则收不到</p>
-<p><img src="https://img-blog.csdnimg.cn/e0947d401d0f4f0d8bb6a64063f3d866.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBARm9hbeeVquiMhA==,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
-<p>上面就是收件的内容</p>
-<h3 id="5-boot整合xxljob"><a href="#5-boot整合xxljob" class="headerlink" title="5.boot整合xxljob"></a>5.boot整合xxljob</h3><p>引入依赖</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.xuxueli<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>xxl-job-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.3.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>配置文件整合</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.demo.config;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.xxl.job.core.executor.impl.XxlJobSpringExecutor;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Value;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Bean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">xxlConfig</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Logger logger = LoggerFactory.getLogger(xxlConfig.class);</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;xxl.job.admin.addresses&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String adminAddresses;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;xxl.job.accessToken&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String accessToken;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;xxl.job.executor.appname&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String appname;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;xxl.job.executor.address&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String address;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;xxl.job.executor.ip&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String ip;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;xxl.job.executor.port&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> port;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;xxl.job.executor.logpath&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String logPath;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;xxl.job.executor.logretentiondays&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> logRetentionDays;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> XxlJobSpringExecutor <span class="title">xxlJobExecutor</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        logger.info(<span class="string">&quot;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; xxl-job config init.&quot;</span>);</span><br><span class="line">        XxlJobSpringExecutor xxlJobSpringExecutor = <span class="keyword">new</span> XxlJobSpringExecutor();</span><br><span class="line">        xxlJobSpringExecutor.setAdminAddresses(adminAddresses);</span><br><span class="line">        xxlJobSpringExecutor.setAppname(appname);</span><br><span class="line">        xxlJobSpringExecutor.setAddress(address);</span><br><span class="line">        xxlJobSpringExecutor.setIp(ip);</span><br><span class="line">        xxlJobSpringExecutor.setPort(port);</span><br><span class="line">        xxlJobSpringExecutor.setAccessToken(accessToken);</span><br><span class="line">        xxlJobSpringExecutor.setLogPath(logPath);</span><br><span class="line">        xxlJobSpringExecutor.setLogRetentionDays(logRetentionDays);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> xxlJobSpringExecutor;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>application.properties</p>
-<figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 启动端口和访问路径</span></span><br><span class="line"><span class="meta">server.port</span>=<span class="string">8089</span></span><br><span class="line"><span class="meta">server.servlet.context-path</span>=<span class="string">/todo</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"># 调度中心（xxl-job-admin）的部署地址，如调度中心集群部署存在多个地址则用逗号分隔。执行器将会使用该地址进行&quot;执行器心跳注册&quot;和&quot;任务结果回调&quot;；</span></span><br><span class="line"><span class="comment"># 为空则关闭自动注册；则需要手动注册</span></span><br><span class="line"><span class="meta">xxl.job.admin.addresses</span>=<span class="string">http://127.0.0.1:8080/xxl-job-admin</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">### 执行器通讯TOKEN [选填]：非空时启用；</span></span><br><span class="line"><span class="meta">xxl.job.accessToken</span>=<span class="string"></span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">### 执行器AppName [选填]：执行器心跳注册分组依据；为空则关闭自动注册</span></span><br><span class="line"><span class="meta">xxl.job.executor.appname</span>=<span class="string">job-to-do</span></span><br><span class="line"><span class="comment">### 执行器注册 [选填]：优先使用该配置作为注册地址，为空时使用内嵌服务 ”IP:PORT“ 作为注册地址。从而更灵活的支持容器类型执行器动态IP和动态映射端口问题。</span></span><br><span class="line"><span class="meta">xxl.job.executor.address</span>=<span class="string"></span></span><br><span class="line"><span class="comment">### 执行器IP [选填]：默认为空表示自动获取IP，多网卡时可手动设置指定IP，该IP不会绑定Host仅作为通讯实用；地址信息用于 &quot;执行器注册&quot; 和 &quot;调度中心请求并触发任务&quot;；</span></span><br><span class="line"><span class="meta">xxl.job.executor.ip</span>=<span class="string"></span></span><br><span class="line"><span class="meta">xxl.job.executor.port</span>=<span class="string">9998</span></span><br><span class="line"><span class="comment">### 执行器运行日志文件存储磁盘路径 [选填] ：需要对该路径拥有读写权限；为空则使用默认路径；</span></span><br><span class="line"><span class="meta">xxl.job.executor.logpath</span>=<span class="string">/data/applogs/xxl-job/jobhandler</span></span><br><span class="line"><span class="comment">### 执行器日志文件保存天数 [选填] ： 过期日志自动清理, 限制值大于等于3时生效; 否则, 如-1, 关闭自动清理功能；</span></span><br><span class="line"><span class="meta">xxl.job.executor.logretentiondays</span>=<span class="string">30</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="6-定时任务的创建方式"><a href="#6-定时任务的创建方式" class="headerlink" title="6.定时任务的创建方式"></a>6.定时任务的创建方式</h3><p><img src="https://img-blog.csdnimg.cn/20210107153914491.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3l3ajc3NjE5OTg0NQ==,size_16,color_FFFFFF,t_70" alt="img"></p>
-<p>@XxlJob注解是新版本提供的方式，不需要继承</p>
-<p>旧版方式是继承IJobHander然后重写execute方法</p>
-<h3 id="7-界面介绍"><a href="#7-界面介绍" class="headerlink" title="7.界面介绍"></a>7.界面介绍</h3><p><img src="https://img-blog.csdnimg.cn/1d7d97d8e07041649fe41609182ff877.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBARm9hbeeVquiMhA==,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
-<p><img src="https://img-blog.csdnimg.cn/64509e90b93641e38373b498c1f68392.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBARm9hbeeVquiMhA==,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
-<p><label style="color:#843900"> 注意  当删除任务时，任务日志也会跟着删除 </label></p>
+    <title>缓存双写不一致</title>
+    <url>/2022/03/07/%E7%BC%93%E5%AD%98%E5%8F%8C%E5%86%99%E4%B8%8D%E4%B8%80%E8%87%B4/</url>
+    <content><![CDATA[<h1 id="缓存数据库双写不一致"><a href="#缓存数据库双写不一致" class="headerlink" title="缓存数据库双写不一致"></a>缓存数据库双写不一致</h1><blockquote>
+<p>高并发下缓存与数据库双写不一致解决方案</p>
+</blockquote>
+<p>正常的缓存数据库更新的时候应该是先执行线程1，然后执行线程2</p>
+<p><img src="https://gitee.com/foam077/images/raw/master/img/image-20220307203941385.png" alt="image-20220307203941385"></p>
+<p>如果线程1卡顿了一下，这时就会造成数据库和缓存不一致的情况<code>线程1把线程2更新的缓存数据给覆盖了</code></p>
+<p><img src="https://gitee.com/foam077/images/raw/master/img/image-20220307204214243.png" alt="image-20220307204214243"></p>
+<h2 id="最开始的缓存不一致问题以及解决方案"><a href="#最开始的缓存不一致问题以及解决方案" class="headerlink" title="最开始的缓存不一致问题以及解决方案"></a>最开始的缓存不一致问题以及解决方案</h2><blockquote>
+<p>问题：先修改数据库，再删除缓存，如果删除缓存失败了，那么会导致数据库中是新数据，缓存中是旧数据，数据出现不一致。</p>
+</blockquote>
+<p>解决思路：<br>　　先删除缓存，再修改数据库，如果删除缓存成功了修改数据库失败了，那么数据库中是旧数据，缓存中是空的，那么数据不会不一致，因为读的时候缓存没有，则读数据库中旧数据，然后更新到缓存中。</p>
+<p><img src="https://gitee.com/foam077/images/raw/master/img/image-20220307205922621.png" alt="image-20220307205922621"></p>
+<h2 id="2、并发下数据缓存不一致问题分析"><a href="#2、并发下数据缓存不一致问题分析" class="headerlink" title="2、并发下数据缓存不一致问题分析"></a><strong>2、并发下数据缓存不一致问题分析</strong></h2><p>问题：<br>　　第一个请求数据发生变更，先删除了缓存，然后要去修改数据库，此时还没来得及去修改；<br>　　第二个请求过来去读缓存，发现缓存空了，去查询数据库，查到了修改前的旧数据，放到了缓存中；<br>　　第三个请求读取缓存中的数据 (此时第一个请求已经完成了数据库修改的操作)。<br>　　完了，数据库和缓存中的数据不一样了。。。。</p>
+<p><img src="https://gitee.com/foam077/images/raw/master/img/image-20220307210140337.png" alt="image-20220307210140337"></p>
+<p>分析原因：</p>
+<p>只有在对同一条数据并发读写的时候，才可能会出现这种问题。其实如果说你的并发量很低的话，特别是读并发很低，每天访问量就1万次，那么很少的情况下，会出现刚才描述的那种不一致的场景;但如果每天的是上亿的流量，每秒并发读是几万，每秒只要有数据更新的请求，就可能会出现上述的数据库+缓存不一致的情况。</p>
+<h3 id="内存队列"><a href="#内存队列" class="headerlink" title="内存队列"></a>内存队列</h3><p>数据库的缓存更新与读取操作进行串行化，一个队列对应一个工作线程，每个工作线程串行拿到对应的操作，然后一条一条的执行。</p>
+<p>  　　1. 首先我们的项目里维护一组线程池和内存队列。<br>  　　2. 更新数据的时候，根据数据的唯一标识将请求路由到一个jvm队列中，去更新数据库,然后请求结束。<br>  　　3. 读取数据的时候，先查缓存，如果发现数据不在缓存中，那么将根据唯一标识路由之后，也发送同一个jvm内部的队列中，重新读取数据库后更新缓存,最后请求结束。</p>
+<p><img src="https://gitee.com/foam077/images/raw/master/img/1363214-20190929191217957-1916614649.png" alt="img"></p>
+<p>缺点：</p>
+<p>1.实现起来麻烦，不同的key可能需要搞不同的队列</p>
+<p>2.如果系统挂了，还得还原这些数据，如果出现了异常，还会造成脏数据</p>
+<h3 id="延时双删"><a href="#延时双删" class="headerlink" title="延时双删"></a>延时双删</h3><p><img src="https://gitee.com/foam077/images/raw/master/img/image-20220307214115094.png" alt="image-20220307214115094"></p>
+<p>延时双删方案执行步骤<br>1.删除redis<br>2.更新数据库<br>3.延时50毫秒<br>4.删除redis</p>
+<ul>
+<li>问题一：为何要延时50毫秒？<br>这是为了我们在第二次删除redis之前能完成数据库的更新操作。<br>假象一下，如果没有第三步操作时，有很大概率，在两次删除redis操作执行完毕之后，数据库的数据还没有更新，此时若有请求访问数据，便会出现我们一开始提到的那个问题。</li>
+<li>问题二: 为何要两次删除redis?<br>如果我们没有第二次删除操作，此时有请求访问数据，有可能是访问的之前未做修改的redis数据，删除操作执行后，redis为空，有请求进来时，便会去访问数据库，此时数据库中的数据已是更新后的数据，保证了数据的一致性。</li>
+</ul>
+<p>缺点：</p>
+<p>1.没有从根本上面去解决问题，如果更新缓存时间超过50ms，那么还是失败的，如果要一直保证休眠时间大于更新时间，这样会不会造成阻塞</p>
+<p>2.如果一个接口请求有限制时间，这休眠时间会影响用户体验，影响接口的响应速度</p>
+<h3 id="分布式锁"><a href="#分布式锁" class="headerlink" title="分布式锁"></a>分布式锁</h3><p>如果加分布式锁可以直接保证每个线程的执行顺序，也是一种串行操作</p>
+<p>这个还是比较推荐使用的，比内存串行实现简单，而且稳定</p>
+<p><img src="https://gitee.com/foam077/images/raw/master/img/image-20220307215417929.png" alt="image-20220307215417929"></p>
+<p>缺点：</p>
+<p>1.分布式锁会有性能问题，会导致并发量很低（<code>加锁永远不是最优的方案</code>）</p>
+<h3 id="读写锁"><a href="#读写锁" class="headerlink" title="读写锁"></a>读写锁</h3><p>redisson中间里面实现了读写锁，读锁与读锁之间是不会互斥的和没加锁一样，写锁与写锁会互斥</p>
+<p>一般都是读多写少</p>
+<p><img src="https://gitee.com/foam077/images/raw/master/img/image-20220307220011598.png" alt="image-20220307220011598"></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>一般来说，就是如果你的系统<strong>不是严格要求</strong>缓存+数据库必须<strong>一致性</strong>的话，缓存可以稍微的跟数据库偶尔有不一致的情况，那最好<strong>不要</strong>上述的<strong>串行化</strong>的这个方案，因为读请求和写请求串行化，串到一个内存队列里去，这样是可以保证一定不会出现不一致的情况。但是，串行化之后，就会导致系统的<strong>吞吐量会大幅度的降低</strong>，你就需要用比正常情况下多几倍的机器去支撑线上的一个请求。</p>
+<p>以上是本人对缓存数据库不一致情况的了解，本人能力有限，如有问题还望包含，也欢迎指正。谢谢！</p>
 ]]></content>
       <tags>
-        <tag>java</tag>
-        <tag>中间件</tag>
+        <tag>redis</tag>
+        <tag>数据库</tag>
+        <tag>缓存</tag>
       </tags>
   </entry>
   <entry>
@@ -241,54 +238,57 @@
       </tags>
   </entry>
   <entry>
-    <title>缓存双写不一致</title>
-    <url>/2022/03/07/%E7%BC%93%E5%AD%98%E5%8F%8C%E5%86%99%E4%B8%8D%E4%B8%80%E8%87%B4/</url>
-    <content><![CDATA[<h1 id="缓存数据库双写不一致"><a href="#缓存数据库双写不一致" class="headerlink" title="缓存数据库双写不一致"></a>缓存数据库双写不一致</h1><blockquote>
-<p>高并发下缓存与数据库双写不一致解决方案</p>
-</blockquote>
-<p>正常的缓存数据库更新的时候应该是先执行线程1，然后执行线程2</p>
-<p><img src="https://gitee.com/foam077/images/raw/master/img/image-20220307203941385.png" alt="image-20220307203941385"></p>
-<p>如果线程1卡顿了一下，这时就会造成数据库和缓存不一致的情况<code>线程1把线程2更新的缓存数据给覆盖了</code></p>
-<p><img src="https://gitee.com/foam077/images/raw/master/img/image-20220307204214243.png" alt="image-20220307204214243"></p>
-<h2 id="最开始的缓存不一致问题以及解决方案"><a href="#最开始的缓存不一致问题以及解决方案" class="headerlink" title="最开始的缓存不一致问题以及解决方案"></a>最开始的缓存不一致问题以及解决方案</h2><blockquote>
-<p>问题：先修改数据库，再删除缓存，如果删除缓存失败了，那么会导致数据库中是新数据，缓存中是旧数据，数据出现不一致。</p>
-</blockquote>
-<p>解决思路：<br>　　先删除缓存，再修改数据库，如果删除缓存成功了修改数据库失败了，那么数据库中是旧数据，缓存中是空的，那么数据不会不一致，因为读的时候缓存没有，则读数据库中旧数据，然后更新到缓存中。</p>
-<p><img src="https://gitee.com/foam077/images/raw/master/img/image-20220307205922621.png" alt="image-20220307205922621"></p>
-<h2 id="2、并发下数据缓存不一致问题分析"><a href="#2、并发下数据缓存不一致问题分析" class="headerlink" title="2、并发下数据缓存不一致问题分析"></a><strong>2、并发下数据缓存不一致问题分析</strong></h2><p>问题：<br>　　第一个请求数据发生变更，先删除了缓存，然后要去修改数据库，此时还没来得及去修改；<br>　　第二个请求过来去读缓存，发现缓存空了，去查询数据库，查到了修改前的旧数据，放到了缓存中；<br>　　第三个请求读取缓存中的数据 (此时第一个请求已经完成了数据库修改的操作)。<br>　　完了，数据库和缓存中的数据不一样了。。。。</p>
-<p><img src="https://gitee.com/foam077/images/raw/master/img/image-20220307210140337.png" alt="image-20220307210140337"></p>
-<p>分析原因：</p>
-<p>只有在对同一条数据并发读写的时候，才可能会出现这种问题。其实如果说你的并发量很低的话，特别是读并发很低，每天访问量就1万次，那么很少的情况下，会出现刚才描述的那种不一致的场景;但如果每天的是上亿的流量，每秒并发读是几万，每秒只要有数据更新的请求，就可能会出现上述的数据库+缓存不一致的情况。</p>
-<h3 id="内存队列"><a href="#内存队列" class="headerlink" title="内存队列"></a>内存队列</h3><p>数据库的缓存更新与读取操作进行串行化，一个队列对应一个工作线程，每个工作线程串行拿到对应的操作，然后一条一条的执行。</p>
-<p>  　　1. 首先我们的项目里维护一组线程池和内存队列。<br>  　　2. 更新数据的时候，根据数据的唯一标识将请求路由到一个jvm队列中，去更新数据库,然后请求结束。<br>  　　3. 读取数据的时候，先查缓存，如果发现数据不在缓存中，那么将根据唯一标识路由之后，也发送同一个jvm内部的队列中，重新读取数据库后更新缓存,最后请求结束。</p>
-<p><img src="https://gitee.com/foam077/images/raw/master/img/1363214-20190929191217957-1916614649.png" alt="img"></p>
-<p>缺点：</p>
-<p>1.实现起来麻烦，不同的key可能需要搞不同的队列</p>
-<p>2.如果系统挂了，还得还原这些数据，如果出现了异常，还会造成脏数据</p>
-<h3 id="延时双删"><a href="#延时双删" class="headerlink" title="延时双删"></a>延时双删</h3><p><img src="https://gitee.com/foam077/images/raw/master/img/image-20220307214115094.png" alt="image-20220307214115094"></p>
-<p>延时双删方案执行步骤<br>1.删除redis<br>2.更新数据库<br>3.延时50毫秒<br>4.删除redis</p>
-<ul>
-<li>问题一：为何要延时50毫秒？<br>这是为了我们在第二次删除redis之前能完成数据库的更新操作。<br>假象一下，如果没有第三步操作时，有很大概率，在两次删除redis操作执行完毕之后，数据库的数据还没有更新，此时若有请求访问数据，便会出现我们一开始提到的那个问题。</li>
-<li>问题二: 为何要两次删除redis?<br>如果我们没有第二次删除操作，此时有请求访问数据，有可能是访问的之前未做修改的redis数据，删除操作执行后，redis为空，有请求进来时，便会去访问数据库，此时数据库中的数据已是更新后的数据，保证了数据的一致性。</li>
-</ul>
-<p>缺点：</p>
-<p>1.没有从根本上面去解决问题，如果更新缓存时间超过50ms，那么还是失败的，如果要一直保证休眠时间大于更新时间，这样会不会造成阻塞</p>
-<p>2.如果一个接口请求有限制时间，这休眠时间会影响用户体验，影响接口的响应速度</p>
-<h3 id="分布式锁"><a href="#分布式锁" class="headerlink" title="分布式锁"></a>分布式锁</h3><p>如果加分布式锁可以直接保证每个线程的执行顺序，也是一种串行操作</p>
-<p>这个还是比较推荐使用的，比内存串行实现简单，而且稳定</p>
-<p><img src="https://gitee.com/foam077/images/raw/master/img/image-20220307215417929.png" alt="image-20220307215417929"></p>
-<p>缺点：</p>
-<p>1.分布式锁会有性能问题，会导致并发量很低（<code>加锁永远不是最优的方案</code>）</p>
-<h3 id="读写锁"><a href="#读写锁" class="headerlink" title="读写锁"></a>读写锁</h3><p>redisson中间里面实现了读写锁，读锁与读锁之间是不会互斥的和没加锁一样，写锁与写锁会互斥</p>
-<p>一般都是读多写少</p>
-<p><img src="https://gitee.com/foam077/images/raw/master/img/image-20220307220011598.png" alt="image-20220307220011598"></p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>一般来说，就是如果你的系统<strong>不是严格要求</strong>缓存+数据库必须<strong>一致性</strong>的话，缓存可以稍微的跟数据库偶尔有不一致的情况，那最好<strong>不要</strong>上述的<strong>串行化</strong>的这个方案，因为读请求和写请求串行化，串到一个内存队列里去，这样是可以保证一定不会出现不一致的情况。但是，串行化之后，就会导致系统的<strong>吞吐量会大幅度的降低</strong>，你就需要用比正常情况下多几倍的机器去支撑线上的一个请求。</p>
-<p>以上是本人对缓存数据库不一致情况的了解，本人能力有限，如有问题还望包含，也欢迎指正。谢谢！</p>
+    <title>初探xxljob</title>
+    <url>/2022/02/13/%E5%88%9D%E6%8E%A2xxljob/</url>
+    <content><![CDATA[<p><a href="http://gitee.com/xuxueli0323/xxl-job/releases">下载地址</a></p>
+<p>搭建xxljob需要提前准备好</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">maven3+</span><br><span class="line">jdk8+</span><br><span class="line">mysql5.7+</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-首先初始化SQL脚本建立必须的库和表"><a href="#1-首先初始化SQL脚本建立必须的库和表" class="headerlink" title="1.首先初始化SQL脚本建立必须的库和表"></a>1.首先初始化SQL脚本建立必须的库和表</h3><p><img src="https://img-blog.csdnimg.cn/41e36ffb828147959d17e4668e4fcde1.png#pic_center" alt="在这里插入图片描述"></p>
+<h3 id="2-对于解压的文件分为三个模块"><a href="#2-对于解压的文件分为三个模块" class="headerlink" title="2.对于解压的文件分为三个模块"></a>2.对于解压的文件分为三个模块</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">xxl-job-admin：调度中心</span><br><span class="line">xxl-job-core：公共依赖</span><br><span class="line">xxl-job-executor-samples：执行器Sample示例（选择合适的版本执行器，可直接使用，也可以参考其并将现有项目改造成执行器）</span><br><span class="line">    ：xxl-job-executor-sample-springboot：Springboot版本，通过Springboot管理执行器，推荐这种方式；</span><br><span class="line">    ：xxl-job-executor-sample-frameless：无框架版本；</span><br></pre></td></tr></table></figure>
+
+<p>其中：xxl-job-core是需要引入的源码包后续我们可以用以下形式引入</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.xuxueli<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>xxl-job-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.3.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>xxl-job-admin是我们的调度中心，我们只需要把这个项目单独拿出来运行就行了，下面是运行结果</p>
+<p><img src="https://img-blog.csdnimg.cn/aa9e342bd215486daaa05d8783dd5f35.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBARm9hbeeVquiMhA==,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+<p>xxl-job-executor-sample-springboot是我们后续用boot可以参照的模板，当然也可以直接用来使用</p>
+<h3 id="3-xxl-job-admin配置"><a href="#3-xxl-job-admin配置" class="headerlink" title="3.xxl-job-admin配置"></a>3.xxl-job-admin配置</h3><p>先修改数据库的地址，也就是上面初始化的地址</p>
+<p><label style="color:#843900">注意在数据库地址哪里加上时区属性，否则乱码</label></p>
+<p><img src="https://img-blog.csdnimg.cn/5f6ad4958e8940e19977bdfbd74a6d56.png#pic_center" alt="在这里插入图片描述"></p>
+<p>然后修改警报邮箱配置</p>
+<p><img src="https://img-blog.csdnimg.cn/fdce9d1b4aa744269bdfcd5706c83abc.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBARm9hbeeVquiMhA==,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+<h3 id="4-警报邮箱配置"><a href="#4-警报邮箱配置" class="headerlink" title="4.警报邮箱配置"></a>4.警报邮箱配置</h3><p><img src="https://img-blog.csdnimg.cn/f59f8bc6828343909ba1c178b8ed6e72.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBARm9hbeeVquiMhA==,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+<p>去自己对应邮箱的设置里面找到smtp并开启</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">注意：spring.mail.password的密码是QQ邮箱开启SMTP的授权码而非QQ密码</span><br></pre></td></tr></table></figure>
+
+<p><label style="color:#843900">这里需要注意不同邮箱有不同的收发件host</label></p>
+<p>比如新浪</p>
+<p>发件:POP3服务器为：pop3.sina.com.cn<br>收件:SMTP服务器为：smtp.sina.com.cn</p>
+<p>qq</p>
+<p>发件:POP3服务器为：pop.qq.com<br>收件:SMTP服务器为：smtp.qq.com</p>
+<p>注意 不能自己邮箱发自己邮箱，否则收不到</p>
+<p><img src="https://img-blog.csdnimg.cn/e0947d401d0f4f0d8bb6a64063f3d866.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBARm9hbeeVquiMhA==,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+<p>上面就是收件的内容</p>
+<h3 id="5-boot整合xxljob"><a href="#5-boot整合xxljob" class="headerlink" title="5.boot整合xxljob"></a>5.boot整合xxljob</h3><p>引入依赖</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.xuxueli<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>xxl-job-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.3.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>配置文件整合</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.demo.config;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.xxl.job.core.executor.impl.XxlJobSpringExecutor;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Value;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Bean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">xxlConfig</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Logger logger = LoggerFactory.getLogger(xxlConfig.class);</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;xxl.job.admin.addresses&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String adminAddresses;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;xxl.job.accessToken&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String accessToken;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;xxl.job.executor.appname&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String appname;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;xxl.job.executor.address&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String address;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;xxl.job.executor.ip&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String ip;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;xxl.job.executor.port&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> port;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;xxl.job.executor.logpath&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String logPath;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;xxl.job.executor.logretentiondays&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> logRetentionDays;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> XxlJobSpringExecutor <span class="title">xxlJobExecutor</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        logger.info(<span class="string">&quot;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; xxl-job config init.&quot;</span>);</span><br><span class="line">        XxlJobSpringExecutor xxlJobSpringExecutor = <span class="keyword">new</span> XxlJobSpringExecutor();</span><br><span class="line">        xxlJobSpringExecutor.setAdminAddresses(adminAddresses);</span><br><span class="line">        xxlJobSpringExecutor.setAppname(appname);</span><br><span class="line">        xxlJobSpringExecutor.setAddress(address);</span><br><span class="line">        xxlJobSpringExecutor.setIp(ip);</span><br><span class="line">        xxlJobSpringExecutor.setPort(port);</span><br><span class="line">        xxlJobSpringExecutor.setAccessToken(accessToken);</span><br><span class="line">        xxlJobSpringExecutor.setLogPath(logPath);</span><br><span class="line">        xxlJobSpringExecutor.setLogRetentionDays(logRetentionDays);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> xxlJobSpringExecutor;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>application.properties</p>
+<figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 启动端口和访问路径</span></span><br><span class="line"><span class="meta">server.port</span>=<span class="string">8089</span></span><br><span class="line"><span class="meta">server.servlet.context-path</span>=<span class="string">/todo</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"># 调度中心（xxl-job-admin）的部署地址，如调度中心集群部署存在多个地址则用逗号分隔。执行器将会使用该地址进行&quot;执行器心跳注册&quot;和&quot;任务结果回调&quot;；</span></span><br><span class="line"><span class="comment"># 为空则关闭自动注册；则需要手动注册</span></span><br><span class="line"><span class="meta">xxl.job.admin.addresses</span>=<span class="string">http://127.0.0.1:8080/xxl-job-admin</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">### 执行器通讯TOKEN [选填]：非空时启用；</span></span><br><span class="line"><span class="meta">xxl.job.accessToken</span>=<span class="string"></span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">### 执行器AppName [选填]：执行器心跳注册分组依据；为空则关闭自动注册</span></span><br><span class="line"><span class="meta">xxl.job.executor.appname</span>=<span class="string">job-to-do</span></span><br><span class="line"><span class="comment">### 执行器注册 [选填]：优先使用该配置作为注册地址，为空时使用内嵌服务 ”IP:PORT“ 作为注册地址。从而更灵活的支持容器类型执行器动态IP和动态映射端口问题。</span></span><br><span class="line"><span class="meta">xxl.job.executor.address</span>=<span class="string"></span></span><br><span class="line"><span class="comment">### 执行器IP [选填]：默认为空表示自动获取IP，多网卡时可手动设置指定IP，该IP不会绑定Host仅作为通讯实用；地址信息用于 &quot;执行器注册&quot; 和 &quot;调度中心请求并触发任务&quot;；</span></span><br><span class="line"><span class="meta">xxl.job.executor.ip</span>=<span class="string"></span></span><br><span class="line"><span class="meta">xxl.job.executor.port</span>=<span class="string">9998</span></span><br><span class="line"><span class="comment">### 执行器运行日志文件存储磁盘路径 [选填] ：需要对该路径拥有读写权限；为空则使用默认路径；</span></span><br><span class="line"><span class="meta">xxl.job.executor.logpath</span>=<span class="string">/data/applogs/xxl-job/jobhandler</span></span><br><span class="line"><span class="comment">### 执行器日志文件保存天数 [选填] ： 过期日志自动清理, 限制值大于等于3时生效; 否则, 如-1, 关闭自动清理功能；</span></span><br><span class="line"><span class="meta">xxl.job.executor.logretentiondays</span>=<span class="string">30</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="6-定时任务的创建方式"><a href="#6-定时任务的创建方式" class="headerlink" title="6.定时任务的创建方式"></a>6.定时任务的创建方式</h3><p><img src="https://img-blog.csdnimg.cn/20210107153914491.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3l3ajc3NjE5OTg0NQ==,size_16,color_FFFFFF,t_70" alt="img"></p>
+<p>@XxlJob注解是新版本提供的方式，不需要继承</p>
+<p>旧版方式是继承IJobHander然后重写execute方法</p>
+<h3 id="7-界面介绍"><a href="#7-界面介绍" class="headerlink" title="7.界面介绍"></a>7.界面介绍</h3><p><img src="https://img-blog.csdnimg.cn/1d7d97d8e07041649fe41609182ff877.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBARm9hbeeVquiMhA==,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/64509e90b93641e38373b498c1f68392.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBARm9hbeeVquiMhA==,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+<p><label style="color:#843900"> 注意  当删除任务时，任务日志也会跟着删除 </label></p>
 ]]></content>
       <tags>
-        <tag>redis</tag>
-        <tag>数据库</tag>
-        <tag>缓存</tag>
+        <tag>java</tag>
+        <tag>中间件</tag>
       </tags>
   </entry>
   <entry>
