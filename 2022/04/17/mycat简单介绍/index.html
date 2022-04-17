@@ -1,0 +1,731 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>mycat简单介绍 | 喵喵鱼塘</title><meta name="keywords" content="分库分表,多数据源,mysql"><meta name="author" content="Foam🍅"><meta name="copyright" content="Foam🍅"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="MyCat介绍 如今随着互联网的发展，数据的量级也是成指数式的增长，从GB到TB到PB。对数据的各种操作也是愈加的困难，传统的关系性数据库已经无法满足快速查询与插入数据的需求,这个时候NoSQL的出现暂时解决了这一危机。它通过降低数据的安全性，减少对事务的支持，减少对复杂查询的支持，来获取性能上的提升。但是，在有些场合NoSQL一些折衷是无法满足使用场景的，就比如有些使用场景是绝对要有事务与安全指">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mycat简单介绍">
+<meta property="og:url" content="https://foamtomato.github.io/2022/04/17/mycat%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D/index.html">
+<meta property="og:site_name" content="喵喵鱼塘">
+<meta property="og:description" content="MyCat介绍 如今随着互联网的发展，数据的量级也是成指数式的增长，从GB到TB到PB。对数据的各种操作也是愈加的困难，传统的关系性数据库已经无法满足快速查询与插入数据的需求,这个时候NoSQL的出现暂时解决了这一危机。它通过降低数据的安全性，减少对事务的支持，减少对复杂查询的支持，来获取性能上的提升。但是，在有些场合NoSQL一些折衷是无法满足使用场景的，就比如有些使用场景是绝对要有事务与安全指">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://foamtomato.github.io/img/a980038dfa0d4b53b52e3ce77907d9b1.jpg">
+<meta property="article:published_time" content="2022-04-17T13:15:25.000Z">
+<meta property="article:modified_time" content="2022-04-17T13:18:10.779Z">
+<meta property="article:author" content="Foam🍅">
+<meta property="article:tag" content="分库分表">
+<meta property="article:tag" content="多数据源">
+<meta property="article:tag" content="mysql">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://foamtomato.github.io/img/a980038dfa0d4b53b52e3ce77907d9b1.jpg"><link rel="shortcut icon" href="/img/favicon.ico"><link rel="canonical" href="https://foamtomato.github.io/2022/04/17/mycat%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'mycat简单介绍',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-04-17 21:18:10'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/static-butterfly/dist/css/index.min.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/css/main.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/favicon.ico" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">13</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">17</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 鱼塘</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 喵生</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 关键词</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 猫片</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 猫の友</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 语录</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/../../../../img/a980038dfa0d4b53b52e3ce77907d9b1.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">喵喵鱼塘</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 鱼塘</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 喵生</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 关键词</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 猫片</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 猫の友</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 语录</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">mycat简单介绍</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-04-17T13:15:25.000Z" title="发表于 2022-04-17 21:15:25">2022-04-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-04-17T13:18:10.779Z" title="更新于 2022-04-17 21:18:10">2022-04-17</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="mycat简单介绍"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="MyCat"><a href="#MyCat" class="headerlink" title="MyCat"></a>MyCat</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><blockquote>
+<p>如今随着互联网的发展，数据的量级也是成指数式的增长，从GB到TB到PB。对数据的各种操作也是愈加的困难，传统的关系性数据库已经无法满足快速查询与插入数据的需求,这个时候NoSQL的出现暂时解决了这一危机。<code>它通过降低数据的安全性，减少对事务的支持，减少对复杂查询的支持，来获取性能上的提升</code>。但是，在有些场合NoSQL一些折衷是无法满足使用场景的，就比如有些使用场景是绝对要有事务与安全指标的。这个时候NoSQL肯定是无法满足的，所以还是需要使用关系性数据库。如何使用关系型数据库解决海量存储的问题呢？此时就需要做数据库集群，为了提高查询性能将一个数据库的数据分散到不同的数据库中存储，为应对此问题就出现了——MyCat 。</p>
+</blockquote>
+<p>MyCAT的目标是：低成本的将现有的单机数据库和应用平滑迁移到”云”端，解决海量数据存储和业务规模迅速增长情况下的数据存储和访问的瓶颈问题 。</p>
+<p>Mycat 背后是阿里曾经开源的知名产品——Cobar，Cobar 的核心功能和优势是 MySQL 数据库分片</p>
+<p>相对于cobar的优势</p>
+<ul>
+<li>对 cobar 的代码进行了彻底的重构，Mycat在I/O方面进行了重大改进,将原来的BIO改成了NIO, 并发量有大幅提高 </li>
+<li>增加了对Order By、Group By、limit等聚合功能的支持，同时兼容绝大多数数据库成为通用的数据库中间件</li>
+<li>对于开发人员来说根本感觉不到mycat的存在</li>
+</ul>
+<p>MyCat发展到目前的版本，已经不是一个单纯的MySQL代理了，它的后端可以支持MySQL、SQL Server、Oracle、DB2、PostgreSQL等主流数据库，也支持MongoDB这种新型NoSQL方式的存储，未来还会支持更多类型的存储。而在最终用户看来，无论是那种存储方式，在MyCat里，都是一个传统的数据库表，支持标准的SQL语句进行数据的操作，这样一来，对前端业务系统来说，可以大幅降低开发难度，提升开发速度</p>
+<h2 id="MyCat使用场景"><a href="#MyCat使用场景" class="headerlink" title="MyCat使用场景"></a>MyCat使用场景</h2><h3 id="1-高可用性与MySQL读写分离"><a href="#1-高可用性与MySQL读写分离" class="headerlink" title="1.高可用性与MySQL读写分离"></a>1.高可用性与MySQL读写分离</h3><p>高可用：利用MyCat可以轻松实现热备份，当一台服务器停机时，可以由集群中的另一台服务器自动接管业务，无需人工干预，从而保证高可用。</p>
+<p>读写分离：通过MySQL数据库的binlog日志完成主从复制，并可以通过MyCat轻松实现读写分离，实现insert、update、delete走主库，而在select时走从库，从而缓解单台服务器的访问压力。</p>
+<h3 id="2-业务数据分级存储保障"><a href="#2-业务数据分级存储保障" class="headerlink" title="2. 业务数据分级存储保障"></a>2. 业务数据分级存储保障</h3><p>企业的数据量总是无休止的增长，这些数据的格式不一样，访问效率不一样，重要性也不一样。可以针对不同级别的数据，采用不同的存储设备，通过分级存储管理软件实现数据客体在存储设备之间自动迁移及自动访问切换</p>
+<h3 id="3-大表水平拆分，集群并行计算"><a href="#3-大表水平拆分，集群并行计算" class="headerlink" title="3.大表水平拆分，集群并行计算"></a>3.大表水平拆分，集群并行计算</h3><p>数据切分是MyCat的核心功能，是指通过某种特定的条件，将存放在同一个数据库的数据，分散存储在多个数据库中，以达到分散单台设备负载的效果。当数据库量超过800万行且需要做分片时，就可以考虑使用MyCat实现数据切分。</p>
+<h3 id="4-数据库路由器"><a href="#4-数据库路由器" class="headerlink" title="4.数据库路由器"></a>4.数据库路由器</h3><p>MyCat基于MySQL实例的连接池复用机制，可以让每个应用最大程度共享一个MySQL实例的所有连接池，让数据库的并发访问能力大大提升。</p>
+<h3 id="5-整合多种数据源"><a href="#5-整合多种数据源" class="headerlink" title="5.整合多种数据源"></a>5.整合多种数据源</h3><p>当一个项目中使用了多个数据库（Oracle，MySQL，SQL Server,PostgreSQL），并配置了多个数据源，操作起来就比较繁琐，这时就可以使用MyCat进行整合，最终我们的应用程序只需要访问一个数据源即可</p>
+<h2 id="MyCat原理"><a href="#MyCat原理" class="headerlink" title="MyCat原理"></a>MyCat原理</h2><blockquote>
+<p>MyCat相当于MySQL的Server层</p>
+<p>MySQL相当于MyCat的存储层</p>
+</blockquote>
+<ul>
+<li>拦截：拦截用户发送的sql</li>
+<li>分析：分析分片，路由分析，读写分离分析，缓存分析</li>
+<li>分发：根据分片规则分发给对应的数据源</li>
+<li>拼接：把各数据源返回的结果聚合</li>
+</ul>
+<p><code>MyCat对于研发来说是透明的</code></p>
+<h2 id="MyCat使用"><a href="#MyCat使用" class="headerlink" title="MyCat使用"></a>MyCat使用</h2><p>下载地址: <a target="_blank" rel="noopener" href="https://github.com/MyCATApache/Mycat-download">https://github.com/MyCATApache/Mycat-download</a></p>
+<p>最新下载地址: <a target="_blank" rel="noopener" href="http://dl.mycat.io/">http://dl.mycat.io/</a></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/foam077/images/raw/master/img/image-20220417203048414.png/" alt="image-20220417203048414"></p>
+<h3 id="配置schema-xml"><a href="#配置schema-xml" class="headerlink" title="配置schema.xml"></a>配置schema.xml</h3><blockquote>
+<p>schema.xml 作为MyCat中重要的配置文件之一，管理着MyCat的逻辑库、逻辑表以及对应的分片规则、DataNode以及DataSource。弄懂这些配置，是正确使用MyCat的前提。这里就一层层对该文件进行解析。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>schema</td>
+<td>标签用于定义MyCat实例中的逻辑库</td>
+</tr>
+<tr>
+<td>table</td>
+<td>标签定义了MyCat中的逻辑表, rule用于指定分片规则，auto-sharding-long的分片规则是按ID值的范围进行分片 1-5000000 为第1片  5000001-10000000 为第2片….  具体设置我们会在第四节中讲解。</td>
+</tr>
+<tr>
+<td>dataNode</td>
+<td>标签定义了MyCat中的数据节点，也就是我们通常说所的数据分片。</td>
+</tr>
+<tr>
+<td>dataHost</td>
+<td>标签在mycat逻辑库中也是作为最底层的标签存在，直接定义了具体的数据库实例、读写分离配置和心跳语句。</td>
+</tr>
+</tbody></table>
+<p>schema.xml文件配置(可根据自己的需求加减配置)</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot;?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">mycat</span>:schema <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;schema.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mycat:schema</span> <span class="attr">xmlns:mycat</span>=<span class="string">&quot;http://io.mycat/&quot;</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 逻辑库配置 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">schema</span> <span class="attr">name</span>=<span class="string">&quot;ITCAST&quot;</span> <span class="attr">checkSQLschema</span>=<span class="string">&quot;false&quot;</span> <span class="attr">sqlMaxLimit</span>=<span class="string">&quot;100&quot;</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 逻辑表配置 --&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">table</span> <span class="attr">name</span>=<span class="string">&quot;TB_TEST&quot;</span> <span class="attr">dataNode</span>=<span class="string">&quot;dn1,dn2,dn3&quot;</span> <span class="attr">rule</span>=<span class="string">&quot;auto-sharding-long&quot;</span> /&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">schema</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&lt;!-- 数据节点配置 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">dataNode</span> <span class="attr">name</span>=<span class="string">&quot;dn1&quot;</span> <span class="attr">dataHost</span>=<span class="string">&quot;host1&quot;</span> <span class="attr">database</span>=<span class="string">&quot;db1&quot;</span> /&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">dataNode</span> <span class="attr">name</span>=<span class="string">&quot;dn2&quot;</span> <span class="attr">dataHost</span>=<span class="string">&quot;host2&quot;</span> <span class="attr">database</span>=<span class="string">&quot;db1&quot;</span> /&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">dataNode</span> <span class="attr">name</span>=<span class="string">&quot;dn3&quot;</span> <span class="attr">dataHost</span>=<span class="string">&quot;host3&quot;</span> <span class="attr">database</span>=<span class="string">&quot;db1&quot;</span> /&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&lt;!-- 节点主机配置 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">dataHost</span> <span class="attr">name</span>=<span class="string">&quot;host1&quot;</span> <span class="attr">maxCon</span>=<span class="string">&quot;1000&quot;</span> <span class="attr">minCon</span>=<span class="string">&quot;10&quot;</span> <span class="attr">balance</span>=<span class="string">&quot;0&quot;</span></span></span><br><span class="line"><span class="tag">		<span class="attr">writeType</span>=<span class="string">&quot;0&quot;</span> <span class="attr">dbType</span>=<span class="string">&quot;mysql&quot;</span> <span class="attr">dbDriver</span>=<span class="string">&quot;native&quot;</span> <span class="attr">switchType</span>=<span class="string">&quot;1&quot;</span>  <span class="attr">slaveThreshold</span>=<span class="string">&quot;100&quot;</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">heartbeat</span>&gt;</span>select user()<span class="tag">&lt;/<span class="name">heartbeat</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">writeHost</span> <span class="attr">host</span>=<span class="string">&quot;hostM1&quot;</span> <span class="attr">url</span>=<span class="string">&quot;192.168.192.157:3306&quot;</span> <span class="attr">user</span>=<span class="string">&quot;root&quot;</span> <span class="attr">password</span>=<span class="string">&quot;itcast&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">writeHost</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">dataHost</span>&gt;</span>	</span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">dataHost</span> <span class="attr">name</span>=<span class="string">&quot;host2&quot;</span> <span class="attr">maxCon</span>=<span class="string">&quot;1000&quot;</span> <span class="attr">minCon</span>=<span class="string">&quot;10&quot;</span> <span class="attr">balance</span>=<span class="string">&quot;0&quot;</span></span></span><br><span class="line"><span class="tag">		<span class="attr">writeType</span>=<span class="string">&quot;0&quot;</span> <span class="attr">dbType</span>=<span class="string">&quot;mysql&quot;</span> <span class="attr">dbDriver</span>=<span class="string">&quot;native&quot;</span> <span class="attr">switchType</span>=<span class="string">&quot;1&quot;</span>  <span class="attr">slaveThreshold</span>=<span class="string">&quot;100&quot;</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">heartbeat</span>&gt;</span>select user()<span class="tag">&lt;/<span class="name">heartbeat</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">writeHost</span> <span class="attr">host</span>=<span class="string">&quot;hostM1&quot;</span> <span class="attr">url</span>=<span class="string">&quot;192.168.192.158:3306&quot;</span> <span class="attr">user</span>=<span class="string">&quot;root&quot;</span> <span class="attr">password</span>=<span class="string">&quot;itcast&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">writeHost</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">dataHost</span>&gt;</span>	</span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">dataHost</span> <span class="attr">name</span>=<span class="string">&quot;host3&quot;</span> <span class="attr">maxCon</span>=<span class="string">&quot;1000&quot;</span> <span class="attr">minCon</span>=<span class="string">&quot;10&quot;</span> <span class="attr">balance</span>=<span class="string">&quot;0&quot;</span></span></span><br><span class="line"><span class="tag">		<span class="attr">writeType</span>=<span class="string">&quot;0&quot;</span> <span class="attr">dbType</span>=<span class="string">&quot;mysql&quot;</span> <span class="attr">dbDriver</span>=<span class="string">&quot;native&quot;</span> <span class="attr">switchType</span>=<span class="string">&quot;1&quot;</span>  <span class="attr">slaveThreshold</span>=<span class="string">&quot;100&quot;</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">heartbeat</span>&gt;</span>select user()<span class="tag">&lt;/<span class="name">heartbeat</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">writeHost</span> <span class="attr">host</span>=<span class="string">&quot;hostM1&quot;</span> <span class="attr">url</span>=<span class="string">&quot;192.168.192.159:3306&quot;</span> <span class="attr">user</span>=<span class="string">&quot;root&quot;</span> <span class="attr">password</span>=<span class="string">&quot;itcast&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">writeHost</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">dataHost</span>&gt;</span>	</span><br><span class="line">    </span><br><span class="line"><span class="tag">&lt;/<span class="name">mycat:schema</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>配置详解</p>
+<h4 id="system标签"><a href="#system标签" class="headerlink" title="system标签"></a>system标签</h4><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>取值</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>charset</td>
+<td>utf8</td>
+<td>设置Mycat的字符集, 字符集需要与MySQL的字符集保持一致</td>
+</tr>
+<tr>
+<td>nonePasswordLogin</td>
+<td>0,1</td>
+<td>0为需要密码登陆、1为不需要密码登陆 ,默认为0，设置为1则需要指定默认账户</td>
+</tr>
+<tr>
+<td>useHandshakeV10</td>
+<td>0,1</td>
+<td>使用该选项主要的目的是为了能够兼容高版本的jdbc驱动, 是否采用HandshakeV10Packet来与client进行通信, 1:是, 0:否</td>
+</tr>
+<tr>
+<td>useSqlStat</td>
+<td>0,1</td>
+<td>开启SQL实时统计, 1 为开启 , 0 为关闭 ;<br />开启之后, MyCat会自动统计SQL语句的执行情况 ;<br />mysql -h 127.0.0.1 -P 9066 -u root -p<br />查看MyCat执行的SQL, 执行效率比较低的SQL , SQL的整体执行情况、读写比例等 ;<br />show @@sql ; show @@sql.slow ; show @@sql.sum ;</td>
+</tr>
+<tr>
+<td>useGlobleTableCheck</td>
+<td>0,1</td>
+<td>是否开启全局表的一致性检测。1为开启 ，0为关闭 。</td>
+</tr>
+<tr>
+<td>sqlExecuteTimeout</td>
+<td>1000</td>
+<td>SQL语句执行的超时时间 , 单位为 s ;</td>
+</tr>
+<tr>
+<td>sequnceHandlerType</td>
+<td>0,1,2</td>
+<td>用来指定Mycat全局序列类型，0 为本地文件，1 为数据库方式，2 为时间戳列方式，默认使用本地文件方式，文件方式主要用于测试</td>
+</tr>
+<tr>
+<td>sequnceHandlerPattern</td>
+<td>正则表达式</td>
+<td>必须带有MYCATSEQ_或者 mycatseq_进入序列匹配流程 注意MYCATSEQ_有空格的情况</td>
+</tr>
+<tr>
+<td>subqueryRelationshipCheck</td>
+<td>true,false</td>
+<td>子查询中存在关联查询的情况下,检查关联字段中是否有分片字段 .默认 false</td>
+</tr>
+<tr>
+<td>useCompression</td>
+<td>0,1</td>
+<td>开启mysql压缩协议 , 0 : 关闭, 1 : 开启</td>
+</tr>
+<tr>
+<td>fakeMySQLVersion</td>
+<td>5.5,5.6</td>
+<td>设置模拟的MySQL版本号</td>
+</tr>
+<tr>
+<td>defaultSqlParser</td>
+<td></td>
+<td>由于MyCat的最初版本使用了FoundationDB的SQL解析器, 在MyCat1.3后增加了Druid解析器, 所以要设置defaultSqlParser属性来指定默认的解析器; 解析器有两个 : druidparser 和 fdbparser, 在MyCat1.4之后,默认是druidparser, fdbparser已经废除了</td>
+</tr>
+<tr>
+<td>processors</td>
+<td>1,2….</td>
+<td>指定系统可用的线程数量, 默认值为CPU核心 x 每个核心运行线程数量; processors 会影响processorBufferPool, processorBufferLocalPercent, processorExecutor属性, 所有, 在性能调优时, 可以适当地修改processors值</td>
+</tr>
+<tr>
+<td>processorBufferChunk</td>
+<td></td>
+<td>指定每次分配Socket Direct Buffer默认值为4096字节, 也会影响BufferPool长度, 如果一次性获取字节过多而导致buffer不够用, 则会出现警告, 可以调大该值</td>
+</tr>
+<tr>
+<td>processorExecutor</td>
+<td></td>
+<td>指定NIOProcessor上共享 businessExecutor固定线程池的大小; MyCat把异步任务交给 businessExecutor线程池中, 在新版本的MyCat中这个连接池使用频次不高, 可以适当地把该值调小</td>
+</tr>
+<tr>
+<td>packetHeaderSize</td>
+<td></td>
+<td>指定MySQL协议中的报文头长度, 默认4个字节</td>
+</tr>
+<tr>
+<td>maxPacketSize</td>
+<td></td>
+<td>指定MySQL协议可以携带的数据最大大小, 默认值为16M</td>
+</tr>
+<tr>
+<td>idleTimeout</td>
+<td>30</td>
+<td>指定连接的空闲时间的超时长度;如果超时,将关闭资源并回收, 默认30分钟</td>
+</tr>
+<tr>
+<td>txIsolation</td>
+<td>1,2,3,4</td>
+<td>初始化前端连接的事务隔离级别,默认为 REPEATED_READ , 对应数字为3<br />READ_UNCOMMITED=1;<br />READ_COMMITTED=2;<br />REPEATED_READ=3;<br />SERIALIZABLE=4;</td>
+</tr>
+<tr>
+<td>sqlExecuteTimeout</td>
+<td>300</td>
+<td>执行SQL的超时时间, 如果SQL语句执行超时,将关闭连接; 默认300秒;</td>
+</tr>
+<tr>
+<td>serverPort</td>
+<td>8066</td>
+<td>定义MyCat的使用端口, 默认8066</td>
+</tr>
+<tr>
+<td>managerPort</td>
+<td>9066</td>
+<td>定义MyCat的管理端口, 默认9066</td>
+</tr>
+</tbody></table>
+<h3 id="server-xml配置"><a href="#server-xml配置" class="headerlink" title="server.xml配置"></a>server.xml配置</h3><blockquote>
+<p>server.xml几乎保存了所有mycat需要的系统配置信息。最常用的是在此配置用户名、密码及权限。在system中添加UTF-8字符集设置，否则存储中文会出现问号</p>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;charset&quot;</span>&gt;</span>utf8<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>修改user的设置 ,  我们这里为 ITCAST 设置了两个用户 : </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">user</span> <span class="attr">name</span>=<span class="string">&quot;root&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;password&quot;</span>&gt;</span>123456<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;schemas&quot;</span>&gt;</span>ITCAST<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">user</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">user</span> <span class="attr">name</span>=<span class="string">&quot;test&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;password&quot;</span>&gt;</span>123456<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;schemas&quot;</span>&gt;</span>ITCAST<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">user</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="user标签"><a href="#user标签" class="headerlink" title="user标签"></a>user标签</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">user</span> <span class="attr">name</span>=<span class="string">&quot;root&quot;</span> <span class="attr">defaultAccount</span>=<span class="string">&quot;true&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;password&quot;</span>&gt;</span>123456<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;schemas&quot;</span>&gt;</span>ITCAST<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;readOnly&quot;</span>&gt;</span>true<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;benchmark&quot;</span>&gt;</span>1000<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;usingDecrypt&quot;</span>&gt;</span>0<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&lt;!-- 表级 DML 权限设置 --&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 		</span></span><br><span class="line"><span class="comment">    &lt;privileges check=&quot;false&quot;&gt;</span></span><br><span class="line"><span class="comment">        &lt;schema name=&quot;TESTDB&quot; dml=&quot;0110&quot; &gt;</span></span><br><span class="line"><span class="comment">            &lt;table name=&quot;tb01&quot; dml=&quot;0000&quot;&gt;&lt;/table&gt;</span></span><br><span class="line"><span class="comment">            &lt;table name=&quot;tb02&quot; dml=&quot;1111&quot;&gt;&lt;/table&gt;</span></span><br><span class="line"><span class="comment">        &lt;/schema&gt;</span></span><br><span class="line"><span class="comment">    &lt;/privileges&gt;		</span></span><br><span class="line"><span class="comment">    --&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">user</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>user标签主要用于定义登录MyCat的用户和权限 :</p>
+<p>1). &lt;user name=”root” defaultAccount=”true”&gt; : name 属性用于声明用户名 ;</p>
+<p>2). &lt;property name=”password”&gt;123456&lt;/property&gt; : 指定该用户名访问MyCat的密码 ;</p>
+<p>3). &lt;property name=”schemas”&gt;ITCAST&lt;/property&gt; : 能够访问的逻辑库, 多个的话, 使用 “,” 分割</p>
+<p>4). &lt;property name=”readOnly”&gt;true&lt;/property&gt; : 是否只读</p>
+<p>5). &lt;property name=”benchmark”&gt;11111&lt;/property&gt; : 指定前端的整体连接数量 , 0 或不设置表示不限制 </p>
+<p>6). &lt;property name=”usingDecrypt”&gt;0&lt;/property&gt; : 是否对密码加密默认 0 否 , 1 是</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -cp Mycat-server-1.6.7.3-release.jar io.mycat.util.DecryptUtil 0:root:123456</span><br></pre></td></tr></table></figure>
+
+<p>7). &lt;privileges check=”false”&gt;</p>
+<p>A. 对用户的 schema 及 下级的 table 进行精细化的 DML 权限控制; </p>
+<p>B. privileges 节点中的 check 属性是用 于标识是否开启 DML 权限检查， 默认 false 标识不检查，当然 privileges 节点不配置，等同 check=false, 由于 Mycat 一个用户的 schemas 属性可配置多个 schema ，所以 privileges 的下级节点 schema 节点同样 可配置多个，对多库多表进行细粒度的 DML 权限控制;</p>
+<p>C. 权限修饰符四位数字(0000 - 1111)，对应的操作是 IUSD ( 增，改，查，删 )。同时配置了库跟表的权限，就近原则。以表权限为准。</p>
+<h4 id="firewall-标签"><a href="#firewall-标签" class="headerlink" title="firewall 标签"></a>firewall 标签</h4><p>firewall标签用来定义防火墙；firewall下whitehost标签用来定义 IP白名单 ，blacklist用来定义 SQL黑名单。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">firewall</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 白名单配置 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">whitehost</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">host</span> <span class="attr">user</span>=<span class="string">&quot;root&quot;</span> <span class="attr">host</span>=<span class="string">&quot;127.0.0.1&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">host</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">whitehost</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 黑名单配置 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">blacklist</span> <span class="attr">check</span>=<span class="string">&quot;true&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;selelctAllow&quot;</span>&gt;</span>false<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">blacklist</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">firewall</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>黑名单拦截明细配置:</p>
+<table>
+<thead>
+<tr>
+<th>配置项</th>
+<th>缺省值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>selelctAllow</td>
+<td>true</td>
+<td>是否允许执行 SELECT 语句</td>
+</tr>
+<tr>
+<td>selectAllColumnAllow</td>
+<td>true</td>
+<td>是否允许执行 SELECT * FROM T 这样的语句。如果设置为 false，不允许执行 select * from t，但可以select * from (select id, name from t) a。这个选项是防御程序通过调用 select * 获得数据表的结构信息。</td>
+</tr>
+<tr>
+<td>selectIntoAllow</td>
+<td>true</td>
+<td>SELECT 查询中是否允许 INTO 字句</td>
+</tr>
+<tr>
+<td>deleteAllow</td>
+<td>true</td>
+<td>是否允许执行 DELETE 语句</td>
+</tr>
+<tr>
+<td>updateAllow</td>
+<td>true</td>
+<td>是否允许执行 UPDATE 语句</td>
+</tr>
+<tr>
+<td>insertAllow</td>
+<td>true</td>
+<td>是否允许执行 INSERT 语句</td>
+</tr>
+<tr>
+<td>replaceAllow</td>
+<td>true</td>
+<td>是否允许执行 REPLACE 语句</td>
+</tr>
+<tr>
+<td>mergeAllow</td>
+<td>true</td>
+<td>是否允许执行 MERGE 语句，这个只在 Oracle 中有用</td>
+</tr>
+<tr>
+<td>callAllow</td>
+<td>true</td>
+<td>是否允许通过 jdbc 的 call 语法调用存储过程</td>
+</tr>
+<tr>
+<td>setAllow</td>
+<td>true</td>
+<td>是否允许使用 SET 语法</td>
+</tr>
+<tr>
+<td>truncateAllow</td>
+<td>true</td>
+<td>truncate 语句是危险，缺省打开，若需要自行关闭</td>
+</tr>
+<tr>
+<td>createTableAllow</td>
+<td>true</td>
+<td>是否允许创建表</td>
+</tr>
+<tr>
+<td>alterTableAllow</td>
+<td>true</td>
+<td>是否允许执行 Alter Table 语句</td>
+</tr>
+<tr>
+<td>dropTableAllow</td>
+<td>true</td>
+<td>是否允许修改表</td>
+</tr>
+<tr>
+<td>commentAllow</td>
+<td>false</td>
+<td>是否允许语句中存在注释，Oracle 的用户不用担心，Wall 能够识别 hints和注释的区别</td>
+</tr>
+<tr>
+<td>noneBaseStatementAllow</td>
+<td>false</td>
+<td>是否允许非以上基本语句的其他语句，缺省关闭，通过这个选项就能够屏蔽 DDL。</td>
+</tr>
+<tr>
+<td>multiStatementAllow</td>
+<td>false</td>
+<td>是否允许一次执行多条语句，缺省关闭</td>
+</tr>
+<tr>
+<td>useAllow</td>
+<td>true</td>
+<td>是否允许执行 mysql 的 use 语句，缺省打开</td>
+</tr>
+<tr>
+<td>describeAllow</td>
+<td>true</td>
+<td>是否允许执行 mysql 的 describe 语句，缺省打开</td>
+</tr>
+<tr>
+<td>showAllow</td>
+<td>true</td>
+<td>是否允许执行 mysql 的 show 语句，缺省打开</td>
+</tr>
+<tr>
+<td>commitAllow</td>
+<td>true</td>
+<td>是否允许执行 commit 操作</td>
+</tr>
+<tr>
+<td>rollbackAllow</td>
+<td>true</td>
+<td>是否允许执行 roll back 操作</td>
+</tr>
+<tr>
+<td>拦截配置－永真条件</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>selectWhereAlwayTrueCheck</td>
+<td>true</td>
+<td>检查 SELECT 语句的 WHERE 子句是否是一个永真条件</td>
+</tr>
+<tr>
+<td>selectHavingAlwayTrueCheck</td>
+<td>true</td>
+<td>检查 SELECT 语句的 HAVING 子句是否是一个永真条件</td>
+</tr>
+<tr>
+<td>deleteWhereAlwayTrueCheck</td>
+<td>true</td>
+<td>检查 DELETE 语句的 WHERE 子句是否是一个永真条件</td>
+</tr>
+<tr>
+<td>deleteWhereNoneCheck</td>
+<td>false</td>
+<td>检查 DELETE 语句是否无 where 条件，这是有风险的，但不是 SQL 注入类型的风险</td>
+</tr>
+<tr>
+<td>updateWhereAlayTrueCheck</td>
+<td>true</td>
+<td>检查 UPDATE 语句的 WHERE 子句是否是一个永真条件</td>
+</tr>
+<tr>
+<td>updateWhereNoneCheck</td>
+<td>false</td>
+<td>检查 UPDATE 语句是否无 where 条件，这是有风险的，但不是SQL 注入类型的风险</td>
+</tr>
+<tr>
+<td>conditionAndAlwayTrueAllow</td>
+<td>false</td>
+<td>检查查询条件(WHERE/HAVING 子句)中是否包含 AND 永真条件</td>
+</tr>
+<tr>
+<td>conditionAndAlwayFalseAllow</td>
+<td>false</td>
+<td>检查查询条件(WHERE/HAVING 子句)中是否包含 AND 永假条件</td>
+</tr>
+<tr>
+<td>conditionLikeTrueAllow</td>
+<td>true</td>
+<td>检查查询条件(WHERE/HAVING 子句)中是否包含 LIKE 永真条件</td>
+</tr>
+<tr>
+<td>其他拦截配置</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>selectIntoOutfileAllow</td>
+<td>false</td>
+<td>SELECT … INTO OUTFILE 是否允许，这个是 mysql 注入攻击的常见手段，缺省是禁止的</td>
+</tr>
+<tr>
+<td>selectUnionCheck</td>
+<td>true</td>
+<td>检测 SELECT UNION</td>
+</tr>
+<tr>
+<td>selectMinusCheck</td>
+<td>true</td>
+<td>检测 SELECT MINUS</td>
+</tr>
+<tr>
+<td>selectExceptCheck</td>
+<td>true</td>
+<td>检测 SELECT EXCEPT</td>
+</tr>
+<tr>
+<td>selectIntersectCheck</td>
+<td>true</td>
+<td>检测 SELECT INTERSECT</td>
+</tr>
+<tr>
+<td>mustParameterized</td>
+<td>false</td>
+<td>是否必须参数化，如果为 True，则不允许类似 WHERE ID = 1 这种不参数化的 SQL</td>
+</tr>
+<tr>
+<td>strictSyntaxCheck</td>
+<td>true</td>
+<td>是否进行严格的语法检测，Druid SQL Parser 在某些场景不能覆盖所有的SQL 语法，出现解析 SQL 出错，可以临时把这个选项设置为 false，同时把 SQL 反馈给 Druid 的开发者。</td>
+</tr>
+<tr>
+<td>conditionOpXorAllow</td>
+<td>false</td>
+<td>查询条件中是否允许有 XOR 条件。XOR 不常用，很难判断永真或者永假，缺省不允许。</td>
+</tr>
+<tr>
+<td>conditionOpBitwseAllow</td>
+<td>true</td>
+<td>查询条件中是否允许有”&amp;”、”~”、”|”、”^”运算符。</td>
+</tr>
+<tr>
+<td>conditionDoubleConstAllow</td>
+<td>false</td>
+<td>查询条件中是否允许连续两个常量运算表达式</td>
+</tr>
+<tr>
+<td>minusAllow</td>
+<td>true</td>
+<td>是否允许 SELECT * FROM A MINUS SELECT * FROM B 这样的语句</td>
+</tr>
+<tr>
+<td>intersectAllow</td>
+<td>true</td>
+<td>是否允许 SELECT * FROM A INTERSECT SELECT * FROM B 这样的语句</td>
+</tr>
+<tr>
+<td>constArithmeticAllow</td>
+<td>true</td>
+<td>拦截常量运算的条件，比如说 WHERE FID = 3 - 1，其中”3 - 1”是常量运算表达式。</td>
+</tr>
+<tr>
+<td>limitZeroAllow</td>
+<td>false</td>
+<td>是否允许 limit 0 这样的语句</td>
+</tr>
+<tr>
+<td>禁用对象检测配置</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>tableCheck</td>
+<td>true</td>
+<td>检测是否使用了禁用的表</td>
+</tr>
+<tr>
+<td>schemaCheck</td>
+<td>true</td>
+<td>检测是否使用了禁用的 Schema</td>
+</tr>
+<tr>
+<td>functionCheck</td>
+<td>true</td>
+<td>检测是否使用了禁用的函数</td>
+</tr>
+<tr>
+<td>objectCheck</td>
+<td>true</td>
+<td>检测是否使用了“禁用对对象”</td>
+</tr>
+<tr>
+<td>variantCheck</td>
+<td>true</td>
+<td>检测是否使用了“禁用的变量”</td>
+</tr>
+<tr>
+<td>readOnlyTables</td>
+<td>空</td>
+<td>指定的表只读，不能够在 SELECT INTO、DELETE、UPDATE、INSERT、MERGE 中作为”被修改表”出现</td>
+</tr>
+</tbody></table>
+<h3 id="启动Mycat"><a href="#启动Mycat" class="headerlink" title="启动Mycat"></a>启动Mycat</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bin/mycat start</span><br><span class="line">bin/mycat stop</span><br><span class="line">bin/mycat status</span><br></pre></td></tr></table></figure>
+
+<p>启动后用mysql链接工具直接连就可以了</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/foam077/images/raw/master/img/image-20220417203803361.png/" alt="image-20220417203803361"></p>
+<h3 id="分片测试"><a href="#分片测试" class="headerlink" title="分片测试"></a>分片测试</h3><p>进入mycat ，执行下列语句创建一个表</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> TB_TEST (</span><br><span class="line">  id <span class="type">BIGINT</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  title <span class="type">VARCHAR</span>(<span class="number">100</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> ,</span><br><span class="line">  <span class="keyword">PRIMARY</span> KEY (id)</span><br><span class="line">) ENGINE<span class="operator">=</span>INNODB <span class="keyword">DEFAULT</span> CHARSET<span class="operator">=</span>utf8 ;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>我们再查看MySQL的3个库，发现表都自动创建好了</p>
+<p>接下来是插入表数据，注意，在写 INSERT 语句时一定要写把字段列表写出来，否则会出现下列错误提示：</p>
+<p>错误代码： 1064</p>
+<p><code>partition table, insert must provide ColumnList</code></p>
+<p>我们试着插入一些数据：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> TB_TEST(ID,TITLE) <span class="keyword">VALUES</span>(<span class="number">1</span>,<span class="string">&#x27;goods1&#x27;</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> TB_TEST(ID,TITLE) <span class="keyword">VALUES</span>(<span class="number">2</span>,<span class="string">&#x27;goods2&#x27;</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> TB_TEST(ID,TITLE) <span class="keyword">VALUES</span>(<span class="number">3</span>,<span class="string">&#x27;goods3&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>我们会发现这些数据被写入到第一个节点中了，那什么时候数据会写到第二个节点中呢？</p>
+<p>我们插入下面的数据就可以插入第二个节点了</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> TB_TEST(ID,TITLE) <span class="keyword">VALUES</span>(<span class="number">5000001</span>,<span class="string">&#x27;goods5000001&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>因为我们采用的分片规则是每节点存储500万条数据，所以当ID大于5000000则会存储到第二个节点上。</p>
+<p>目前只设置了两个节点，如果数据大于1000万条，会怎么样呢？执行下列语句测试一下</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> TB_TEST(ID,TITLE) <span class="keyword">VALUES</span>(<span class="number">10000001</span>,<span class="string">&#x27;goods10000001&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="MyCat原理-1"><a href="#MyCat原理-1" class="headerlink" title="MyCat原理"></a>MyCat原理</h3><p>MyCat原理中最重要的一个动词就是 “拦截”, 它拦截了用户发送过来的SQL语句, 首先对SQL语句做一些特定的分析,如分片分析、路由分析、读写分离分析、缓存分析等，然后将此SQL语句发往后端的真实数据库，并将返回的结果做适当处理，最终再返回给用户，如图所示。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/foam077/images/raw/master/img/image-20220417204131752.png/" alt="image-20220417204131752"></p>
+<p>在图中,user表被分为三个分片节点dn1、dn2、dn3, 他们分布式在三个MySQL Server(dataHost)上，因此可以使用1-N台服务器来分片,分片规则(sharding rule)为典型的字符串枚举分片规则, 一个规则的定义是分片字段+分片函数。这里的分片字段为 status，分片函数则为字符串枚举方式。</p>
+<p>MyCat收到一条SQL语句时，首先解析SQL语句涉及到的表，接着查看此表的定义，如果该表存在分片规则，则获取SQL语句里分片字段的值，并匹配分片函数，得到该SQL语句对应的分片列表，然后将SQL语句发送到相应的分片去执行，最后处理所有分片返回的数据并返回给客户端。以”select * from user where status=’0’” 为例, 查找 status=’0’ ,按照分片函数, ‘0’ 值存放在dn1,于是SQL语句被发送到第一个节点中执行, 然后再将查询的结果返回给用户。</p>
+<p>如果发送的SQL语句为 “select * from user where status in (‘0’,’1’)” , 那么SQL语句会被发送到dn1,dn2对应的主机上执行, 然后将结果集合并后输出给用户。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>mycat相对于shardingjdbc可以单独运行，让开发感觉不到它的存在，可以多数据源之间交互，只需要连mycat一个数据源就行了，也可以加监控<code>Mycat-web</code></p>
+<p>Mycat-web 是 Mycat 可视化运维的管理和监控平台，弥补了 Mycat 在监控上的空白。帮 Mycat 分担统计任务和配置管理任务。Mycat-web 引入了 ZooKeeper 作为配置中心，可以管理多个节点。Mycat-web 主要管理和监控 Mycat 的流量、连接、活动线程和内存等，具备 IP 白名单、邮件告警等模块，还可以统计 SQL 并分析慢 SQL 和高频 SQL 等。为优化 SQL 提供依据。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/foam077/images/raw/master/img/image-20220417205909579.png/" alt="image-20220417205909579"></p>
+<p>mycat现在强推mycat2，缺点就是文档还在完善中，不够完全，不过相对于mycat1，在配置方面优化的更加简单容易入手了。 建议从mycat1慢慢学上去</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Foam🍅</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://foamtomato.github.io/2022/04/17/mycat%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D/">https://foamtomato.github.io/2022/04/17/mycat%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://foamtomato.github.io" target="_blank">喵喵鱼塘</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/">分库分表</a><a class="post-meta__tags" href="/tags/%E5%A4%9A%E6%95%B0%E6%8D%AE%E6%BA%90/">多数据源</a><a class="post-meta__tags" href="/tags/mysql/">mysql</a></div><div class="post_share"><div class="social-share" data-image="/../../../../img/a980038dfa0d4b53b52e3ce77907d9b1.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2022/04/10/ShardingJDBC%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D/"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://image.baidu.com/search/down?tn=download&amp;word=download&amp;ie=utf8&amp;fr=detail&amp;url=http://p3.qhimg.com/bdm/1000_618_85/t01abc6e061cae27bc3.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">ShardingJDBC简单介绍</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2022/04/10/ShardingJDBC%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D/" title="ShardingJDBC简单介绍"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://image.baidu.com/search/down?tn=download&word=download&ie=utf8&fr=detail&url=http://p3.qhimg.com/bdm/1000_618_85/t01abc6e061cae27bc3.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-10</div><div class="title">ShardingJDBC简单介绍</div></div></a></div><div><a href="/2022/04/10/%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E6%80%9D%E6%83%B3/" title="分库分表思想"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://image.baidu.com/search/down?tn=download&word=download&ie=utf8&fr=detail&url=http://p16.qhimg.com/bdm/1000_618_85/t01fce1f99b60abfba6.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-10</div><div class="title">分库分表思想</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/favicon.ico" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Foam🍅</div><div class="author-info__description">用能力换时间，用时间换能力</div></div><div class="card-info-data is-center"><div class="card-info-data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">13</div></a></div><div class="card-info-data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">17</div></a></div><div class="card-info-data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">工作繁忙，不会定期更新！！！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#MyCat"><span class="toc-number">1.</span> <span class="toc-text">MyCat</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MyCat%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">1.2.</span> <span class="toc-text">MyCat使用场景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E9%AB%98%E5%8F%AF%E7%94%A8%E6%80%A7%E4%B8%8EMySQL%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB"><span class="toc-number">1.2.1.</span> <span class="toc-text">1.高可用性与MySQL读写分离</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E4%B8%9A%E5%8A%A1%E6%95%B0%E6%8D%AE%E5%88%86%E7%BA%A7%E5%AD%98%E5%82%A8%E4%BF%9D%E9%9A%9C"><span class="toc-number">1.2.2.</span> <span class="toc-text">2. 业务数据分级存储保障</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%A4%A7%E8%A1%A8%E6%B0%B4%E5%B9%B3%E6%8B%86%E5%88%86%EF%BC%8C%E9%9B%86%E7%BE%A4%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97"><span class="toc-number">1.2.3.</span> <span class="toc-text">3.大表水平拆分，集群并行计算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%B7%AF%E7%94%B1%E5%99%A8"><span class="toc-number">1.2.4.</span> <span class="toc-text">4.数据库路由器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E6%95%B4%E5%90%88%E5%A4%9A%E7%A7%8D%E6%95%B0%E6%8D%AE%E6%BA%90"><span class="toc-number">1.2.5.</span> <span class="toc-text">5.整合多种数据源</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MyCat%E5%8E%9F%E7%90%86"><span class="toc-number">1.3.</span> <span class="toc-text">MyCat原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MyCat%E4%BD%BF%E7%94%A8"><span class="toc-number">1.4.</span> <span class="toc-text">MyCat使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEschema-xml"><span class="toc-number">1.4.1.</span> <span class="toc-text">配置schema.xml</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#system%E6%A0%87%E7%AD%BE"><span class="toc-number">1.4.1.1.</span> <span class="toc-text">system标签</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#server-xml%E9%85%8D%E7%BD%AE"><span class="toc-number">1.4.2.</span> <span class="toc-text">server.xml配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#user%E6%A0%87%E7%AD%BE"><span class="toc-number">1.4.2.1.</span> <span class="toc-text">user标签</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#firewall-%E6%A0%87%E7%AD%BE"><span class="toc-number">1.4.2.2.</span> <span class="toc-text">firewall 标签</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8Mycat"><span class="toc-number">1.4.3.</span> <span class="toc-text">启动Mycat</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E7%89%87%E6%B5%8B%E8%AF%95"><span class="toc-number">1.4.4.</span> <span class="toc-text">分片测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MyCat%E5%8E%9F%E7%90%86-1"><span class="toc-number">1.4.5.</span> <span class="toc-text">MyCat原理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-number">1.5.</span> <span class="toc-text">小结</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/04/17/mycat%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D/" title="mycat简单介绍"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/../../../../img/a980038dfa0d4b53b52e3ce77907d9b1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="mycat简单介绍"/></a><div class="content"><a class="title" href="/2022/04/17/mycat%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D/" title="mycat简单介绍">mycat简单介绍</a><time datetime="2022-04-17T13:15:25.000Z" title="发表于 2022-04-17 21:15:25">2022-04-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/04/10/ShardingJDBC%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D/" title="ShardingJDBC简单介绍"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://image.baidu.com/search/down?tn=download&amp;word=download&amp;ie=utf8&amp;fr=detail&amp;url=http://p3.qhimg.com/bdm/1000_618_85/t01abc6e061cae27bc3.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ShardingJDBC简单介绍"/></a><div class="content"><a class="title" href="/2022/04/10/ShardingJDBC%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D/" title="ShardingJDBC简单介绍">ShardingJDBC简单介绍</a><time datetime="2022-04-10T14:35:03.000Z" title="发表于 2022-04-10 22:35:03">2022-04-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/04/10/%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E6%80%9D%E6%83%B3/" title="分库分表思想"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://image.baidu.com/search/down?tn=download&amp;word=download&amp;ie=utf8&amp;fr=detail&amp;url=http://p16.qhimg.com/bdm/1000_618_85/t01fce1f99b60abfba6.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="分库分表思想"/></a><div class="content"><a class="title" href="/2022/04/10/%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E6%80%9D%E6%83%B3/" title="分库分表思想">分库分表思想</a><time datetime="2022-04-10T06:30:32.000Z" title="发表于 2022-04-10 14:30:32">2022-04-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/04/04/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/" title="定时任务使用总结"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://image.baidu.com/search/down?tn=download&amp;word=download&amp;ie=utf8&amp;fr=detail&amp;url=http://p1.qhimg.com/bdm/1000_618_85/t01a7e20297ee92fdd5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="定时任务使用总结"/></a><div class="content"><a class="title" href="/2022/04/04/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/" title="定时任务使用总结">定时任务使用总结</a><time datetime="2022-04-04T13:45:42.000Z" title="发表于 2022-04-04 21:45:42">2022-04-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/04/04/ip%E5%9C%B0%E5%9D%80%E7%99%BD%E5%90%8D%E5%8D%95%E6%A0%A1%E9%AA%8C/" title="ip地址白名单校验"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://image.baidu.com/search/down?tn=download&amp;word=download&amp;ie=utf8&amp;fr=detail&amp;url=http://p0.qhimg.com/bdm/1000_618_85/t0128e35996c4f15f73.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ip地址白名单校验"/></a><div class="content"><a class="title" href="/2022/04/04/ip%E5%9C%B0%E5%9D%80%E7%99%BD%E5%90%8D%E5%8D%95%E6%A0%A1%E9%AA%8C/" title="ip地址白名单校验">ip地址白名单校验</a><time datetime="2022-04-04T10:43:04.000Z" title="发表于 2022-04-04 18:43:04">2022-04-04</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By Foam🍅</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">本地搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>(() => {
+  const $mermaidWrap = document.querySelectorAll('#article-container .mermaid-wrap')
+  if ($mermaidWrap.length) {
+    window.runMermaid = () => {
+      window.loadMermaid = true
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+      Array.from($mermaidWrap).forEach((item, index) => {
+        const mermaidSrc = item.firstElementChild
+        const mermaidThemeConfig = '%%{init:{ \'theme\':\'' + theme + '\'}}%%\n'
+        const mermaidID = 'mermaid-' + index
+        const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+        mermaid.mermaidAPI.render(mermaidID, mermaidDefinition, (svgCode) => {
+          mermaidSrc.insertAdjacentHTML('afterend', svgCode)
+        })
+      })
+    }
+
+    const loadMermaid = () => {
+      window.loadMermaid ? runMermaid() : getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaid)
+    }
+
+    window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start -->
+  <script data-pjax src="https://cdn.jsdelivr.net/gh/Zfour/hexo-github-calendar@1.21/hexo_githubcalendar.js"></script>
+  <script data-pjax>
+        function GithubCalendarConfig(){
+            var git_githubapiurl ="https://python-github-calendar-api.vercel.app/api?FoamTomato";
+            var git_color =['#ebedf0', '#fdcdec', '#fc9bd9', '#fa6ac5', '#f838b2', '#f5089f', '#c4067e', '#92055e', '#540336', '#48022f', '#30021f'];
+            var git_user ="FoamTomato";
+            var parent_div_git = document.getElementById('recent-posts');
+            var git_div_html = '<div class="recent-post-item" style="width:100%;height:auto;padding:10px;"><div id="github_loading" style="width:10%;height:100%;margin:0 auto;display: block"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  viewBox="0 0 50 50" style="enable-background:new 0 0 50 50" xml:space="preserve"><path fill="#d0d0d0" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z" transform="rotate(275.098 25 25)"><animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"></animateTransform></path></svg></div><div id="github_container"></div></div>';
+            if(parent_div_git && location.pathname =='/'){
+                console.log('已挂载github calendar')
+                // parent_div_git.innerHTML=git_div_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",git_div_html) // 有报错，但不影响使用(支持pjax跳转)
+            };
+            GithubCalendar(git_githubapiurl,git_color,git_user)
+        }
+        if(document.getElementById('recent-posts')){
+            GithubCalendarConfig()
+        }
+    </script>
+    <style>#github_container{min-height:280px}@media screen and (max-width:650px) {#github_container{background-image:;min-height:0px}}</style>
+    <style></style><script data-pjax>function history_calendar_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-history"><div class="card-content"><div class="item-headline"><i class="fas fa-clock fa-spin"></i><span>那年今日</span></div><div id="history-baidu" style="height: 100px;overflow: hidden"><div class="history_swiper-container" id="history-container" style="width: 100%;height: 100%"><div class="swiper-wrapper" id="history_container_wrapper" style="height:20px"></div></div></div></div>';
+                console.log('已挂载history_calendar')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            history_calendar_injector_config()
+        } </script><script data-pjax  src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script><script data-pjax src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/js/main.js"></script><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img id="card-clock-loading" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><!-- hexo injector body_end end --></body></html>
