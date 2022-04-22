@@ -389,6 +389,7 @@
 <p>MaxScale：MaxScale是mariadb研发的中间件</p>
 <p>MysqlRoute：MySql官方Oracle公司发布的中间件</p>
 <p>ShardingJDBC：现在比较主流的中间件</p>
+<p>SQL解析&gt;查询优化&gt;SQL路由&gt;SQL改写&gt;SQL执行&gt;结果归并</p>
 ]]></content>
       <tags>
         <tag>分库分表</tag>
@@ -508,6 +509,114 @@
         <tag>redis</tag>
         <tag>数据库</tag>
         <tag>缓存</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>自定义注解</title>
+    <url>/2022/04/22/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%A8%E8%A7%A3/</url>
+    <content><![CDATA[<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>注解是一种能被添加到java源代码中的元数据，方法、类、参数和包都可以用注解来修饰。注解可以看作是一种特殊的标记，可以用在方法、类、参数和包上，程序在编译或者运行时可以检测到这些标记而进行一些特殊的处理</p>
+<h3 id="元注解介绍"><a href="#元注解介绍" class="headerlink" title="元注解介绍"></a>元注解介绍</h3><p>元注解的作用就是负责注解其他注解，Java5.0定义了4个标准的meta-annotation类型，它们被用来提供对其它 annotation类型作说明</p>
+<ul>
+<li>@Target</li>
+<li>@Retention</li>
+<li>@Documented</li>
+<li>@Inherited</li>
+</ul>
+<p>对应的参数详情说明见末尾</p>
+<p>修饰符：访问修饰符必须为public,不写默认为pubic</p>
+<p>关键字：关键字为@interface</p>
+<p>注解名称： 注解名称为自定义注解的名称</p>
+<p>注解内容：注解中内容，对注解的描述</p>
+<blockquote>
+<p>以下内容采用枚举方式进行注解</p>
+</blockquote>
+<h3 id="1-定义枚举"><a href="#1-定义枚举" class="headerlink" title="1.定义枚举"></a>1.定义枚举</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">enum</span> <span class="title">newChannelEnum</span> </span>&#123;</span><br><span class="line">    BVC(<span class="string">&quot;BVC&quot;</span>,<span class="string">&quot;bvc_timeout&quot;</span>,<span class="string">&quot;BVC&quot;</span>,<span class="string">&quot;BVC_config&quot;</span>),</span><br><span class="line">    ACC(<span class="string">&quot;ACC&quot;</span>,<span class="string">&quot;acc_timeout&quot;</span>,<span class="string">&quot;ACC&quot;</span>,<span class="string">&quot;ACC_config&quot;</span>);</span><br><span class="line">    <span class="comment">// 渠道简称</span></span><br><span class="line">    <span class="keyword">private</span> String channel;</span><br><span class="line">    <span class="comment">// 超时时间配置</span></span><br><span class="line">    <span class="keyword">private</span> String timeout;</span><br><span class="line">    <span class="comment">// 全名</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="comment">// 接口详情配置</span></span><br><span class="line">    <span class="keyword">private</span> String interfaceName;</span><br><span class="line"></span><br><span class="line">    newChannelEnum(String channel, String timeout, String name, String interfaceName) &#123;</span><br><span class="line">        <span class="keyword">this</span>.channel = channel;</span><br><span class="line">        <span class="keyword">this</span>.timeout = timeout;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.interfaceName = interfaceName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getInterfaceName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> interfaceName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getChannel</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> channel;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getTimeout</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> timeout;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setTimeout</span><span class="params">(String timeout)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.timeout = timeout;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-定义注解"><a href="#2-定义注解" class="headerlink" title="2.定义注解"></a>2.定义注解</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Target(&#123;ElementType.METHOD,ElementType.FIELD,ElementType.PARAMETER&#125;)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> InterfaceTagConfig &#123;</span><br><span class="line">    <span class="function">newChannelEnum <span class="title">method</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-定义注解工具类"><a href="#3-定义注解工具类" class="headerlink" title="3.定义注解工具类"></a>3.定义注解工具类</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InterfaceTarHelper</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 你需要使用注解的实体类</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> InterfaceDefault CLASS_LOAD_PATH = <span class="keyword">new</span> InterfaceDefault();</span><br><span class="line">    <span class="comment">// 存放标记了自定义注解方法的MAP</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Map&lt;String,Method&gt; METHOD_MAP = <span class="keyword">new</span> ConcurrentHashMap&lt;String,Method&gt;();</span><br><span class="line">    <span class="comment">// 方法</span></span><br><span class="line">    <span class="keyword">private</span> Method method;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        <span class="comment">// 获取所有方法</span></span><br><span class="line">        Method[] methods = CLASS_LOAD_PATH.getClass().getMethods();</span><br><span class="line">        <span class="keyword">for</span> (Method method : methods) &#123;</span><br><span class="line">            <span class="comment">// 筛选打了注解的方法，并存入MAP</span></span><br><span class="line">            InterfaceTagConfig annotation = method.getAnnotation(InterfaceTagConfig.class);</span><br><span class="line">            <span class="keyword">if</span>(annotation != <span class="keyword">null</span>)&#123;</span><br><span class="line">                METHOD_MAP.put(String.valueOf(annotation.method()),method);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> InterfaceTarHelper <span class="title">getInstance</span><span class="params">(newChannelEnum methodEnum)</span></span>&#123;</span><br><span class="line">        InterfaceTarHelper helper = <span class="keyword">new</span> InterfaceTarHelper();</span><br><span class="line">        <span class="comment">// 根据枚举获取方法</span></span><br><span class="line">        helper.method = METHOD_MAP.get(String.valueOf(methodEnum));</span><br><span class="line">        <span class="keyword">return</span> helper;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">getSearchFlightDetail</span><span class="params">(Object... args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 方法传参数</span></span><br><span class="line">            <span class="keyword">return</span> method.invoke(CLASS_LOAD_PATH, args);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InvocationTargetException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-使用注解"><a href="#4-使用注解" class="headerlink" title="4.使用注解"></a>4.使用注解</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NewSearch</span> </span>&#123;</span><br><span class="line">    <span class="meta">@InterfaceTarget(method = InterfaceTagConfig.BVC)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">BVCValidation</span><span class="params">(InterfaceParam param)</span></span>&#123;……&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@InterfaceTarget(method = InterfaceTagConfig.ACC)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">ACCValidation</span><span class="params">(InterfaceParam param)</span></span>&#123;……&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-调用方法"><a href="#5-调用方法" class="headerlink" title="5.调用方法"></a>5.调用方法</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SearchUtils</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">getData_new</span><span class="params">(String channel, InterfaceParam param)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="comment">// 获取对应的枚举</span></span><br><span class="line">        newChannelEnum enums = newChannelEnum.getEnums(channel);</span><br><span class="line">        <span class="comment">// 调用对应的注解</span></span><br><span class="line">        InterfaceHelper.getInstance(enums).getSearchFlightDetail(param);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-附释"><a href="#6-附释" class="headerlink" title="6.附释"></a>6.附释</h3><h4 id="Target"><a href="#Target" class="headerlink" title="@Target"></a><strong>@Target</strong></h4><p><code>表明该注解可以应用的java元素类型</code></p>
+<table>
+<thead>
+<tr>
+<th>Target类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ElementType.TYPE</td>
+<td>应用于类、接口（包括注解类型）、枚举</td>
+</tr>
+<tr>
+<td>ElementType.FIELD</td>
+<td>应用于属性（包括枚举中的常量）</td>
+</tr>
+<tr>
+<td>ElementType.METHOD</td>
+<td>应用于方法</td>
+</tr>
+<tr>
+<td>ElementType.PARAMETER</td>
+<td>应用于方法的形参</td>
+</tr>
+<tr>
+<td>ElementType.CONSTRUCTOR</td>
+<td>应用于构造函数</td>
+</tr>
+<tr>
+<td>ElementType.LOCAL_VARIABLE</td>
+<td>应用于局部变量</td>
+</tr>
+<tr>
+<td>ElementType.ANNOTATION_TYPE</td>
+<td>应用于注解类型</td>
+</tr>
+<tr>
+<td>ElementType.PACKAGE</td>
+<td>应用于包</td>
+</tr>
+<tr>
+<td>ElementType.TYPE_PARAMETER</td>
+<td>1.8版本新增，应用于类型变量</td>
+</tr>
+<tr>
+<td>ElementType.TYPE_USE</td>
+<td>1.8版本新增，应用于任何使用类型的语句中（例如声明语句、泛型和强制转换语句中的类型）</td>
+</tr>
+</tbody></table>
+<h4 id="Retention"><a href="#Retention" class="headerlink" title="@Retention"></a><strong>@Retention</strong></h4><p><code>表明该注解的生命周期</code></p>
+<table>
+<thead>
+<tr>
+<th><strong>生命周期类型</strong></th>
+<th><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RetentionPolicy.SOURCE</td>
+<td>编译时被丢弃，不包含在类文件中</td>
+</tr>
+<tr>
+<td>RetentionPolicy.CLASS</td>
+<td>JVM加载时被丢弃，包含在类文件中，默认值</td>
+</tr>
+<tr>
+<td>RetentionPolicy.RUNTIME</td>
+<td>由JVM 加载，包含在类文件中，在运行时可以被获取到</td>
+</tr>
+</tbody></table>
+<h4 id="Document"><a href="#Document" class="headerlink" title="@Document"></a><strong>@Document</strong></h4><p><code>表明该注解标记的元素可以被Javadoc 或类似的工具文档化</code></p>
+<h4 id="Inherited"><a href="#Inherited" class="headerlink" title="@Inherited"></a><strong>@Inherited</strong></h4><p><code>表明使用了@Inherited注解的注解，所标记的类的子类也会拥有这个注解</code></p>
+]]></content>
+      <tags>
+        <tag>java</tag>
+        <tag>自定义注解</tag>
+        <tag>反射</tag>
       </tags>
   </entry>
   <entry>
