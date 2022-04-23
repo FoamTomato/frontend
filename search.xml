@@ -110,6 +110,51 @@
       </tags>
   </entry>
   <entry>
+    <title>mysql创建定时任务</title>
+    <url>/2022/04/23/mysql%E5%88%9B%E5%BB%BA%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/</url>
+    <content><![CDATA[<blockquote>
+<p>需求：定时删除三个月之前的数据</p>
+</blockquote>
+<p>1.编写需要执行的sql语句</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">## 因为表数据过大（大约2亿数据），需要先查询三个月之前的id节点，增加查询速度</span><br><span class="line">select MAX(id) from other_log_info where DATE_FORMAT(createtime,&#x27;%Y-%m-%d&#x27;) = DATE_SUB(CURDATE(),INTERVAL 3 MONTH);</span><br><span class="line"></span><br><span class="line">## 查询的sql一次不能删除太多数据，防止锁表</span><br><span class="line">select * from other_log_info where id &lt; (select MAX(id) from other_log_info where DATE_FORMAT(createtime,&#x27;%Y-%m-%d&#x27;) = DATE_SUB(CURDATE(),INTERVAL 3 MONTH)) LIMIT 0,1000</span><br><span class="line"></span><br><span class="line">## 由于delete不能直接删除子查询表中的数据，必须用过嵌套一层的方式来解决</span><br><span class="line">## 第二种执行方式，如果对于sql比较熟悉，可以用存储过程的&quot;游标&quot;进行循环</span><br><span class="line">DELETE FROM other_log_info where id in </span><br><span class="line">	(select t2.id from </span><br><span class="line">		(select id from other_log_info where </span><br><span class="line">			id &lt; (select MAX(id) from other_log_info where createtime &lt; DATE_SUB(CURDATE(),INTERVAL 3 MONTH)) LIMIT 0,1000) t2)</span><br></pre></td></tr></table></figure>
+
+<p>游标使用方式：<a href="https://www.cnblogs.com/cbt-home/p/15269736.html">https://www.cnblogs.com/cbt-home/p/15269736.html</a></p>
+<ul>
+<li>CURDATE() 返回当前日期</li>
+<li>CURNOW() 返回当前datetime</li>
+<li>INTERVAL 是mysql间隔值，用法为INTERVAL expr unit。INTERVAL 3 DAY表示三天的间隔</li>
+<li>DATE_SUB(start_date,INTERVAL expr unit);</li>
+</ul>
+<p>2.编写存储过程</p>
+<p>存储过程相当于mysql的函数，它是存储在数据库服务器中的一组sql语句，通过调用这个函数的名称来执行这些sql语句命令。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-- 分隔符切换防止“;”直接分隔了</span><br><span class="line">DELIMITER //</span><br><span class="line">-- 创建存储过程</span><br><span class="line">CREATE procedure del_log2()</span><br><span class="line">BEGIN</span><br><span class="line">	SELECT * FROM xxl_job_log WHERE trigger_time &lt; DATE_SUB(CURDATE(),INTERVAL 5 MONTH);</span><br><span class="line">END //</span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>DELIMITER是分割符的意思，声明存储过程前将&quot;//&quot;声明为分隔符，这样存储过程中的“;”才不会被当作分隔符处理。声明结束后再还原分隔符。</code></li>
+<li>存储过程也可以带参数，存储过程名(参数)</li>
+<li>在声明存储过程前要先用use database_name切换到想要应用的数据库，否则存储过程会应用到默认数据库中</li>
+</ul>
+<p>查看存储过程</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-- db指的数据库名</span><br><span class="line">select * from mysql.proc where db = &quot;xxl_job&quot;</span><br></pre></td></tr></table></figure>
+
+<p>调用存储过程</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">call del_log();</span><br></pre></td></tr></table></figure>
+
+<p>3.编写事件调度器（定时任务）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-- 确认是否开启事件调度器</span><br><span class="line">SHOW VARIABLES LIKE &#x27;event_scheduler&#x27;;</span><br><span class="line"></span><br><span class="line">-- 开启事件调度器</span><br><span class="line">SET GLOBAL event_scheduler = ON;</span><br></pre></td></tr></table></figure>
+
+<p>创建事件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-- 创建调度任务(从2022-4-22开始，每天执行一次del_data())</span><br><span class="line">create event del_event  </span><br><span class="line">on schedule </span><br><span class="line">EVERY 1 day  </span><br><span class="line">STARTS &#x27;2022-4-22 00:00:00&#x27; </span><br><span class="line">do call del_data()</span><br></pre></td></tr></table></figure>
+
+<p>查看事件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-- 查看事件</span><br><span class="line">SHOW EVENTS;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://gitee.com/foam077/images/raw/master/img/123.jpg/" alt="image-20220422104326667"></p>
+<p><img src="https://gitee.com/foam077/images/raw/master/img/34.jpg/" alt="image-20220422104354508"></p>
+<p><img src="https://gitee.com/foam077/images/raw/master/img/PZ_%7D(YABF6HUB3~ULXWF5R3.png/" alt="image-20220422104419241"></p>
+]]></content>
+  </entry>
+  <entry>
     <title>redis锁</title>
     <url>/2022/02/23/redis%E9%94%81/</url>
     <content><![CDATA[<p>暂时没时间整细节，给个粗略的记录一下</p>
@@ -212,6 +257,60 @@
       <tags>
         <tag>redis</tag>
         <tag>分布式锁</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>初探xxljob</title>
+    <url>/2022/02/13/%E5%88%9D%E6%8E%A2xxljob/</url>
+    <content><![CDATA[<p><a href="http://gitee.com/xuxueli0323/xxl-job/releases">下载地址</a></p>
+<p>搭建xxljob需要提前准备好</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">maven3+</span><br><span class="line">jdk8+</span><br><span class="line">mysql5.7+</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-首先初始化SQL脚本建立必须的库和表"><a href="#1-首先初始化SQL脚本建立必须的库和表" class="headerlink" title="1.首先初始化SQL脚本建立必须的库和表"></a>1.首先初始化SQL脚本建立必须的库和表</h3><p><img src="https://img-blog.csdnimg.cn/41e36ffb828147959d17e4668e4fcde1.png#pic_center" alt="在这里插入图片描述"></p>
+<h3 id="2-对于解压的文件分为三个模块"><a href="#2-对于解压的文件分为三个模块" class="headerlink" title="2.对于解压的文件分为三个模块"></a>2.对于解压的文件分为三个模块</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">xxl-job-admin：调度中心</span><br><span class="line">xxl-job-core：公共依赖</span><br><span class="line">xxl-job-executor-samples：执行器Sample示例（选择合适的版本执行器，可直接使用，也可以参考其并将现有项目改造成执行器）</span><br><span class="line">    ：xxl-job-executor-sample-springboot：Springboot版本，通过Springboot管理执行器，推荐这种方式；</span><br><span class="line">    ：xxl-job-executor-sample-frameless：无框架版本；</span><br></pre></td></tr></table></figure>
+
+<p>其中：xxl-job-core是需要引入的源码包后续我们可以用以下形式引入</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.xuxueli<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>xxl-job-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.3.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>xxl-job-admin是我们的调度中心，我们只需要把这个项目单独拿出来运行就行了，下面是运行结果</p>
+<p><img src="https://img-blog.csdnimg.cn/aa9e342bd215486daaa05d8783dd5f35.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBARm9hbeeVquiMhA==,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+<p>xxl-job-executor-sample-springboot是我们后续用boot可以参照的模板，当然也可以直接用来使用</p>
+<h3 id="3-xxl-job-admin配置"><a href="#3-xxl-job-admin配置" class="headerlink" title="3.xxl-job-admin配置"></a>3.xxl-job-admin配置</h3><p>先修改数据库的地址，也就是上面初始化的地址</p>
+<p><label style="color:#843900">注意在数据库地址哪里加上时区属性，否则乱码</label></p>
+<p><img src="https://img-blog.csdnimg.cn/5f6ad4958e8940e19977bdfbd74a6d56.png#pic_center" alt="在这里插入图片描述"></p>
+<p>然后修改警报邮箱配置</p>
+<p><img src="https://img-blog.csdnimg.cn/fdce9d1b4aa744269bdfcd5706c83abc.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBARm9hbeeVquiMhA==,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+<h3 id="4-警报邮箱配置"><a href="#4-警报邮箱配置" class="headerlink" title="4.警报邮箱配置"></a>4.警报邮箱配置</h3><p><img src="https://img-blog.csdnimg.cn/f59f8bc6828343909ba1c178b8ed6e72.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBARm9hbeeVquiMhA==,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+<p>去自己对应邮箱的设置里面找到smtp并开启</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">注意：spring.mail.password的密码是QQ邮箱开启SMTP的授权码而非QQ密码</span><br></pre></td></tr></table></figure>
+
+<p><label style="color:#843900">这里需要注意不同邮箱有不同的收发件host</label></p>
+<p>比如新浪</p>
+<p>发件:POP3服务器为：pop3.sina.com.cn<br>收件:SMTP服务器为：smtp.sina.com.cn</p>
+<p>qq</p>
+<p>发件:POP3服务器为：pop.qq.com<br>收件:SMTP服务器为：smtp.qq.com</p>
+<p>注意 不能自己邮箱发自己邮箱，否则收不到</p>
+<p><img src="https://img-blog.csdnimg.cn/e0947d401d0f4f0d8bb6a64063f3d866.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBARm9hbeeVquiMhA==,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+<p>上面就是收件的内容</p>
+<h3 id="5-boot整合xxljob"><a href="#5-boot整合xxljob" class="headerlink" title="5.boot整合xxljob"></a>5.boot整合xxljob</h3><p>引入依赖</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.xuxueli<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>xxl-job-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.3.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>配置文件整合</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.demo.config;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.xxl.job.core.executor.impl.XxlJobSpringExecutor;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Value;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Bean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">xxlConfig</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Logger logger = LoggerFactory.getLogger(xxlConfig.class);</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;xxl.job.admin.addresses&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String adminAddresses;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;xxl.job.accessToken&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String accessToken;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;xxl.job.executor.appname&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String appname;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;xxl.job.executor.address&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String address;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;xxl.job.executor.ip&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String ip;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;xxl.job.executor.port&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> port;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;xxl.job.executor.logpath&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String logPath;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;xxl.job.executor.logretentiondays&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> logRetentionDays;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> XxlJobSpringExecutor <span class="title">xxlJobExecutor</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        logger.info(<span class="string">&quot;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; xxl-job config init.&quot;</span>);</span><br><span class="line">        XxlJobSpringExecutor xxlJobSpringExecutor = <span class="keyword">new</span> XxlJobSpringExecutor();</span><br><span class="line">        xxlJobSpringExecutor.setAdminAddresses(adminAddresses);</span><br><span class="line">        xxlJobSpringExecutor.setAppname(appname);</span><br><span class="line">        xxlJobSpringExecutor.setAddress(address);</span><br><span class="line">        xxlJobSpringExecutor.setIp(ip);</span><br><span class="line">        xxlJobSpringExecutor.setPort(port);</span><br><span class="line">        xxlJobSpringExecutor.setAccessToken(accessToken);</span><br><span class="line">        xxlJobSpringExecutor.setLogPath(logPath);</span><br><span class="line">        xxlJobSpringExecutor.setLogRetentionDays(logRetentionDays);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> xxlJobSpringExecutor;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>application.properties</p>
+<figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 启动端口和访问路径</span></span><br><span class="line"><span class="meta">server.port</span>=<span class="string">8089</span></span><br><span class="line"><span class="meta">server.servlet.context-path</span>=<span class="string">/todo</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"># 调度中心（xxl-job-admin）的部署地址，如调度中心集群部署存在多个地址则用逗号分隔。执行器将会使用该地址进行&quot;执行器心跳注册&quot;和&quot;任务结果回调&quot;；</span></span><br><span class="line"><span class="comment"># 为空则关闭自动注册；则需要手动注册</span></span><br><span class="line"><span class="meta">xxl.job.admin.addresses</span>=<span class="string">http://127.0.0.1:8080/xxl-job-admin</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">### 执行器通讯TOKEN [选填]：非空时启用；</span></span><br><span class="line"><span class="meta">xxl.job.accessToken</span>=<span class="string"></span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">### 执行器AppName [选填]：执行器心跳注册分组依据；为空则关闭自动注册</span></span><br><span class="line"><span class="meta">xxl.job.executor.appname</span>=<span class="string">job-to-do</span></span><br><span class="line"><span class="comment">### 执行器注册 [选填]：优先使用该配置作为注册地址，为空时使用内嵌服务 ”IP:PORT“ 作为注册地址。从而更灵活的支持容器类型执行器动态IP和动态映射端口问题。</span></span><br><span class="line"><span class="meta">xxl.job.executor.address</span>=<span class="string"></span></span><br><span class="line"><span class="comment">### 执行器IP [选填]：默认为空表示自动获取IP，多网卡时可手动设置指定IP，该IP不会绑定Host仅作为通讯实用；地址信息用于 &quot;执行器注册&quot; 和 &quot;调度中心请求并触发任务&quot;；</span></span><br><span class="line"><span class="meta">xxl.job.executor.ip</span>=<span class="string"></span></span><br><span class="line"><span class="meta">xxl.job.executor.port</span>=<span class="string">9998</span></span><br><span class="line"><span class="comment">### 执行器运行日志文件存储磁盘路径 [选填] ：需要对该路径拥有读写权限；为空则使用默认路径；</span></span><br><span class="line"><span class="meta">xxl.job.executor.logpath</span>=<span class="string">/data/applogs/xxl-job/jobhandler</span></span><br><span class="line"><span class="comment">### 执行器日志文件保存天数 [选填] ： 过期日志自动清理, 限制值大于等于3时生效; 否则, 如-1, 关闭自动清理功能；</span></span><br><span class="line"><span class="meta">xxl.job.executor.logretentiondays</span>=<span class="string">30</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="6-定时任务的创建方式"><a href="#6-定时任务的创建方式" class="headerlink" title="6.定时任务的创建方式"></a>6.定时任务的创建方式</h3><p><img src="https://img-blog.csdnimg.cn/20210107153914491.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3l3ajc3NjE5OTg0NQ==,size_16,color_FFFFFF,t_70" alt="img"></p>
+<p>@XxlJob注解是新版本提供的方式，不需要继承</p>
+<p>旧版方式是继承IJobHander然后重写execute方法</p>
+<h3 id="7-界面介绍"><a href="#7-界面介绍" class="headerlink" title="7.界面介绍"></a>7.界面介绍</h3><p><img src="https://img-blog.csdnimg.cn/1d7d97d8e07041649fe41609182ff877.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBARm9hbeeVquiMhA==,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/64509e90b93641e38373b498c1f68392.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBARm9hbeeVquiMhA==,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+<p><label style="color:#843900"> 注意  当删除任务时，任务日志也会跟着删除 </label></p>
+]]></content>
+      <tags>
+        <tag>java</tag>
+        <tag>中间件</tag>
       </tags>
   </entry>
   <entry>
@@ -324,80 +423,6 @@
       </tags>
   </entry>
   <entry>
-    <title>初探xxljob</title>
-    <url>/2022/02/13/%E5%88%9D%E6%8E%A2xxljob/</url>
-    <content><![CDATA[<p><a href="http://gitee.com/xuxueli0323/xxl-job/releases">下载地址</a></p>
-<p>搭建xxljob需要提前准备好</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">maven3+</span><br><span class="line">jdk8+</span><br><span class="line">mysql5.7+</span><br></pre></td></tr></table></figure>
-
-<h3 id="1-首先初始化SQL脚本建立必须的库和表"><a href="#1-首先初始化SQL脚本建立必须的库和表" class="headerlink" title="1.首先初始化SQL脚本建立必须的库和表"></a>1.首先初始化SQL脚本建立必须的库和表</h3><p><img src="https://img-blog.csdnimg.cn/41e36ffb828147959d17e4668e4fcde1.png#pic_center" alt="在这里插入图片描述"></p>
-<h3 id="2-对于解压的文件分为三个模块"><a href="#2-对于解压的文件分为三个模块" class="headerlink" title="2.对于解压的文件分为三个模块"></a>2.对于解压的文件分为三个模块</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">xxl-job-admin：调度中心</span><br><span class="line">xxl-job-core：公共依赖</span><br><span class="line">xxl-job-executor-samples：执行器Sample示例（选择合适的版本执行器，可直接使用，也可以参考其并将现有项目改造成执行器）</span><br><span class="line">    ：xxl-job-executor-sample-springboot：Springboot版本，通过Springboot管理执行器，推荐这种方式；</span><br><span class="line">    ：xxl-job-executor-sample-frameless：无框架版本；</span><br></pre></td></tr></table></figure>
-
-<p>其中：xxl-job-core是需要引入的源码包后续我们可以用以下形式引入</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.xuxueli<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>xxl-job-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.3.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>xxl-job-admin是我们的调度中心，我们只需要把这个项目单独拿出来运行就行了，下面是运行结果</p>
-<p><img src="https://img-blog.csdnimg.cn/aa9e342bd215486daaa05d8783dd5f35.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBARm9hbeeVquiMhA==,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
-<p>xxl-job-executor-sample-springboot是我们后续用boot可以参照的模板，当然也可以直接用来使用</p>
-<h3 id="3-xxl-job-admin配置"><a href="#3-xxl-job-admin配置" class="headerlink" title="3.xxl-job-admin配置"></a>3.xxl-job-admin配置</h3><p>先修改数据库的地址，也就是上面初始化的地址</p>
-<p><label style="color:#843900">注意在数据库地址哪里加上时区属性，否则乱码</label></p>
-<p><img src="https://img-blog.csdnimg.cn/5f6ad4958e8940e19977bdfbd74a6d56.png#pic_center" alt="在这里插入图片描述"></p>
-<p>然后修改警报邮箱配置</p>
-<p><img src="https://img-blog.csdnimg.cn/fdce9d1b4aa744269bdfcd5706c83abc.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBARm9hbeeVquiMhA==,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
-<h3 id="4-警报邮箱配置"><a href="#4-警报邮箱配置" class="headerlink" title="4.警报邮箱配置"></a>4.警报邮箱配置</h3><p><img src="https://img-blog.csdnimg.cn/f59f8bc6828343909ba1c178b8ed6e72.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBARm9hbeeVquiMhA==,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
-<p>去自己对应邮箱的设置里面找到smtp并开启</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">注意：spring.mail.password的密码是QQ邮箱开启SMTP的授权码而非QQ密码</span><br></pre></td></tr></table></figure>
-
-<p><label style="color:#843900">这里需要注意不同邮箱有不同的收发件host</label></p>
-<p>比如新浪</p>
-<p>发件:POP3服务器为：pop3.sina.com.cn<br>收件:SMTP服务器为：smtp.sina.com.cn</p>
-<p>qq</p>
-<p>发件:POP3服务器为：pop.qq.com<br>收件:SMTP服务器为：smtp.qq.com</p>
-<p>注意 不能自己邮箱发自己邮箱，否则收不到</p>
-<p><img src="https://img-blog.csdnimg.cn/e0947d401d0f4f0d8bb6a64063f3d866.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBARm9hbeeVquiMhA==,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
-<p>上面就是收件的内容</p>
-<h3 id="5-boot整合xxljob"><a href="#5-boot整合xxljob" class="headerlink" title="5.boot整合xxljob"></a>5.boot整合xxljob</h3><p>引入依赖</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.xuxueli<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>xxl-job-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.3.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>配置文件整合</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.demo.config;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.xxl.job.core.executor.impl.XxlJobSpringExecutor;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Value;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Bean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">xxlConfig</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Logger logger = LoggerFactory.getLogger(xxlConfig.class);</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;xxl.job.admin.addresses&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String adminAddresses;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;xxl.job.accessToken&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String accessToken;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;xxl.job.executor.appname&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String appname;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;xxl.job.executor.address&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String address;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;xxl.job.executor.ip&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String ip;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;xxl.job.executor.port&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> port;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;xxl.job.executor.logpath&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String logPath;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;xxl.job.executor.logretentiondays&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> logRetentionDays;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> XxlJobSpringExecutor <span class="title">xxlJobExecutor</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        logger.info(<span class="string">&quot;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; xxl-job config init.&quot;</span>);</span><br><span class="line">        XxlJobSpringExecutor xxlJobSpringExecutor = <span class="keyword">new</span> XxlJobSpringExecutor();</span><br><span class="line">        xxlJobSpringExecutor.setAdminAddresses(adminAddresses);</span><br><span class="line">        xxlJobSpringExecutor.setAppname(appname);</span><br><span class="line">        xxlJobSpringExecutor.setAddress(address);</span><br><span class="line">        xxlJobSpringExecutor.setIp(ip);</span><br><span class="line">        xxlJobSpringExecutor.setPort(port);</span><br><span class="line">        xxlJobSpringExecutor.setAccessToken(accessToken);</span><br><span class="line">        xxlJobSpringExecutor.setLogPath(logPath);</span><br><span class="line">        xxlJobSpringExecutor.setLogRetentionDays(logRetentionDays);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> xxlJobSpringExecutor;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>application.properties</p>
-<figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 启动端口和访问路径</span></span><br><span class="line"><span class="meta">server.port</span>=<span class="string">8089</span></span><br><span class="line"><span class="meta">server.servlet.context-path</span>=<span class="string">/todo</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"># 调度中心（xxl-job-admin）的部署地址，如调度中心集群部署存在多个地址则用逗号分隔。执行器将会使用该地址进行&quot;执行器心跳注册&quot;和&quot;任务结果回调&quot;；</span></span><br><span class="line"><span class="comment"># 为空则关闭自动注册；则需要手动注册</span></span><br><span class="line"><span class="meta">xxl.job.admin.addresses</span>=<span class="string">http://127.0.0.1:8080/xxl-job-admin</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">### 执行器通讯TOKEN [选填]：非空时启用；</span></span><br><span class="line"><span class="meta">xxl.job.accessToken</span>=<span class="string"></span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">### 执行器AppName [选填]：执行器心跳注册分组依据；为空则关闭自动注册</span></span><br><span class="line"><span class="meta">xxl.job.executor.appname</span>=<span class="string">job-to-do</span></span><br><span class="line"><span class="comment">### 执行器注册 [选填]：优先使用该配置作为注册地址，为空时使用内嵌服务 ”IP:PORT“ 作为注册地址。从而更灵活的支持容器类型执行器动态IP和动态映射端口问题。</span></span><br><span class="line"><span class="meta">xxl.job.executor.address</span>=<span class="string"></span></span><br><span class="line"><span class="comment">### 执行器IP [选填]：默认为空表示自动获取IP，多网卡时可手动设置指定IP，该IP不会绑定Host仅作为通讯实用；地址信息用于 &quot;执行器注册&quot; 和 &quot;调度中心请求并触发任务&quot;；</span></span><br><span class="line"><span class="meta">xxl.job.executor.ip</span>=<span class="string"></span></span><br><span class="line"><span class="meta">xxl.job.executor.port</span>=<span class="string">9998</span></span><br><span class="line"><span class="comment">### 执行器运行日志文件存储磁盘路径 [选填] ：需要对该路径拥有读写权限；为空则使用默认路径；</span></span><br><span class="line"><span class="meta">xxl.job.executor.logpath</span>=<span class="string">/data/applogs/xxl-job/jobhandler</span></span><br><span class="line"><span class="comment">### 执行器日志文件保存天数 [选填] ： 过期日志自动清理, 限制值大于等于3时生效; 否则, 如-1, 关闭自动清理功能；</span></span><br><span class="line"><span class="meta">xxl.job.executor.logretentiondays</span>=<span class="string">30</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="6-定时任务的创建方式"><a href="#6-定时任务的创建方式" class="headerlink" title="6.定时任务的创建方式"></a>6.定时任务的创建方式</h3><p><img src="https://img-blog.csdnimg.cn/20210107153914491.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3l3ajc3NjE5OTg0NQ==,size_16,color_FFFFFF,t_70" alt="img"></p>
-<p>@XxlJob注解是新版本提供的方式，不需要继承</p>
-<p>旧版方式是继承IJobHander然后重写execute方法</p>
-<h3 id="7-界面介绍"><a href="#7-界面介绍" class="headerlink" title="7.界面介绍"></a>7.界面介绍</h3><p><img src="https://img-blog.csdnimg.cn/1d7d97d8e07041649fe41609182ff877.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBARm9hbeeVquiMhA==,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
-<p><img src="https://img-blog.csdnimg.cn/64509e90b93641e38373b498c1f68392.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBARm9hbeeVquiMhA==,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
-<p><label style="color:#843900"> 注意  当删除任务时，任务日志也会跟着删除 </label></p>
-]]></content>
-      <tags>
-        <tag>java</tag>
-        <tag>中间件</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>数据库中间件</title>
-    <url>/2022/04/17/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E9%97%B4%E4%BB%B6/</url>
-    <content><![CDATA[<h1 id="数据库中间件"><a href="#数据库中间件" class="headerlink" title="数据库中间件"></a>数据库中间件</h1><p>Cobar：阿里团队开发，已经多年没有维护更新</p>
-<p>MyCat：基于Cobar二次开发，开源社区维护</p>
-<p>OneProxy：不开源的商业中间件<code>专注性能和稳定性</code></p>
-<p>KingShard：GO语言开发，在不断完善</p>
-<p>Vitess：youtobe生产在使用，不支持MySql原生协议</p>
-<p>Atlas：360团队基于MySqlProxy改写，高并发下不稳定</p>
-<p>MaxScale：MaxScale是mariadb研发的中间件</p>
-<p>MysqlRoute：MySql官方Oracle公司发布的中间件</p>
-<p>ShardingJDBC：现在比较主流的中间件</p>
-<p>SQL解析&gt;查询优化&gt;SQL路由&gt;SQL改写&gt;SQL执行&gt;结果归并</p>
-]]></content>
-      <tags>
-        <tag>分库分表</tag>
-        <tag>多数据源</tag>
-        <tag>mysql</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>简单吐槽一下xml</title>
     <url>/2022/01/08/%E7%AE%80%E5%8D%95%E5%90%90%E6%A7%BD%E4%B8%80%E4%B8%8Bxml/</url>
     <content><![CDATA[<blockquote>
@@ -458,6 +483,26 @@
       <tags>
         <tag>java</tag>
         <tag>xml</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据库中间件</title>
+    <url>/2022/04/17/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E9%97%B4%E4%BB%B6/</url>
+    <content><![CDATA[<h1 id="数据库中间件"><a href="#数据库中间件" class="headerlink" title="数据库中间件"></a>数据库中间件</h1><p>Cobar：阿里团队开发，已经多年没有维护更新</p>
+<p>MyCat：基于Cobar二次开发，开源社区维护</p>
+<p>OneProxy：不开源的商业中间件<code>专注性能和稳定性</code></p>
+<p>KingShard：GO语言开发，在不断完善</p>
+<p>Vitess：youtobe生产在使用，不支持MySql原生协议</p>
+<p>Atlas：360团队基于MySqlProxy改写，高并发下不稳定</p>
+<p>MaxScale：MaxScale是mariadb研发的中间件</p>
+<p>MysqlRoute：MySql官方Oracle公司发布的中间件</p>
+<p>ShardingJDBC：现在比较主流的中间件</p>
+<p>SQL解析&gt;查询优化&gt;SQL路由&gt;SQL改写&gt;SQL执行&gt;结果归并</p>
+]]></content>
+      <tags>
+        <tag>分库分表</tag>
+        <tag>多数据源</tag>
+        <tag>mysql</tag>
       </tags>
   </entry>
   <entry>
