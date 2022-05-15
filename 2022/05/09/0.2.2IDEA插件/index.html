@@ -1,0 +1,248 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>IDEA插件 | 喵喵鱼塘</title><meta name="keywords" content="idea,插件"><meta name="author" content="Foam🍅"><meta name="copyright" content="Foam🍅"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="插件官网JetBrains Marketplace Alibaba Java Coding Guidelines首先要推荐的是和《手册》配套的 阿里巴巴 Java代码规范插件。安装该插件后，代码超过 80 行、手动创建线程池等，这些和《手册》中的规约不符时，IDEA中会给出警告提示。 jclasslib bytecode viewer下面要隆重介绍的是一款可视化的字节码查看插件：jclasslib">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IDEA插件">
+<meta property="og:url" content="https://foamtomato.github.io/2022/05/09/0.2.2IDEA%E6%8F%92%E4%BB%B6/index.html">
+<meta property="og:site_name" content="喵喵鱼塘">
+<meta property="og:description" content="插件官网JetBrains Marketplace Alibaba Java Coding Guidelines首先要推荐的是和《手册》配套的 阿里巴巴 Java代码规范插件。安装该插件后，代码超过 80 行、手动创建线程池等，这些和《手册》中的规约不符时，IDEA中会给出警告提示。 jclasslib bytecode viewer下面要隆重介绍的是一款可视化的字节码查看插件：jclasslib">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://npm.elemecdn.com/ushio-api-img-wallpaper@1.121.46/img_2021-04-03_1920x1080_96_background_normal.jpg">
+<meta property="article:published_time" content="2022-05-09T14:12:42.000Z">
+<meta property="article:modified_time" content="2022-05-15T14:24:51.110Z">
+<meta property="article:author" content="Foam🍅">
+<meta property="article:tag" content="idea">
+<meta property="article:tag" content="插件">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://npm.elemecdn.com/ushio-api-img-wallpaper@1.121.46/img_2021-04-03_1920x1080_96_background_normal.jpg"><link rel="shortcut icon" href="/img/favicon.ico"><link rel="canonical" href="https://foamtomato.github.io/2022/05/09/0.2.2IDEA%E6%8F%92%E4%BB%B6/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'IDEA插件',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-05-15 22:24:51'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/static-butterfly/dist/css/index.min.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/css/main.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/favicon.ico" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">22</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">26</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 鱼塘</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 喵生</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 关键词</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 猫片</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 猫の友</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 语录</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://npm.elemecdn.com/ushio-api-img-wallpaper@1.121.46/img_2021-04-03_1920x1080_96_background_normal.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">喵喵鱼塘</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 鱼塘</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 喵生</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 关键词</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 猫片</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 猫の友</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 语录</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">IDEA插件</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-05-09T14:12:42.000Z" title="发表于 2022-05-09 22:12:42">2022-05-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-05-15T14:24:51.110Z" title="更新于 2022-05-15 22:24:51">2022-05-15</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="IDEA插件"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="插件官网"><a href="#插件官网" class="headerlink" title="插件官网"></a>插件官网</h2><p><a target="_blank" rel="noopener" href="https://plugins.jetbrains.com/">JetBrains Marketplace</a></p>
+<h2 id="Alibaba-Java-Coding-Guidelines"><a href="#Alibaba-Java-Coding-Guidelines" class="headerlink" title="Alibaba Java Coding Guidelines"></a>Alibaba Java Coding Guidelines</h2><p>首先要推荐的是和《手册》配套的 <a href="https://link.zhihu.com/?target=https://plugins.jetbrains.com/plugin/10046-alibaba-java-coding-guidelines">阿里巴巴 Java代码规范</a>插件。<br>安装该插件后，代码超过 80 行、手动创建线程池等，这些和《手册》中的规约不符时，IDEA中会给出警告提示。</p>
+<h2 id="jclasslib-bytecode-viewer"><a href="#jclasslib-bytecode-viewer" class="headerlink" title="jclasslib bytecode viewer"></a>jclasslib bytecode viewer</h2><p>下面要隆重介绍的是一款可视化的字节码查看插件：<a href="https://link.zhihu.com/?target=https://plugins.jetbrains.com/plugin/9248-jclasslib-bytecode-viewer">jclasslib</a><br>大家可以直接在 IDEA 插件管理中安装（安装步骤略）<br><strong>使用方法：</strong></p>
+<ol>
+<li>在 IDEA 打开想研究的类</li>
+<li>编译该类或者直接编译整个项目（ 如果想研究的类在 jar 包中，此步可略过）</li>
+<li>打开“view” 菜单，选择“Show Bytecode With jclasslib” 选项</li>
+<li>选择上述菜单项后 IDEA 中会弹出 jclasslib 工具窗口<br><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/foam077/images/raw/master/img/8e553cce-1641-4005-a6ff-6a3d37b0ac09.jpg/" alt="img"><br>那么有自带的强大的反汇编工具 javap 还有必要用这个插件吗？<br>这个插件的强大之处在于：</li>
+<li>不需要敲命令，简单直接，在右侧方便和源代码进行对比学习。</li>
+<li>字节码命令支持超链接，点击其中的虚拟机指令即可跳转到 jvms 相关章节，超级方便。<br>该插件对我们学习虚拟机指令有极大的帮助。<br>详细安装和介绍参考另外一篇手记：<a target="_blank" rel="noopener" href="https://www.imooc.com/article/29625">https://www.imooc.com/article/29625</a></li>
+</ol>
+<h2 id="Codota"><a href="#Codota" class="headerlink" title="Codota"></a>Codota</h2><p>另外一个不得不说的就是专栏中提到的辅助开发神器: <a href="https://link.zhihu.com/?target=https://www.codota.com/code">Codota</a><br>可以点击下图所示“Add Codota to you IDEA” 了解安装步骤<br><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/foam077/images/raw/master/img/7916b83c-b22f-4cc4-87c1-e6baf8dd31d3.png/" alt="img"><br>该插件的强大之处在于：</p>
+<ol>
+<li>支持智能代码自动提示，该功能可以增强 IDEA 的代码提示功能。</li>
+<li>支持 JDK 和知名第三方库的函数的使用方法搜索，可以看到其他知名开源项目对该函数的用法<br>当我们第一次使用某个类，对某个函数不够熟悉时，可以通过该插件搜索相关用法，快速模仿学习<br><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/foam077/images/raw/master/img/8351c384-572e-4e28-9c8b-22249fd90af2.jpg/" alt="img"><br>如上图所示，我们想了解 Stream 类中 flatMap 函数的用法，可以使用该插件查看知名开源项目的用法<br>插件窗口顶部还给出了该类最常用的函数，可以点击查看相关用法案例，每个案例右侧的 “view source”可以跳转到该片段对应的开源项目的源码中</li>
+</ol>
+<h2 id="Auto-filling-Java-call-arguments"><a href="#Auto-filling-Java-call-arguments" class="headerlink" title="Auto filling Java call arguments"></a>Auto filling Java call arguments</h2><p>开发中，我们通常会调用其他已经编写好的函数，调用后需要填充参数，但是绝大多数情况下，传入的变量名称和该函数的参数名一致，当参数较多时，手动单个填充参数非常浪费时间<br>该插件就可以帮你解决这个问题<br>安装完该插件以后，调用一个函数，使用 Alt+Enter 组合键，调出 “Auto fill call parameters” 自动使用该函数定义的参数名填充</p>
+<h2 id="GenerateO2O、GenerateAllSetter"><a href="#GenerateO2O、GenerateAllSetter" class="headerlink" title="GenerateO2O、GenerateAllSetter"></a>GenerateO2O、GenerateAllSetter</h2><p>我们定义好从 A 类转换到 B 类的函数转换函数后，使用这两个插件可以自动调用 Getter 和 Setter 函数实行自动转换<br>实际开发中还有一个非常常见的场景： 我们创建一个对象后，想依次调用 Setter 函数对属性赋值，如果属性较多很容易遗漏或者重复<br><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/foam077/images/raw/master/img/c66fd122-cab4-47cc-b961-c135cd4959a4.jpg/" alt="img"><br>可以使用这 GenerateAllSetter 提供的功能，自动调用所有 Setter 函数（可填充默认值），然后自己再跟进实际需求设置属性值</p>
+<h2 id="Rainbow-Brackets"><a href="#Rainbow-Brackets" class="headerlink" title="Rainbow Brackets"></a>Rainbow Brackets</h2><p>由于很多人没有养成好的编码风格，没有随手 format 代码的习惯，甚至有些同事会写代码超过几百行，阅读起来将非常痛苦<br>痛苦的原因之一就是找到上下文，由于括号太多，不确定当前代码行是否属于某个代码块，此时这个插件就会帮上大忙<br>插件 github 地址：<a target="_blank" rel="noopener" href="https://github.com/izhangzhihao/intellij-rainbow-brackets">https://github.com/izhangzhihao/intellij-rainbow-brackets</a><br><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/foam077/images/raw/master/img/fb0eecd3-58fb-4c94-983b-0c857429b1af.jpg/" alt="img"><br>大家可以观看其 github 首页的动图体会和学习其强大功能</p>
+<h2 id="Maven-Helper"><a href="#Maven-Helper" class="headerlink" title="Maven Helper"></a>Maven Helper</h2><p>现在 Java 项目通常会使用 maven 或者 gradle 构建，对于maven 项目来说， jar 包冲突非常常见<br>那么如何更容易地查看和解决 jar 包冲突呢？<br><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/foam077/images/raw/master/img/6d4402db-659a-46a5-a3c5-2eca8e2d8fef.jpg/" alt="img"><br>大家可以安装该插件，安装后 IDEA 中打开 pom.xml 文件时，就会多出一个 “Dependency Analyzer” 选项卡<br>如上图所示，该插件支持值插件冲突的 jar 包，可以选择冲突的 jar 包将其 exclude 掉</p>
+<h2 id="FindBugs"><a href="#FindBugs" class="headerlink" title="FindBugs"></a>FindBugs</h2><p>程序员总是想尽可能地避免写 BUG， <a href="https://link.zhihu.com/?target=https://plugins.jetbrains.com/plugin/3847-findbugs-idea">FindBugs</a> 作为静态代码检查插件，可以检查你代码中的隐患，并给出原因。<br><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/foam077/images/raw/master/img/7a194699-57ed-4fa2-90dc-0ea77f6387aa.jpg/" alt="img"><br>当然还有很多类似的静态代码检查插件，大家可以自行了解安装</p>
+<h2 id="SequenceDiagram"><a href="#SequenceDiagram" class="headerlink" title="SequenceDiagram"></a>SequenceDiagram</h2><p><a href="https://link.zhihu.com/?target=https://plugins.jetbrains.com/plugin/8286-sequencediagram/">SequenceDiagram</a> 可以根据代码调用链路自动生成时序图，超级赞，超级推荐！<br>这对研究源码，梳理工作中的业务代码有极大的帮助，堪称神器。<br>安装完成后，在某个类的某个函数中，右键 –Sequence Diagaram 即可调出。<br>如下图是 Netty 的源码，可以通过该插件绘制出当前函数的调用链路。<br><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/foam077/images/raw/master/img/9fcf9f6f-fca3-4e84-bde3-4fcae1d094cc.jpg/" alt="img"><br>双击顶部的类名可以跳转到对应类的源码中，双击调用的函数名可以直接调入某个函数的源码，总之非常强大。</p>
+<h2 id="Java-Stream-Debugger"><a href="#Java-Stream-Debugger" class="headerlink" title="Java Stream Debugger"></a>Java Stream Debugger</h2><p>Stream 非常好用，可以灵活对数据进行操作，但是对很多刚接触的人来说，不好理解。<br>那么 <a href="https://link.zhihu.com/?target=https://plugins.jetbrains.com/plugin/9696-java-stream-debugger/">Java Stream Debugger</a> 这款神器的 IDEA 就可以帮到你。它可以将 Stream 的操作步骤可视化，非常有助于我们的学习。<br><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/foam077/images/raw/master/img/8ca3318a-0e7c-41a5-aeca-9fdd2f22fe64.png/" alt="img"><br><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/foam077/images/raw/master/img/65dd07a0-1d0e-44e7-aa53-6d5214f41b67.png/" alt="img"></p>
+<h2 id="Key-promoter-X"><a href="#Key-promoter-X" class="headerlink" title="Key promoter X"></a>Key promoter X</h2><p>很多人不愿意切换 IDE 就是因为快捷键的习惯问题。刚好这个插件可以提醒快捷键，有代入感，提醒的多了你就会了。对于新手建议安装熟悉一下快捷键。<br><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/foam077/images/raw/master/img/9c228208-bfc5-4266-9237-e6667719476d.gif/" alt="img"></p>
+<h2 id="IDEA-Mind-Map"><a href="#IDEA-Mind-Map" class="headerlink" title="IDEA Mind Map"></a>IDEA Mind Map</h2><p>思维导图对于我们需求分析和知识库关系梳理十分重要。有了这个插件以后 IDEA 也可以画思维导图了。而且功能还十分强大，贴图啥的应有尽有<br><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/foam077/images/raw/master/img/fdeb2a29-dadd-46a8-8470-9dcaed28f538.jpg/" alt="img"></p>
+<h2 id="CodeGlance"><a href="#CodeGlance" class="headerlink" title="CodeGlance"></a>CodeGlance</h2><p>代码编辑区迷你缩放插件，可以进行代码的全局预览。来看看效果吧<br><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/foam077/images/raw/master/img/8201434c-1af4-4541-814d-3319272e9dce.jpg/" alt="img"></p>
+<h2 id="CamelCase"><a href="#CamelCase" class="headerlink" title="CamelCase"></a>CamelCase</h2><p>命名风格转换插件，可以在 kebab-case，SNAKE_CASE，PascalCase，camelCase，snake_case 和 空格风格之间切换。快捷键苹果为 ⇧+⌥+ U ，windows 下为 Shift + Alt +U<br><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/foam077/images/raw/master/img/fc0c56ed-3faa-4561-a62a-79972d781f99.jpg/" alt="img"></p>
+<h2 id="MybatisX"><a href="#MybatisX" class="headerlink" title="MybatisX"></a>MybatisX</h2><p>Mybatis-plus 团队为 Mybatis 开发的插件，提供了 Mapper 接口和 XML之间的跳转和自动生成模版的功能<br><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/foam077/images/raw/master/img/049c45ce-b90f-4dd7-9a93-66ac59bba065.jpg/" alt="img"></p>
+<h2 id="MyBatis-Log-Plugin"><a href="#MyBatis-Log-Plugin" class="headerlink" title="MyBatis Log Plugin"></a>MyBatis Log Plugin</h2><p>另一款国人关于 Mybatis 的作品，评分也很高，作用是将 Mybatis 生成的 sql 还原为原始整个 sql。方便在开发中从日志中跟踪调试 sql语句<br><a target="_blank" rel="noopener" href="https://vdn.vzuu.com/SD/04205f24-23a2-11eb-a602-d6a043673cc5.mp4?disable_local_cache=1&amp;bu=078babd7&amp;c=avc.0.0&amp;f=mp4&amp;expiration=1652064414&amp;auth_key=1652064414-0-0-ed4dc28442589dc4e9e6703457fc9811&amp;v=ali&amp;pu=078babd7">https://vdn.vzuu.com/SD/04205f24-23a2-11eb-a602-d6a043673cc5.mp4?disable_local_cache=1&amp;bu=078babd7&amp;c=avc.0.0&amp;f=mp4&amp;expiration=1652064414&amp;auth_key=1652064414-0-0-ed4dc28442589dc4e9e6703457fc9811&amp;v=ali&amp;pu=078babd7</a></p>
+<h2 id="Git-Commit-Template"><a href="#Git-Commit-Template" class="headerlink" title="Git Commit Template"></a>Git Commit Template</h2><p>老是有人吐槽你提交的 Git 不规范？你可以试试这个插件。它提供了很好的 Git 格式化模版，你可以按照实际情况格式化你的提交信息<br><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/foam077/images/raw/master/img/4dec18c9-6b03-433c-a1e1-3c89624e4e9f.jpg/" alt="img"></p>
+<h2 id="Fast-Request"><a href="#Fast-Request" class="headerlink" title="Fast Request"></a>Fast Request</h2><p>Fast Request是一个基于springmvc的帮助你快速生成url和参数的插件,同时也是一个http client工具,调试API的时候只需要点击生成图标即可在工具窗口生成方法的url以及对应的参数，再点击发送请求按钮即可完成api调试，非常实用，相比于 Http client和restfultool，该插件拥有postman一样的界面和参数生成功能，域名管理功能，自定义参数解析功能，功能更加强大全面<br>【缺点】收费<br><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/foam077/images/raw/master/img/b2cdd37b-7b10-468b-a35d-68489cda7605.png/" alt="img"></p>
+<h2 id="Easy-Javadoc"><a href="#Easy-Javadoc" class="headerlink" title="Easy Javadoc"></a>Easy Javadoc</h2><p>快速生成javadoc文档，点击快捷键生成方法或类或属性的javadoc，同时支持各种渠道的翻译(建议不要用有道翻译，不准)<br><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/foam077/images/raw/master/img/d11428a5-ae8e-46a1-963b-5b84466de68c.png/" alt="img"></p>
+<h2 id="MybatisCodeHelperPro"><a href="#MybatisCodeHelperPro" class="headerlink" title="MybatisCodeHelperPro"></a>MybatisCodeHelperPro</h2><p>最好的Mybatis代码提示，完整支持Mybatis动态sql代码提示，代码检测，写sql几乎所有地方都有代码提示，支持基于方法名动态生成sql，生成基础实体类及mapper，功能非常强大<br><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/foam077/images/raw/master/img/ac025a3e-6f41-45d5-b9a5-0aad8b58c91d.png/" alt="img"><br><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/foam077/images/raw/master/img/c7d441d0-5520-4439-a385-ec72cd94b848.png/" alt="img"></p>
+<h2 id="Translation"><a href="#Translation" class="headerlink" title="Translation"></a>Translation</h2><p>对于英文不好的开发者来说，这款插件就是神器，在看各种框架源码的时候十分有用; 选择右键就可以翻译，对于方法或者类上面的注释，只要按下F1就自动被翻译成中文<br>(建议自定义快捷键)<br><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/foam077/images/raw/master/img/9d5f6612-6196-467f-9e20-90a91ecdf4ad.png/" alt="img"></p>
+<h2 id="Jrebel"><a href="#Jrebel" class="headerlink" title="Jrebel"></a>Jrebel</h2><p>老牌插件了，支持热启动，修改一些代码不再需要重启应用，大大减小项目重启带来的时间浪费，同时也支持远程启动调试<br><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/foam077/images/raw/master/img/14cc8906-e2a1-40e8-8a07-b22d04b267e9.png/" alt="img"></p>
+<h2 id="ignore"><a href="#ignore" class="headerlink" title=".ignore"></a>.ignore</h2><p>.ignore是IDEA的一款专用忽略文件的插件<br><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/foam077/images/raw/master/img/73ede4ce-3971-4c68-abf7-1deefeb78152.png/" alt="img"></p>
+<h2 id="google-java-format"><a href="#google-java-format" class="headerlink" title="google-java-format"></a>google-java-format</h2><p>google-java-format插件可以帮助我们不通过对应的快捷键就可以实现特定方式下自动格式化代码</p>
+<h2 id="Leetcode-Editor"><a href="#Leetcode-Editor" class="headerlink" title="Leetcode Editor"></a>Leetcode Editor</h2><p>LeetCode插件，可以在IDEA中在线刷题。上班摸鱼属实方便，表面上我在干活，实际上我在刷算法题<br><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/foam077/images/raw/master/img/7f7c5086-3d6a-4794-941e-b77d02a8a01c.png/" alt="img"></p>
+<h2 id="Json-Parser"><a href="#Json-Parser" class="headerlink" title="Json Parser"></a>Json Parser</h2><p>厌倦了打开浏览器格式化和验证JSON?为什么不安装JSON解析器并在IDE中使用离线支持呢?JSON解析器是一个用于验证和格式化JSON字符串的轻量级插件<br><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/foam077/images/raw/master/img/11aa823f-4418-4d35-aeb9-c561d32ef62f.png/" alt="img"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Foam🍅</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://foamtomato.github.io/2022/05/09/0.2.2IDEA%E6%8F%92%E4%BB%B6/">https://foamtomato.github.io/2022/05/09/0.2.2IDEA%E6%8F%92%E4%BB%B6/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://foamtomato.github.io" target="_blank">喵喵鱼塘</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/idea/">idea</a><a class="post-meta__tags" href="/tags/%E6%8F%92%E4%BB%B6/">插件</a></div><div class="post_share"><div class="social-share" data-image="https://npm.elemecdn.com/ushio-api-img-wallpaper@1.121.46/img_2021-04-03_1920x1080_96_background_normal.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2022/05/06/0.2.1RedisTemplate%E7%BB%9F%E4%B8%80%E9%9B%86%E6%88%90/"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://image.baidu.com/search/down?tn=download&amp;word=download&amp;ie=utf8&amp;fr=detail&amp;url=http%3A%2F%2Fp4.qhimg.com%2Fbdr%2F__85%2Ft0176c64143e046d48e.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">RedisTemplate统一集成</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/favicon.ico" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Foam🍅</div><div class="author-info__description">用能力换时间，用时间换能力</div></div><div class="card-info-data is-center"><div class="card-info-data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">22</div></a></div><div class="card-info-data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">26</div></a></div><div class="card-info-data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">工作繁忙，不会定期更新！！！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%92%E4%BB%B6%E5%AE%98%E7%BD%91"><span class="toc-number">1.</span> <span class="toc-text">插件官网</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Alibaba-Java-Coding-Guidelines"><span class="toc-number">2.</span> <span class="toc-text">Alibaba Java Coding Guidelines</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#jclasslib-bytecode-viewer"><span class="toc-number">3.</span> <span class="toc-text">jclasslib bytecode viewer</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Codota"><span class="toc-number">4.</span> <span class="toc-text">Codota</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Auto-filling-Java-call-arguments"><span class="toc-number">5.</span> <span class="toc-text">Auto filling Java call arguments</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GenerateO2O%E3%80%81GenerateAllSetter"><span class="toc-number">6.</span> <span class="toc-text">GenerateO2O、GenerateAllSetter</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Rainbow-Brackets"><span class="toc-number">7.</span> <span class="toc-text">Rainbow Brackets</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Maven-Helper"><span class="toc-number">8.</span> <span class="toc-text">Maven Helper</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#FindBugs"><span class="toc-number">9.</span> <span class="toc-text">FindBugs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SequenceDiagram"><span class="toc-number">10.</span> <span class="toc-text">SequenceDiagram</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java-Stream-Debugger"><span class="toc-number">11.</span> <span class="toc-text">Java Stream Debugger</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Key-promoter-X"><span class="toc-number">12.</span> <span class="toc-text">Key promoter X</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IDEA-Mind-Map"><span class="toc-number">13.</span> <span class="toc-text">IDEA Mind Map</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CodeGlance"><span class="toc-number">14.</span> <span class="toc-text">CodeGlance</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CamelCase"><span class="toc-number">15.</span> <span class="toc-text">CamelCase</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MybatisX"><span class="toc-number">16.</span> <span class="toc-text">MybatisX</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MyBatis-Log-Plugin"><span class="toc-number">17.</span> <span class="toc-text">MyBatis Log Plugin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Git-Commit-Template"><span class="toc-number">18.</span> <span class="toc-text">Git Commit Template</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Fast-Request"><span class="toc-number">19.</span> <span class="toc-text">Fast Request</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Easy-Javadoc"><span class="toc-number">20.</span> <span class="toc-text">Easy Javadoc</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MybatisCodeHelperPro"><span class="toc-number">21.</span> <span class="toc-text">MybatisCodeHelperPro</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Translation"><span class="toc-number">22.</span> <span class="toc-text">Translation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Jrebel"><span class="toc-number">23.</span> <span class="toc-text">Jrebel</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ignore"><span class="toc-number">24.</span> <span class="toc-text">.ignore</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#google-java-format"><span class="toc-number">25.</span> <span class="toc-text">google-java-format</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Leetcode-Editor"><span class="toc-number">26.</span> <span class="toc-text">Leetcode Editor</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Json-Parser"><span class="toc-number">27.</span> <span class="toc-text">Json Parser</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/05/09/0.2.2IDEA%E6%8F%92%E4%BB%B6/" title="IDEA插件"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://npm.elemecdn.com/ushio-api-img-wallpaper@1.121.46/img_2021-04-03_1920x1080_96_background_normal.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="IDEA插件"/></a><div class="content"><a class="title" href="/2022/05/09/0.2.2IDEA%E6%8F%92%E4%BB%B6/" title="IDEA插件">IDEA插件</a><time datetime="2022-05-09T14:12:42.000Z" title="发表于 2022-05-09 22:12:42">2022-05-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/05/06/0.2.1RedisTemplate%E7%BB%9F%E4%B8%80%E9%9B%86%E6%88%90/" title="RedisTemplate统一集成"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://image.baidu.com/search/down?tn=download&amp;word=download&amp;ie=utf8&amp;fr=detail&amp;url=http%3A%2F%2Fp4.qhimg.com%2Fbdr%2F__85%2Ft0176c64143e046d48e.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="RedisTemplate统一集成"/></a><div class="content"><a class="title" href="/2022/05/06/0.2.1RedisTemplate%E7%BB%9F%E4%B8%80%E9%9B%86%E6%88%90/" title="RedisTemplate统一集成">RedisTemplate统一集成</a><time datetime="2022-05-06T14:56:59.000Z" title="发表于 2022-05-06 22:56:59">2022-05-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/05/06/0.2.0IDEA%E5%86%85%E5%AD%98%E8%B0%83%E4%BC%98/" title="IDEA内存调优"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://image.baidu.com/search/down?tn=download&amp;word=download&amp;ie=utf8&amp;fr=detail&amp;url=http%3A%2F%2Fp4.qhimg.com%2Fbdr%2F__85%2Ft0167e06e11c072d23b.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="IDEA内存调优"/></a><div class="content"><a class="title" href="/2022/05/06/0.2.0IDEA%E5%86%85%E5%AD%98%E8%B0%83%E4%BC%98/" title="IDEA内存调优">IDEA内存调优</a><time datetime="2022-05-06T14:38:34.000Z" title="发表于 2022-05-06 22:38:34">2022-05-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/05/01/0.1.0%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%B7%A5%E5%85%B7%E7%B1%BB/" title="线程池工具类"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://image.baidu.com/search/down?tn=download&amp;word=download&amp;ie=utf8&amp;fr=detail&amp;url=http://p5.qhimg.com/bdm/1000_618_85/t017f77a34519fd2802.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="线程池工具类"/></a><div class="content"><a class="title" href="/2022/05/01/0.1.0%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%B7%A5%E5%85%B7%E7%B1%BB/" title="线程池工具类">线程池工具类</a><time datetime="2022-05-01T15:02:09.000Z" title="发表于 2022-05-01 23:02:09">2022-05-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/05/01/0.0.3%E5%88%86%E6%AE%B5%E6%89%A7%E8%A1%8C/" title="分段执行"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://image.baidu.com/search/down?tn=download&amp;word=download&amp;ie=utf8&amp;fr=detail&amp;url=http://p6.qhimg.com/bdm/1000_618_85/t016abc0de421e60f9d.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="分段执行"/></a><div class="content"><a class="title" href="/2022/05/01/0.0.3%E5%88%86%E6%AE%B5%E6%89%A7%E8%A1%8C/" title="分段执行">分段执行</a><time datetime="2022-05-01T14:47:30.000Z" title="发表于 2022-05-01 22:47:30">2022-05-01</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By Foam🍅</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">本地搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>(() => {
+  const $mermaidWrap = document.querySelectorAll('#article-container .mermaid-wrap')
+  if ($mermaidWrap.length) {
+    window.runMermaid = () => {
+      window.loadMermaid = true
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+      Array.from($mermaidWrap).forEach((item, index) => {
+        const mermaidSrc = item.firstElementChild
+        const mermaidThemeConfig = '%%{init:{ \'theme\':\'' + theme + '\'}}%%\n'
+        const mermaidID = 'mermaid-' + index
+        const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+        mermaid.mermaidAPI.render(mermaidID, mermaidDefinition, (svgCode) => {
+          mermaidSrc.insertAdjacentHTML('afterend', svgCode)
+        })
+      })
+    }
+
+    const loadMermaid = () => {
+      window.loadMermaid ? runMermaid() : getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaid)
+    }
+
+    window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start -->
+  <script data-pjax src="https://cdn.jsdelivr.net/gh/Zfour/hexo-github-calendar@1.21/hexo_githubcalendar.js"></script>
+  <script data-pjax>
+        function GithubCalendarConfig(){
+            var git_githubapiurl ="https://python-github-calendar-api.vercel.app/api?FoamTomato";
+            var git_color =['#ebedf0', '#fdcdec', '#fc9bd9', '#fa6ac5', '#f838b2', '#f5089f', '#c4067e', '#92055e', '#540336', '#48022f', '#30021f'];
+            var git_user ="FoamTomato";
+            var parent_div_git = document.getElementById('recent-posts');
+            var git_div_html = '<div class="recent-post-item" style="width:100%;height:auto;padding:10px;"><div id="github_loading" style="width:10%;height:100%;margin:0 auto;display: block"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  viewBox="0 0 50 50" style="enable-background:new 0 0 50 50" xml:space="preserve"><path fill="#d0d0d0" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z" transform="rotate(275.098 25 25)"><animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"></animateTransform></path></svg></div><div id="github_container"></div></div>';
+            if(parent_div_git && location.pathname =='/'){
+                console.log('已挂载github calendar')
+                // parent_div_git.innerHTML=git_div_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",git_div_html) // 有报错，但不影响使用(支持pjax跳转)
+            };
+            GithubCalendar(git_githubapiurl,git_color,git_user)
+        }
+        if(document.getElementById('recent-posts')){
+            GithubCalendarConfig()
+        }
+    </script>
+    <style>#github_container{min-height:280px}@media screen and (max-width:650px) {#github_container{background-image:;min-height:0px}}</style>
+    <style></style><script data-pjax>function history_calendar_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-history"><div class="card-content"><div class="item-headline"><i class="fas fa-clock fa-spin"></i><span>那年今日</span></div><div id="history-baidu" style="height: 100px;overflow: hidden"><div class="history_swiper-container" id="history-container" style="width: 100%;height: 100%"><div class="swiper-wrapper" id="history_container_wrapper" style="height:20px"></div></div></div></div>';
+                console.log('已挂载history_calendar')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            history_calendar_injector_config()
+        } </script><script data-pjax  src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script><script data-pjax src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/js/main.js"></script><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img id="card-clock-loading" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><!-- hexo injector body_end end --></body></html>
