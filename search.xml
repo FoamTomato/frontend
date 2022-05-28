@@ -228,6 +228,20 @@
       </tags>
   </entry>
   <entry>
+    <title>解决微信小程序键盘上移</title>
+    <url>/2022/02/16/0.0.7%E8%A7%A3%E5%86%B3%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E9%94%AE%E7%9B%98%E4%B8%8A%E7%A7%BB/</url>
+    <content><![CDATA[<p>在微信开发者工具没有出现上移的情况，但是一到真机调试就出现了，把页面设置固定布局也不管用<br><img src="https://img-blog.csdnimg.cn/ee256319d57f47979e4671c18a10ffc1.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBARm9hbeeVquiMhA==,size_14,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"><br>然后查询微信官方文档，是这样解释的<br>小程序在input框输入时，默认会开启自动上推的功能，但是有的时候会出现卡顿的现象，想关闭自动上推，把<br><label style="color:#843900">adjust-position设置为false</label>就可以了</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">van-row</span>  <span class="attr">gutter</span>=<span class="string">&quot;20&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">van-col</span> <span class="attr">span</span>=<span class="string">&quot;24&quot;</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">van-field</span></span></span><br><span class="line"><span class="tag">          <span class="attr">left-icon</span>=<span class="string">&quot;eye-o&quot;</span></span></span><br><span class="line"><span class="tag">          <span class="attr">adjust-position</span>=<span class="string">&quot;false&quot;</span> </span></span><br><span class="line"><span class="tag">          <span class="attr">placeholder</span>=<span class="string">&quot;请输入密码&quot;</span></span></span><br><span class="line"><span class="tag">          <span class="attr">name</span>=<span class="string">&quot;input&quot;</span>  <span class="attr">type</span>=<span class="string">&quot;password&quot;</span>  <span class="attr">model:value</span>=<span class="string">&quot;&#123;&#123;password&#125;&#125;&quot;</span></span></span><br><span class="line"><span class="tag">       /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">van-col</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">van-row</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>按道理应该就不会出现了，结果就是不生效，经过几轮瞎搞后才发现需要加<code>&#123;&#123;&#125;&#125;</code></p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">van-row</span>  <span class="attr">gutter</span>=<span class="string">&quot;20&quot;</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">van-col</span> <span class="attr">span</span>=<span class="string">&quot;24&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">van-field</span></span></span><br><span class="line"><span class="tag">         <span class="attr">left-icon</span>=<span class="string">&quot;eye-o&quot;</span></span></span><br><span class="line"><span class="tag">         <span class="attr">adjust-position</span>=<span class="string">&quot;&#123;&#123; false &#125;&#125;&quot;</span> </span></span><br><span class="line"><span class="tag">         <span class="attr">placeholder</span>=<span class="string">&quot;请输入密码&quot;</span></span></span><br><span class="line"><span class="tag">         <span class="attr">name</span>=<span class="string">&quot;input&quot;</span>  <span class="attr">type</span>=<span class="string">&quot;password&quot;</span>  <span class="attr">model:value</span>=<span class="string">&quot;&#123;&#123;password&#125;&#125;&quot;</span></span></span><br><span class="line"><span class="tag">      /&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">van-col</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">van-row</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>请大家谨慎踩坑</p>
+]]></content>
+      <tags>
+        <tag>小程序</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>简单吐槽一下xml</title>
     <url>/2022/01/08/0.0.6%E7%AE%80%E5%8D%95%E5%90%90%E6%A7%BD%E4%B8%80%E4%B8%8Bxml/</url>
     <content><![CDATA[<blockquote>
@@ -288,20 +302,6 @@
       <tags>
         <tag>java</tag>
         <tag>xml</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>解决微信小程序键盘上移</title>
-    <url>/2022/02/16/0.0.7%E8%A7%A3%E5%86%B3%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E9%94%AE%E7%9B%98%E4%B8%8A%E7%A7%BB/</url>
-    <content><![CDATA[<p>在微信开发者工具没有出现上移的情况，但是一到真机调试就出现了，把页面设置固定布局也不管用<br><img src="https://img-blog.csdnimg.cn/ee256319d57f47979e4671c18a10ffc1.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBARm9hbeeVquiMhA==,size_14,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"><br>然后查询微信官方文档，是这样解释的<br>小程序在input框输入时，默认会开启自动上推的功能，但是有的时候会出现卡顿的现象，想关闭自动上推，把<br><label style="color:#843900">adjust-position设置为false</label>就可以了</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">van-row</span>  <span class="attr">gutter</span>=<span class="string">&quot;20&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">van-col</span> <span class="attr">span</span>=<span class="string">&quot;24&quot;</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">van-field</span></span></span><br><span class="line"><span class="tag">          <span class="attr">left-icon</span>=<span class="string">&quot;eye-o&quot;</span></span></span><br><span class="line"><span class="tag">          <span class="attr">adjust-position</span>=<span class="string">&quot;false&quot;</span> </span></span><br><span class="line"><span class="tag">          <span class="attr">placeholder</span>=<span class="string">&quot;请输入密码&quot;</span></span></span><br><span class="line"><span class="tag">          <span class="attr">name</span>=<span class="string">&quot;input&quot;</span>  <span class="attr">type</span>=<span class="string">&quot;password&quot;</span>  <span class="attr">model:value</span>=<span class="string">&quot;&#123;&#123;password&#125;&#125;&quot;</span></span></span><br><span class="line"><span class="tag">       /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">van-col</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">van-row</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>按道理应该就不会出现了，结果就是不生效，经过几轮瞎搞后才发现需要加<code>&#123;&#123;&#125;&#125;</code></p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">van-row</span>  <span class="attr">gutter</span>=<span class="string">&quot;20&quot;</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">van-col</span> <span class="attr">span</span>=<span class="string">&quot;24&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">van-field</span></span></span><br><span class="line"><span class="tag">         <span class="attr">left-icon</span>=<span class="string">&quot;eye-o&quot;</span></span></span><br><span class="line"><span class="tag">         <span class="attr">adjust-position</span>=<span class="string">&quot;&#123;&#123; false &#125;&#125;&quot;</span> </span></span><br><span class="line"><span class="tag">         <span class="attr">placeholder</span>=<span class="string">&quot;请输入密码&quot;</span></span></span><br><span class="line"><span class="tag">         <span class="attr">name</span>=<span class="string">&quot;input&quot;</span>  <span class="attr">type</span>=<span class="string">&quot;password&quot;</span>  <span class="attr">model:value</span>=<span class="string">&quot;&#123;&#123;password&#125;&#125;&quot;</span></span></span><br><span class="line"><span class="tag">      /&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">van-col</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">van-row</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>请大家谨慎踩坑</p>
-]]></content>
-      <tags>
-        <tag>小程序</tag>
       </tags>
   </entry>
   <entry>
@@ -643,41 +643,6 @@
       </tags>
   </entry>
   <entry>
-    <title>RedisTemplate统一集成</title>
-    <url>/2022/05/06/0.2.1RedisTemplate%E7%BB%9F%E4%B8%80%E9%9B%86%E6%88%90/</url>
-    <content><![CDATA[<h2 id="1-配置redis-config"><a href="#1-配置redis-config" class="headerlink" title="1.配置redis-config"></a>1.配置redis-config</h2><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- Jedis 连接池配置 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;jedisPoolConfig&quot;</span> <span class="attr">class</span>=<span class="string">&quot;redis.clients.jedis.JedisPoolConfig&quot;</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;maxIdle&quot;</span> <span class="attr">value</span>=<span class="string">&quot;$&#123;redis.maxIdle&#125;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;minEvictableIdleTimeMillis&quot;</span> <span class="attr">value</span>=<span class="string">&quot;$&#123;redis.minEvictableIdleTimeMillis&#125;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;numTestsPerEvictionRun&quot;</span> <span class="attr">value</span>=<span class="string">&quot;$&#123;redis.numTestsPerEvictionRun&#125;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;timeBetweenEvictionRunsMillis&quot;</span> <span class="attr">value</span>=<span class="string">&quot;$&#123;redis.timeBetweenEvictionRunsMillis&#125;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;stringRedisSerializer&quot;</span>  <span class="attr">class</span>=<span class="string">&quot;org.springframework.data.redis.serializer.StringRedisSerializer&quot;</span> /&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;jdkRedisSerializer&quot;</span>  <span class="attr">class</span>=<span class="string">&quot;org.springframework.data.redis.serializer.JdkSerializationRedisSerializer&quot;</span> /&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;jedisConnectionZero&quot;</span> <span class="attr">class</span>=<span class="string">&quot;org.springframework.data.redis.connection.jedis.JedisConnectionFactory&quot;</span> <span class="attr">destroy-method</span>=<span class="string">&quot;destroy&quot;</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;poolConfig&quot;</span> <span class="attr">ref</span>=<span class="string">&quot;jedisPoolConfig&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;hostName&quot;</span> <span class="attr">value</span>=<span class="string">&quot;$&#123;redisst.hostName&#125;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;port&quot;</span> <span class="attr">value</span>=<span class="string">&quot;$&#123;redisst.port&#125;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;timeout&quot;</span> <span class="attr">value</span>=<span class="string">&quot;$&#123;redisst.timeout&#125;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;usePool&quot;</span> <span class="attr">value</span>=<span class="string">&quot;$&#123;redisst.usePool&#125;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;password&quot;</span> <span class="attr">value</span>=<span class="string">&quot;$&#123;redisst.password&#125;&quot;</span> &gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span> </span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;database&quot;</span> <span class="attr">value</span>=<span class="string">&quot;$&#123;redisst.db0&#125;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;redisTemplateZero&quot;</span> <span class="attr">class</span>=<span class="string">&quot;org.springframework.data.redis.core.RedisTemplate&quot;</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;connectionFactory&quot;</span> <span class="attr">ref</span>=<span class="string">&quot;jedisConnectionZero&quot;</span> /&gt;</span> </span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;keySerializer&quot;</span> <span class="attr">ref</span>=<span class="string">&quot;stringRedisSerializer&quot;</span> /&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;hashKeySerializer&quot;</span> <span class="attr">ref</span>=<span class="string">&quot;jdkRedisSerializer&quot;</span> /&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;valueSerializer&quot;</span> <span class="attr">ref</span>=<span class="string">&quot;jdkRedisSerializer&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="2-定义枚举"><a href="#2-定义枚举" class="headerlink" title="2.定义枚举"></a>2.定义枚举</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">enum</span> <span class="title">CommonRedisEnums</span> </span>&#123;</span><br><span class="line">    O_DB_0(<span class="string">&quot;redisTemplateZero&quot;</span>,<span class="string">&quot;ODB0&quot;</span>);</span><br><span class="line">    <span class="comment">// 对应redis-config中的bean名称</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="comment">// 别名</span></span><br><span class="line">    <span class="keyword">private</span> String asName;</span><br><span class="line"></span><br><span class="line">    CommonRedisEnums(String name, String asName) &#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.asName = asName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getAsName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> asName;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="3-使用SpringAppContextHolder获取bean"><a href="#3-使用SpringAppContextHolder获取bean" class="headerlink" title="3.使用SpringAppContextHolder获取bean"></a>3.使用SpringAppContextHolder获取bean</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> Map&lt;String,RedisTemplate&gt; redisTemplateMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">getRedis</span><span class="params">(CommonRedisEnums enums)</span></span>&#123;</span><br><span class="line">   <span class="keyword">if</span>(!redisTemplateMap.containsKey(enums.getName()))&#123;</span><br><span class="line">      RedisTemplate redisBean = (RedisTemplate) SpringAppContextHolder</span><br><span class="line">            .getBean(enums.getName());</span><br><span class="line">      <span class="keyword">if</span>(redisBean != <span class="keyword">null</span>)&#123;</span><br><span class="line">         redisTemplateMap.put(enums.getName(),redisBean);</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="4-使用工具类进行调用"><a href="#4-使用工具类进行调用" class="headerlink" title="4.使用工具类进行调用"></a>4.使用工具类进行调用</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 搜索</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Map&lt;String, Object&gt; <span class="title">searchKeys</span><span class="params">(List&lt;String&gt; keys,CommonRedisEnums enums)</span></span>&#123;</span><br><span class="line">   getRedis(enums);</span><br><span class="line">   <span class="keyword">return</span> batchQueryByKeys(keys, <span class="keyword">false</span>,redisTemplateMap.get(enums.getName()));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Map&lt;String, Object&gt; <span class="title">batchQueryByKeys</span><span class="params">(<span class="keyword">final</span> List&lt;String&gt; keys, Boolean useParallel, <span class="keyword">final</span> RedisTemplate redisTemplate)</span> </span>&#123;</span><br><span class="line">   <span class="keyword">if</span> (<span class="keyword">null</span> == keys || keys.size() == <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">if</span> (<span class="keyword">null</span> == useParallel) &#123;</span><br><span class="line">      useParallel = <span class="keyword">true</span>;</span><br><span class="line">   &#125;</span><br><span class="line">   Object object = redisTemplate.execute(<span class="keyword">new</span> RedisCallback&lt;Object&gt;() &#123;</span><br><span class="line">      <span class="meta">@Override</span></span><br><span class="line">      <span class="function"><span class="keyword">public</span> Object <span class="title">doInRedis</span><span class="params">(RedisConnection connection)</span> <span class="keyword">throws</span> DataAccessException </span>&#123;</span><br><span class="line">         connection.openPipeline();</span><br><span class="line">         <span class="keyword">for</span> (String key : keys) &#123;</span><br><span class="line">            <span class="keyword">byte</span>[] bkey = redisTemplate.getStringSerializer().serialize(key);</span><br><span class="line">            redisTemplate.getStringSerializer().serialize(JSON.toJSONString(connection.get(bkey)));</span><br><span class="line">         &#125;</span><br><span class="line"></span><br><span class="line">         <span class="keyword">return</span> connection.closePipeline();</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;);</span><br><span class="line">   List&lt;Object&gt; results = <span class="keyword">null</span>;</span><br><span class="line">   <span class="keyword">if</span> (<span class="keyword">null</span> == object) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">   &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      results = (List) object;</span><br><span class="line">   &#125;</span><br><span class="line">   Map&lt;String, Object&gt; resultMap = <span class="keyword">null</span>;</span><br><span class="line">   <span class="keyword">if</span> (useParallel) &#123;</span><br><span class="line">      Map&lt;String, Object&gt; resultMapOne = Collections.synchronizedMap(<span class="keyword">new</span> HashMap&lt;String, Object&gt;());</span><br><span class="line">      <span class="keyword">for</span> (String t : keys) &#123;</span><br><span class="line">         resultMapOne.put(t, results.get(keys.indexOf(t)));</span><br><span class="line">      &#125;</span><br><span class="line">      resultMap = resultMapOne;</span><br><span class="line">   &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      Map&lt;String, Object&gt; resultMapTwo = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">      <span class="keyword">for</span> (String t : keys) &#123;</span><br><span class="line">         Object o = results.get(keys.indexOf(t));</span><br><span class="line">         <span class="keyword">if</span> (<span class="keyword">null</span> != o) &#123;</span><br><span class="line">            String val = (String) redisTemplate.getStringSerializer().deserialize((<span class="keyword">byte</span>[]) o);</span><br><span class="line">            resultMapTwo.put(t, val);</span><br><span class="line">         &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      resultMap = resultMapTwo;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> resultMap;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>使用@Autowired的时候，对于static标识的变量或者方法一般是获取到的null值常规的方法已经使用不了</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> NewRedisZeroService redisZeroService;</span><br></pre></td></tr></table></figure>
-
-<p>需要使用注入方法的形式来使用</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> ZXSearchNewService_new zxSearchNewService_new;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> QueueProducerService messageService;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">zxSearch</span><span class="params">(QueueProducerService queueProducerService,ZXSearchNewService_new zxSearchNewService_new)</span> </span>&#123;</span><br><span class="line">    zxSearch.zxSearchNewService_new = zxSearchNewService_new;</span><br><span class="line">    zxSearch.messageService = queueProducerService;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这样就可以在工具类中使用了，不需要通过传参的形式去获取</p>
-]]></content>
-      <tags>
-        <tag>工具类</tag>
-        <tag>redis</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>IDEA内存调优</title>
-    <url>/2022/05/06/0.2.0IDEA%E5%86%85%E5%AD%98%E8%B0%83%E4%BC%98/</url>
-    <content><![CDATA[<p><a href="https://blog.csdn.net/c18092694487t/article/details/116915386?spm=1001.2101.3001.6661.1&utm_medium=distribute.pc_relevant_t0.none-task-blog-2~default~CTRLIST~Rate-1.pc_relevant_antiscanv2&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2~default~CTRLIST~Rate-1.pc_relevant_antiscanv2&utm_relevant_index=1">idea2020无法启动报错初始堆值大于最大堆值_寒烟雾柳的博客-CSDN博客</a></p>
-<p>调整内存的时候一定Xms2048m不能大于Xmx4096m【否则idea启动不起来】</p>
-<p>xmx建议设置为（总内存的3/4 ÷ 你要开的idea个数），这样才不会卡</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">-Xms1024m</span><br><span class="line">-Xmx8192m</span><br><span class="line">-XX:MaxPermSize=2048m</span><br><span class="line">-XX:ReservedCodeCacheSize=256m</span><br><span class="line">-ea</span><br><span class="line">-Dsun.io.useCanonCaches=false</span><br><span class="line">-Dsun.awt.keepWorkingSetOnMinimize=true</span><br><span class="line">-Djava.net.preferIPv4Stack=true</span><br><span class="line">#-Djsse.enableSNIExtension=false</span><br><span class="line">-XX:+UseCodeCacheFlushing</span><br><span class="line">-XX:+UseConcMarkSweepGC</span><br><span class="line">-XX:SoftRefLRUPolicyMSPerMB=50</span><br></pre></td></tr></table></figure>]]></content>
-      <tags>
-        <tag>jvm</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>ShardingJDBC简单介绍</title>
     <url>/2022/04/10/0.1.9ShardingJDBC%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D/</url>
     <content><![CDATA[<h1 id="ShardingJDBC"><a href="#ShardingJDBC" class="headerlink" title="ShardingJDBC"></a>ShardingJDBC</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><blockquote>
@@ -744,6 +709,89 @@
         <tag>分库分表</tag>
         <tag>多数据源</tag>
         <tag>mysql</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>IDEA内存调优</title>
+    <url>/2022/05/06/0.2.0IDEA%E5%86%85%E5%AD%98%E8%B0%83%E4%BC%98/</url>
+    <content><![CDATA[<p><a href="https://blog.csdn.net/c18092694487t/article/details/116915386?spm=1001.2101.3001.6661.1&utm_medium=distribute.pc_relevant_t0.none-task-blog-2~default~CTRLIST~Rate-1.pc_relevant_antiscanv2&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2~default~CTRLIST~Rate-1.pc_relevant_antiscanv2&utm_relevant_index=1">idea2020无法启动报错初始堆值大于最大堆值_寒烟雾柳的博客-CSDN博客</a></p>
+<p>调整内存的时候一定Xms2048m不能大于Xmx4096m【否则idea启动不起来】</p>
+<p>xmx建议设置为（总内存的3/4 ÷ 你要开的idea个数），这样才不会卡</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">-Xms1024m</span><br><span class="line">-Xmx8192m</span><br><span class="line">-XX:MaxPermSize=2048m</span><br><span class="line">-XX:ReservedCodeCacheSize=256m</span><br><span class="line">-ea</span><br><span class="line">-Dsun.io.useCanonCaches=false</span><br><span class="line">-Dsun.awt.keepWorkingSetOnMinimize=true</span><br><span class="line">-Djava.net.preferIPv4Stack=true</span><br><span class="line">#-Djsse.enableSNIExtension=false</span><br><span class="line">-XX:+UseCodeCacheFlushing</span><br><span class="line">-XX:+UseConcMarkSweepGC</span><br><span class="line">-XX:SoftRefLRUPolicyMSPerMB=50</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>jvm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>RedisTemplate统一集成</title>
+    <url>/2022/05/06/0.2.1RedisTemplate%E7%BB%9F%E4%B8%80%E9%9B%86%E6%88%90/</url>
+    <content><![CDATA[<h2 id="1-配置redis-config"><a href="#1-配置redis-config" class="headerlink" title="1.配置redis-config"></a>1.配置redis-config</h2><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- Jedis 连接池配置 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;jedisPoolConfig&quot;</span> <span class="attr">class</span>=<span class="string">&quot;redis.clients.jedis.JedisPoolConfig&quot;</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;maxIdle&quot;</span> <span class="attr">value</span>=<span class="string">&quot;$&#123;redis.maxIdle&#125;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;minEvictableIdleTimeMillis&quot;</span> <span class="attr">value</span>=<span class="string">&quot;$&#123;redis.minEvictableIdleTimeMillis&#125;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;numTestsPerEvictionRun&quot;</span> <span class="attr">value</span>=<span class="string">&quot;$&#123;redis.numTestsPerEvictionRun&#125;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;timeBetweenEvictionRunsMillis&quot;</span> <span class="attr">value</span>=<span class="string">&quot;$&#123;redis.timeBetweenEvictionRunsMillis&#125;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;stringRedisSerializer&quot;</span>  <span class="attr">class</span>=<span class="string">&quot;org.springframework.data.redis.serializer.StringRedisSerializer&quot;</span> /&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;jdkRedisSerializer&quot;</span>  <span class="attr">class</span>=<span class="string">&quot;org.springframework.data.redis.serializer.JdkSerializationRedisSerializer&quot;</span> /&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;jedisConnectionZero&quot;</span> <span class="attr">class</span>=<span class="string">&quot;org.springframework.data.redis.connection.jedis.JedisConnectionFactory&quot;</span> <span class="attr">destroy-method</span>=<span class="string">&quot;destroy&quot;</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;poolConfig&quot;</span> <span class="attr">ref</span>=<span class="string">&quot;jedisPoolConfig&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;hostName&quot;</span> <span class="attr">value</span>=<span class="string">&quot;$&#123;redisst.hostName&#125;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;port&quot;</span> <span class="attr">value</span>=<span class="string">&quot;$&#123;redisst.port&#125;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;timeout&quot;</span> <span class="attr">value</span>=<span class="string">&quot;$&#123;redisst.timeout&#125;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;usePool&quot;</span> <span class="attr">value</span>=<span class="string">&quot;$&#123;redisst.usePool&#125;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;password&quot;</span> <span class="attr">value</span>=<span class="string">&quot;$&#123;redisst.password&#125;&quot;</span> &gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span> </span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;database&quot;</span> <span class="attr">value</span>=<span class="string">&quot;$&#123;redisst.db0&#125;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;redisTemplateZero&quot;</span> <span class="attr">class</span>=<span class="string">&quot;org.springframework.data.redis.core.RedisTemplate&quot;</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;connectionFactory&quot;</span> <span class="attr">ref</span>=<span class="string">&quot;jedisConnectionZero&quot;</span> /&gt;</span> </span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;keySerializer&quot;</span> <span class="attr">ref</span>=<span class="string">&quot;stringRedisSerializer&quot;</span> /&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;hashKeySerializer&quot;</span> <span class="attr">ref</span>=<span class="string">&quot;jdkRedisSerializer&quot;</span> /&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;valueSerializer&quot;</span> <span class="attr">ref</span>=<span class="string">&quot;jdkRedisSerializer&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="2-定义枚举"><a href="#2-定义枚举" class="headerlink" title="2.定义枚举"></a>2.定义枚举</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">enum</span> <span class="title">CommonRedisEnums</span> </span>&#123;</span><br><span class="line">    O_DB_0(<span class="string">&quot;redisTemplateZero&quot;</span>,<span class="string">&quot;ODB0&quot;</span>);</span><br><span class="line">    <span class="comment">// 对应redis-config中的bean名称</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="comment">// 别名</span></span><br><span class="line">    <span class="keyword">private</span> String asName;</span><br><span class="line"></span><br><span class="line">    CommonRedisEnums(String name, String asName) &#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.asName = asName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getAsName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> asName;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-使用SpringAppContextHolder获取bean"><a href="#3-使用SpringAppContextHolder获取bean" class="headerlink" title="3.使用SpringAppContextHolder获取bean"></a>3.使用SpringAppContextHolder获取bean</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> Map&lt;String,RedisTemplate&gt; redisTemplateMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">getRedis</span><span class="params">(CommonRedisEnums enums)</span></span>&#123;</span><br><span class="line">   <span class="keyword">if</span>(!redisTemplateMap.containsKey(enums.getName()))&#123;</span><br><span class="line">      RedisTemplate redisBean = (RedisTemplate) SpringAppContextHolder</span><br><span class="line">            .getBean(enums.getName());</span><br><span class="line">      <span class="keyword">if</span>(redisBean != <span class="keyword">null</span>)&#123;</span><br><span class="line">         redisTemplateMap.put(enums.getName(),redisBean);</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-使用工具类进行调用"><a href="#4-使用工具类进行调用" class="headerlink" title="4.使用工具类进行调用"></a>4.使用工具类进行调用</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 搜索</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Map&lt;String, Object&gt; <span class="title">searchKeys</span><span class="params">(List&lt;String&gt; keys,CommonRedisEnums enums)</span></span>&#123;</span><br><span class="line">   getRedis(enums);</span><br><span class="line">   <span class="keyword">return</span> batchQueryByKeys(keys, <span class="keyword">false</span>,redisTemplateMap.get(enums.getName()));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Map&lt;String, Object&gt; <span class="title">batchQueryByKeys</span><span class="params">(<span class="keyword">final</span> List&lt;String&gt; keys, Boolean useParallel, <span class="keyword">final</span> RedisTemplate redisTemplate)</span> </span>&#123;</span><br><span class="line">   <span class="keyword">if</span> (<span class="keyword">null</span> == keys || keys.size() == <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">if</span> (<span class="keyword">null</span> == useParallel) &#123;</span><br><span class="line">      useParallel = <span class="keyword">true</span>;</span><br><span class="line">   &#125;</span><br><span class="line">   Object object = redisTemplate.execute(<span class="keyword">new</span> RedisCallback&lt;Object&gt;() &#123;</span><br><span class="line">      <span class="meta">@Override</span></span><br><span class="line">      <span class="function"><span class="keyword">public</span> Object <span class="title">doInRedis</span><span class="params">(RedisConnection connection)</span> <span class="keyword">throws</span> DataAccessException </span>&#123;</span><br><span class="line">         connection.openPipeline();</span><br><span class="line">         <span class="keyword">for</span> (String key : keys) &#123;</span><br><span class="line">            <span class="keyword">byte</span>[] bkey = redisTemplate.getStringSerializer().serialize(key);</span><br><span class="line">            redisTemplate.getStringSerializer().serialize(JSON.toJSONString(connection.get(bkey)));</span><br><span class="line">         &#125;</span><br><span class="line"></span><br><span class="line">         <span class="keyword">return</span> connection.closePipeline();</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;);</span><br><span class="line">   List&lt;Object&gt; results = <span class="keyword">null</span>;</span><br><span class="line">   <span class="keyword">if</span> (<span class="keyword">null</span> == object) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">   &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      results = (List) object;</span><br><span class="line">   &#125;</span><br><span class="line">   Map&lt;String, Object&gt; resultMap = <span class="keyword">null</span>;</span><br><span class="line">   <span class="keyword">if</span> (useParallel) &#123;</span><br><span class="line">      Map&lt;String, Object&gt; resultMapOne = Collections.synchronizedMap(<span class="keyword">new</span> HashMap&lt;String, Object&gt;());</span><br><span class="line">      <span class="keyword">for</span> (String t : keys) &#123;</span><br><span class="line">         resultMapOne.put(t, results.get(keys.indexOf(t)));</span><br><span class="line">      &#125;</span><br><span class="line">      resultMap = resultMapOne;</span><br><span class="line">   &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      Map&lt;String, Object&gt; resultMapTwo = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">      <span class="keyword">for</span> (String t : keys) &#123;</span><br><span class="line">         Object o = results.get(keys.indexOf(t));</span><br><span class="line">         <span class="keyword">if</span> (<span class="keyword">null</span> != o) &#123;</span><br><span class="line">            String val = (String) redisTemplate.getStringSerializer().deserialize((<span class="keyword">byte</span>[]) o);</span><br><span class="line">            resultMapTwo.put(t, val);</span><br><span class="line">         &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      resultMap = resultMapTwo;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> resultMap;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>使用@Autowired的时候，对于static标识的变量或者方法一般是获取到的null值常规的方法已经使用不了</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> NewRedisZeroService redisZeroService;</span><br></pre></td></tr></table></figure>
+
+<p>需要使用注入方法的形式来使用</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> ZXSearchNewService_new zxSearchNewService_new;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> QueueProducerService messageService;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">zxSearch</span><span class="params">(QueueProducerService queueProducerService,ZXSearchNewService_new zxSearchNewService_new)</span> </span>&#123;</span><br><span class="line">    zxSearch.zxSearchNewService_new = zxSearchNewService_new;</span><br><span class="line">    zxSearch.messageService = queueProducerService;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样就可以在工具类中使用了，不需要通过传参的形式去获取</p>
+]]></content>
+      <tags>
+        <tag>工具类</tag>
+        <tag>redis</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>IDEA插件</title>
+    <url>/2022/05/09/0.2.2IDEA%E6%8F%92%E4%BB%B6/</url>
+    <content><![CDATA[<h2 id="插件官网"><a href="#插件官网" class="headerlink" title="插件官网"></a>插件官网</h2><p><a href="https://plugins.jetbrains.com/">JetBrains Marketplace</a></p>
+<h2 id="Alibaba-Java-Coding-Guidelines"><a href="#Alibaba-Java-Coding-Guidelines" class="headerlink" title="Alibaba Java Coding Guidelines"></a>Alibaba Java Coding Guidelines</h2><p>首先要推荐的是和《手册》配套的 <a href="https://link.zhihu.com/?target=https://plugins.jetbrains.com/plugin/10046-alibaba-java-coding-guidelines">阿里巴巴 Java代码规范</a>插件。<br>安装该插件后，代码超过 80 行、手动创建线程池等，这些和《手册》中的规约不符时，IDEA中会给出警告提示。</p>
+<h2 id="jclasslib-bytecode-viewer"><a href="#jclasslib-bytecode-viewer" class="headerlink" title="jclasslib bytecode viewer"></a>jclasslib bytecode viewer</h2><p>下面要隆重介绍的是一款可视化的字节码查看插件：<a href="https://link.zhihu.com/?target=https://plugins.jetbrains.com/plugin/9248-jclasslib-bytecode-viewer">jclasslib</a><br>大家可以直接在 IDEA 插件管理中安装（安装步骤略）<br><strong>使用方法：</strong></p>
+<ol>
+<li>在 IDEA 打开想研究的类</li>
+<li>编译该类或者直接编译整个项目（ 如果想研究的类在 jar 包中，此步可略过）</li>
+<li>打开“view” 菜单，选择“Show Bytecode With jclasslib” 选项</li>
+<li>选择上述菜单项后 IDEA 中会弹出 jclasslib 工具窗口<br><img src="https://gitee.com/foam077/images/raw/master/img/8e553cce-1641-4005-a6ff-6a3d37b0ac09.jpg/" alt="img"><br>那么有自带的强大的反汇编工具 javap 还有必要用这个插件吗？<br>这个插件的强大之处在于：</li>
+<li>不需要敲命令，简单直接，在右侧方便和源代码进行对比学习。</li>
+<li>字节码命令支持超链接，点击其中的虚拟机指令即可跳转到 jvms 相关章节，超级方便。<br>该插件对我们学习虚拟机指令有极大的帮助。<br>详细安装和介绍参考另外一篇手记：<a href="https://www.imooc.com/article/29625">https://www.imooc.com/article/29625</a></li>
+</ol>
+<h2 id="Codota"><a href="#Codota" class="headerlink" title="Codota"></a>Codota</h2><p>另外一个不得不说的就是专栏中提到的辅助开发神器: <a href="https://link.zhihu.com/?target=https://www.codota.com/code">Codota</a><br>可以点击下图所示“Add Codota to you IDEA” 了解安装步骤<br><img src="https://gitee.com/foam077/images/raw/master/img/7916b83c-b22f-4cc4-87c1-e6baf8dd31d3.png/" alt="img"><br>该插件的强大之处在于：</p>
+<ol>
+<li>支持智能代码自动提示，该功能可以增强 IDEA 的代码提示功能。</li>
+<li>支持 JDK 和知名第三方库的函数的使用方法搜索，可以看到其他知名开源项目对该函数的用法<br>当我们第一次使用某个类，对某个函数不够熟悉时，可以通过该插件搜索相关用法，快速模仿学习<br><img src="https://gitee.com/foam077/images/raw/master/img/8351c384-572e-4e28-9c8b-22249fd90af2.jpg/" alt="img"><br>如上图所示，我们想了解 Stream 类中 flatMap 函数的用法，可以使用该插件查看知名开源项目的用法<br>插件窗口顶部还给出了该类最常用的函数，可以点击查看相关用法案例，每个案例右侧的 “view source”可以跳转到该片段对应的开源项目的源码中</li>
+</ol>
+<h2 id="Auto-filling-Java-call-arguments"><a href="#Auto-filling-Java-call-arguments" class="headerlink" title="Auto filling Java call arguments"></a>Auto filling Java call arguments</h2><p>开发中，我们通常会调用其他已经编写好的函数，调用后需要填充参数，但是绝大多数情况下，传入的变量名称和该函数的参数名一致，当参数较多时，手动单个填充参数非常浪费时间<br>该插件就可以帮你解决这个问题<br>安装完该插件以后，调用一个函数，使用 Alt+Enter 组合键，调出 “Auto fill call parameters” 自动使用该函数定义的参数名填充</p>
+<h2 id="GenerateO2O、GenerateAllSetter"><a href="#GenerateO2O、GenerateAllSetter" class="headerlink" title="GenerateO2O、GenerateAllSetter"></a>GenerateO2O、GenerateAllSetter</h2><p>我们定义好从 A 类转换到 B 类的函数转换函数后，使用这两个插件可以自动调用 Getter 和 Setter 函数实行自动转换<br>实际开发中还有一个非常常见的场景： 我们创建一个对象后，想依次调用 Setter 函数对属性赋值，如果属性较多很容易遗漏或者重复<br><img src="https://gitee.com/foam077/images/raw/master/img/c66fd122-cab4-47cc-b961-c135cd4959a4.jpg/" alt="img"><br>可以使用这 GenerateAllSetter 提供的功能，自动调用所有 Setter 函数（可填充默认值），然后自己再跟进实际需求设置属性值</p>
+<h2 id="Rainbow-Brackets"><a href="#Rainbow-Brackets" class="headerlink" title="Rainbow Brackets"></a>Rainbow Brackets</h2><p>由于很多人没有养成好的编码风格，没有随手 format 代码的习惯，甚至有些同事会写代码超过几百行，阅读起来将非常痛苦<br>痛苦的原因之一就是找到上下文，由于括号太多，不确定当前代码行是否属于某个代码块，此时这个插件就会帮上大忙<br>插件 github 地址：<a href="https://github.com/izhangzhihao/intellij-rainbow-brackets">https://github.com/izhangzhihao/intellij-rainbow-brackets</a><br><img src="https://gitee.com/foam077/images/raw/master/img/fb0eecd3-58fb-4c94-983b-0c857429b1af.jpg/" alt="img"><br>大家可以观看其 github 首页的动图体会和学习其强大功能</p>
+<h2 id="Maven-Helper"><a href="#Maven-Helper" class="headerlink" title="Maven Helper"></a>Maven Helper</h2><p>现在 Java 项目通常会使用 maven 或者 gradle 构建，对于maven 项目来说， jar 包冲突非常常见<br>那么如何更容易地查看和解决 jar 包冲突呢？<br><img src="https://gitee.com/foam077/images/raw/master/img/6d4402db-659a-46a5-a3c5-2eca8e2d8fef.jpg/" alt="img"><br>大家可以安装该插件，安装后 IDEA 中打开 pom.xml 文件时，就会多出一个 “Dependency Analyzer” 选项卡<br>如上图所示，该插件支持值插件冲突的 jar 包，可以选择冲突的 jar 包将其 exclude 掉</p>
+<h2 id="FindBugs"><a href="#FindBugs" class="headerlink" title="FindBugs"></a>FindBugs</h2><p>程序员总是想尽可能地避免写 BUG， <a href="https://link.zhihu.com/?target=https://plugins.jetbrains.com/plugin/3847-findbugs-idea">FindBugs</a> 作为静态代码检查插件，可以检查你代码中的隐患，并给出原因。<br><img src="https://gitee.com/foam077/images/raw/master/img/7a194699-57ed-4fa2-90dc-0ea77f6387aa.jpg/" alt="img"><br>当然还有很多类似的静态代码检查插件，大家可以自行了解安装</p>
+<h2 id="SequenceDiagram"><a href="#SequenceDiagram" class="headerlink" title="SequenceDiagram"></a>SequenceDiagram</h2><p><a href="https://link.zhihu.com/?target=https://plugins.jetbrains.com/plugin/8286-sequencediagram/">SequenceDiagram</a> 可以根据代码调用链路自动生成时序图，超级赞，超级推荐！<br>这对研究源码，梳理工作中的业务代码有极大的帮助，堪称神器。<br>安装完成后，在某个类的某个函数中，右键 –Sequence Diagaram 即可调出。<br>如下图是 Netty 的源码，可以通过该插件绘制出当前函数的调用链路。<br><img src="https://gitee.com/foam077/images/raw/master/img/9fcf9f6f-fca3-4e84-bde3-4fcae1d094cc.jpg/" alt="img"><br>双击顶部的类名可以跳转到对应类的源码中，双击调用的函数名可以直接调入某个函数的源码，总之非常强大。</p>
+<h2 id="Java-Stream-Debugger"><a href="#Java-Stream-Debugger" class="headerlink" title="Java Stream Debugger"></a>Java Stream Debugger</h2><p>Stream 非常好用，可以灵活对数据进行操作，但是对很多刚接触的人来说，不好理解。<br>那么 <a href="https://link.zhihu.com/?target=https://plugins.jetbrains.com/plugin/9696-java-stream-debugger/">Java Stream Debugger</a> 这款神器的 IDEA 就可以帮到你。它可以将 Stream 的操作步骤可视化，非常有助于我们的学习。<br><img src="https://gitee.com/foam077/images/raw/master/img/8ca3318a-0e7c-41a5-aeca-9fdd2f22fe64.png/" alt="img"><br><img src="https://gitee.com/foam077/images/raw/master/img/65dd07a0-1d0e-44e7-aa53-6d5214f41b67.png/" alt="img"></p>
+<h2 id="Key-promoter-X"><a href="#Key-promoter-X" class="headerlink" title="Key promoter X"></a>Key promoter X</h2><p>很多人不愿意切换 IDE 就是因为快捷键的习惯问题。刚好这个插件可以提醒快捷键，有代入感，提醒的多了你就会了。对于新手建议安装熟悉一下快捷键。<br><img src="https://gitee.com/foam077/images/raw/master/img/9c228208-bfc5-4266-9237-e6667719476d.gif/" alt="img"></p>
+<h2 id="IDEA-Mind-Map"><a href="#IDEA-Mind-Map" class="headerlink" title="IDEA Mind Map"></a>IDEA Mind Map</h2><p>思维导图对于我们需求分析和知识库关系梳理十分重要。有了这个插件以后 IDEA 也可以画思维导图了。而且功能还十分强大，贴图啥的应有尽有<br><img src="https://gitee.com/foam077/images/raw/master/img/fdeb2a29-dadd-46a8-8470-9dcaed28f538.jpg/" alt="img"></p>
+<h2 id="CodeGlance"><a href="#CodeGlance" class="headerlink" title="CodeGlance"></a>CodeGlance</h2><p>代码编辑区迷你缩放插件，可以进行代码的全局预览。来看看效果吧<br><img src="https://gitee.com/foam077/images/raw/master/img/8201434c-1af4-4541-814d-3319272e9dce.jpg/" alt="img"></p>
+<h2 id="CamelCase"><a href="#CamelCase" class="headerlink" title="CamelCase"></a>CamelCase</h2><p>命名风格转换插件，可以在 kebab-case，SNAKE_CASE，PascalCase，camelCase，snake_case 和 空格风格之间切换。快捷键苹果为 ⇧+⌥+ U ，windows 下为 Shift + Alt +U<br><img src="https://gitee.com/foam077/images/raw/master/img/fc0c56ed-3faa-4561-a62a-79972d781f99.jpg/" alt="img"></p>
+<h2 id="MybatisX"><a href="#MybatisX" class="headerlink" title="MybatisX"></a>MybatisX</h2><p>Mybatis-plus 团队为 Mybatis 开发的插件，提供了 Mapper 接口和 XML之间的跳转和自动生成模版的功能<br><img src="https://gitee.com/foam077/images/raw/master/img/049c45ce-b90f-4dd7-9a93-66ac59bba065.jpg/" alt="img"></p>
+<h2 id="MyBatis-Log-Plugin"><a href="#MyBatis-Log-Plugin" class="headerlink" title="MyBatis Log Plugin"></a>MyBatis Log Plugin</h2><p>另一款国人关于 Mybatis 的作品，评分也很高，作用是将 Mybatis 生成的 sql 还原为原始整个 sql。方便在开发中从日志中跟踪调试 sql语句<br><a href="https://vdn.vzuu.com/SD/04205f24-23a2-11eb-a602-d6a043673cc5.mp4?disable_local_cache=1&amp;bu=078babd7&amp;c=avc.0.0&amp;f=mp4&amp;expiration=1652064414&amp;auth_key=1652064414-0-0-ed4dc28442589dc4e9e6703457fc9811&amp;v=ali&amp;pu=078babd7">https://vdn.vzuu.com/SD/04205f24-23a2-11eb-a602-d6a043673cc5.mp4?disable_local_cache=1&amp;bu=078babd7&amp;c=avc.0.0&amp;f=mp4&amp;expiration=1652064414&amp;auth_key=1652064414-0-0-ed4dc28442589dc4e9e6703457fc9811&amp;v=ali&amp;pu=078babd7</a></p>
+<h2 id="Git-Commit-Template"><a href="#Git-Commit-Template" class="headerlink" title="Git Commit Template"></a>Git Commit Template</h2><p>老是有人吐槽你提交的 Git 不规范？你可以试试这个插件。它提供了很好的 Git 格式化模版，你可以按照实际情况格式化你的提交信息<br><img src="https://gitee.com/foam077/images/raw/master/img/4dec18c9-6b03-433c-a1e1-3c89624e4e9f.jpg/" alt="img"></p>
+<h2 id="Fast-Request"><a href="#Fast-Request" class="headerlink" title="Fast Request"></a>Fast Request</h2><p>Fast Request是一个基于springmvc的帮助你快速生成url和参数的插件,同时也是一个http client工具,调试API的时候只需要点击生成图标即可在工具窗口生成方法的url以及对应的参数，再点击发送请求按钮即可完成api调试，非常实用，相比于 Http client和restfultool，该插件拥有postman一样的界面和参数生成功能，域名管理功能，自定义参数解析功能，功能更加强大全面<br>【缺点】收费<br><img src="https://gitee.com/foam077/images/raw/master/img/b2cdd37b-7b10-468b-a35d-68489cda7605.png/" alt="img"></p>
+<h2 id="Easy-Javadoc"><a href="#Easy-Javadoc" class="headerlink" title="Easy Javadoc"></a>Easy Javadoc</h2><p>快速生成javadoc文档，点击快捷键生成方法或类或属性的javadoc，同时支持各种渠道的翻译(建议不要用有道翻译，不准)<br><img src="https://gitee.com/foam077/images/raw/master/img/d11428a5-ae8e-46a1-963b-5b84466de68c.png/" alt="img"></p>
+<h2 id="MybatisCodeHelperPro"><a href="#MybatisCodeHelperPro" class="headerlink" title="MybatisCodeHelperPro"></a>MybatisCodeHelperPro</h2><p>最好的Mybatis代码提示，完整支持Mybatis动态sql代码提示，代码检测，写sql几乎所有地方都有代码提示，支持基于方法名动态生成sql，生成基础实体类及mapper，功能非常强大<br><img src="https://gitee.com/foam077/images/raw/master/img/ac025a3e-6f41-45d5-b9a5-0aad8b58c91d.png/" alt="img"><br><img src="https://gitee.com/foam077/images/raw/master/img/c7d441d0-5520-4439-a385-ec72cd94b848.png/" alt="img"></p>
+<h2 id="Translation"><a href="#Translation" class="headerlink" title="Translation"></a>Translation</h2><p>对于英文不好的开发者来说，这款插件就是神器，在看各种框架源码的时候十分有用; 选择右键就可以翻译，对于方法或者类上面的注释，只要按下F1就自动被翻译成中文<br>(建议自定义快捷键)<br><img src="https://gitee.com/foam077/images/raw/master/img/9d5f6612-6196-467f-9e20-90a91ecdf4ad.png/" alt="img"></p>
+<h2 id="Jrebel"><a href="#Jrebel" class="headerlink" title="Jrebel"></a>Jrebel</h2><p>老牌插件了，支持热启动，修改一些代码不再需要重启应用，大大减小项目重启带来的时间浪费，同时也支持远程启动调试<br><img src="https://gitee.com/foam077/images/raw/master/img/14cc8906-e2a1-40e8-8a07-b22d04b267e9.png/" alt="img"></p>
+<h2 id="ignore"><a href="#ignore" class="headerlink" title=".ignore"></a>.ignore</h2><p>.ignore是IDEA的一款专用忽略文件的插件<br><img src="https://gitee.com/foam077/images/raw/master/img/73ede4ce-3971-4c68-abf7-1deefeb78152.png/" alt="img"></p>
+<h2 id="google-java-format"><a href="#google-java-format" class="headerlink" title="google-java-format"></a>google-java-format</h2><p>google-java-format插件可以帮助我们不通过对应的快捷键就可以实现特定方式下自动格式化代码</p>
+<h2 id="Leetcode-Editor"><a href="#Leetcode-Editor" class="headerlink" title="Leetcode Editor"></a>Leetcode Editor</h2><p>LeetCode插件，可以在IDEA中在线刷题。上班摸鱼属实方便，表面上我在干活，实际上我在刷算法题<br><img src="https://gitee.com/foam077/images/raw/master/img/7f7c5086-3d6a-4794-941e-b77d02a8a01c.png/" alt="img"></p>
+<h2 id="Json-Parser"><a href="#Json-Parser" class="headerlink" title="Json Parser"></a>Json Parser</h2><p>厌倦了打开浏览器格式化和验证JSON?为什么不安装JSON解析器并在IDE中使用离线支持呢?JSON解析器是一个用于验证和格式化JSON字符串的轻量级插件<br><img src="https://gitee.com/foam077/images/raw/master/img/11aa823f-4418-4d35-aeb9-c561d32ef62f.png/" alt="img"></p>
+]]></content>
+      <tags>
+        <tag>idea</tag>
+        <tag>插件</tag>
       </tags>
   </entry>
   <entry>
@@ -836,54 +884,6 @@
       </tags>
   </entry>
   <entry>
-    <title>IDEA插件</title>
-    <url>/2022/05/09/0.2.2IDEA%E6%8F%92%E4%BB%B6/</url>
-    <content><![CDATA[<h2 id="插件官网"><a href="#插件官网" class="headerlink" title="插件官网"></a>插件官网</h2><p><a href="https://plugins.jetbrains.com/">JetBrains Marketplace</a></p>
-<h2 id="Alibaba-Java-Coding-Guidelines"><a href="#Alibaba-Java-Coding-Guidelines" class="headerlink" title="Alibaba Java Coding Guidelines"></a>Alibaba Java Coding Guidelines</h2><p>首先要推荐的是和《手册》配套的 <a href="https://link.zhihu.com/?target=https://plugins.jetbrains.com/plugin/10046-alibaba-java-coding-guidelines">阿里巴巴 Java代码规范</a>插件。<br>安装该插件后，代码超过 80 行、手动创建线程池等，这些和《手册》中的规约不符时，IDEA中会给出警告提示。</p>
-<h2 id="jclasslib-bytecode-viewer"><a href="#jclasslib-bytecode-viewer" class="headerlink" title="jclasslib bytecode viewer"></a>jclasslib bytecode viewer</h2><p>下面要隆重介绍的是一款可视化的字节码查看插件：<a href="https://link.zhihu.com/?target=https://plugins.jetbrains.com/plugin/9248-jclasslib-bytecode-viewer">jclasslib</a><br>大家可以直接在 IDEA 插件管理中安装（安装步骤略）<br><strong>使用方法：</strong></p>
-<ol>
-<li>在 IDEA 打开想研究的类</li>
-<li>编译该类或者直接编译整个项目（ 如果想研究的类在 jar 包中，此步可略过）</li>
-<li>打开“view” 菜单，选择“Show Bytecode With jclasslib” 选项</li>
-<li>选择上述菜单项后 IDEA 中会弹出 jclasslib 工具窗口<br><img src="https://gitee.com/foam077/images/raw/master/img/8e553cce-1641-4005-a6ff-6a3d37b0ac09.jpg/" alt="img"><br>那么有自带的强大的反汇编工具 javap 还有必要用这个插件吗？<br>这个插件的强大之处在于：</li>
-<li>不需要敲命令，简单直接，在右侧方便和源代码进行对比学习。</li>
-<li>字节码命令支持超链接，点击其中的虚拟机指令即可跳转到 jvms 相关章节，超级方便。<br>该插件对我们学习虚拟机指令有极大的帮助。<br>详细安装和介绍参考另外一篇手记：<a href="https://www.imooc.com/article/29625">https://www.imooc.com/article/29625</a></li>
-</ol>
-<h2 id="Codota"><a href="#Codota" class="headerlink" title="Codota"></a>Codota</h2><p>另外一个不得不说的就是专栏中提到的辅助开发神器: <a href="https://link.zhihu.com/?target=https://www.codota.com/code">Codota</a><br>可以点击下图所示“Add Codota to you IDEA” 了解安装步骤<br><img src="https://gitee.com/foam077/images/raw/master/img/7916b83c-b22f-4cc4-87c1-e6baf8dd31d3.png/" alt="img"><br>该插件的强大之处在于：</p>
-<ol>
-<li>支持智能代码自动提示，该功能可以增强 IDEA 的代码提示功能。</li>
-<li>支持 JDK 和知名第三方库的函数的使用方法搜索，可以看到其他知名开源项目对该函数的用法<br>当我们第一次使用某个类，对某个函数不够熟悉时，可以通过该插件搜索相关用法，快速模仿学习<br><img src="https://gitee.com/foam077/images/raw/master/img/8351c384-572e-4e28-9c8b-22249fd90af2.jpg/" alt="img"><br>如上图所示，我们想了解 Stream 类中 flatMap 函数的用法，可以使用该插件查看知名开源项目的用法<br>插件窗口顶部还给出了该类最常用的函数，可以点击查看相关用法案例，每个案例右侧的 “view source”可以跳转到该片段对应的开源项目的源码中</li>
-</ol>
-<h2 id="Auto-filling-Java-call-arguments"><a href="#Auto-filling-Java-call-arguments" class="headerlink" title="Auto filling Java call arguments"></a>Auto filling Java call arguments</h2><p>开发中，我们通常会调用其他已经编写好的函数，调用后需要填充参数，但是绝大多数情况下，传入的变量名称和该函数的参数名一致，当参数较多时，手动单个填充参数非常浪费时间<br>该插件就可以帮你解决这个问题<br>安装完该插件以后，调用一个函数，使用 Alt+Enter 组合键，调出 “Auto fill call parameters” 自动使用该函数定义的参数名填充</p>
-<h2 id="GenerateO2O、GenerateAllSetter"><a href="#GenerateO2O、GenerateAllSetter" class="headerlink" title="GenerateO2O、GenerateAllSetter"></a>GenerateO2O、GenerateAllSetter</h2><p>我们定义好从 A 类转换到 B 类的函数转换函数后，使用这两个插件可以自动调用 Getter 和 Setter 函数实行自动转换<br>实际开发中还有一个非常常见的场景： 我们创建一个对象后，想依次调用 Setter 函数对属性赋值，如果属性较多很容易遗漏或者重复<br><img src="https://gitee.com/foam077/images/raw/master/img/c66fd122-cab4-47cc-b961-c135cd4959a4.jpg/" alt="img"><br>可以使用这 GenerateAllSetter 提供的功能，自动调用所有 Setter 函数（可填充默认值），然后自己再跟进实际需求设置属性值</p>
-<h2 id="Rainbow-Brackets"><a href="#Rainbow-Brackets" class="headerlink" title="Rainbow Brackets"></a>Rainbow Brackets</h2><p>由于很多人没有养成好的编码风格，没有随手 format 代码的习惯，甚至有些同事会写代码超过几百行，阅读起来将非常痛苦<br>痛苦的原因之一就是找到上下文，由于括号太多，不确定当前代码行是否属于某个代码块，此时这个插件就会帮上大忙<br>插件 github 地址：<a href="https://github.com/izhangzhihao/intellij-rainbow-brackets">https://github.com/izhangzhihao/intellij-rainbow-brackets</a><br><img src="https://gitee.com/foam077/images/raw/master/img/fb0eecd3-58fb-4c94-983b-0c857429b1af.jpg/" alt="img"><br>大家可以观看其 github 首页的动图体会和学习其强大功能</p>
-<h2 id="Maven-Helper"><a href="#Maven-Helper" class="headerlink" title="Maven Helper"></a>Maven Helper</h2><p>现在 Java 项目通常会使用 maven 或者 gradle 构建，对于maven 项目来说， jar 包冲突非常常见<br>那么如何更容易地查看和解决 jar 包冲突呢？<br><img src="https://gitee.com/foam077/images/raw/master/img/6d4402db-659a-46a5-a3c5-2eca8e2d8fef.jpg/" alt="img"><br>大家可以安装该插件，安装后 IDEA 中打开 pom.xml 文件时，就会多出一个 “Dependency Analyzer” 选项卡<br>如上图所示，该插件支持值插件冲突的 jar 包，可以选择冲突的 jar 包将其 exclude 掉</p>
-<h2 id="FindBugs"><a href="#FindBugs" class="headerlink" title="FindBugs"></a>FindBugs</h2><p>程序员总是想尽可能地避免写 BUG， <a href="https://link.zhihu.com/?target=https://plugins.jetbrains.com/plugin/3847-findbugs-idea">FindBugs</a> 作为静态代码检查插件，可以检查你代码中的隐患，并给出原因。<br><img src="https://gitee.com/foam077/images/raw/master/img/7a194699-57ed-4fa2-90dc-0ea77f6387aa.jpg/" alt="img"><br>当然还有很多类似的静态代码检查插件，大家可以自行了解安装</p>
-<h2 id="SequenceDiagram"><a href="#SequenceDiagram" class="headerlink" title="SequenceDiagram"></a>SequenceDiagram</h2><p><a href="https://link.zhihu.com/?target=https://plugins.jetbrains.com/plugin/8286-sequencediagram/">SequenceDiagram</a> 可以根据代码调用链路自动生成时序图，超级赞，超级推荐！<br>这对研究源码，梳理工作中的业务代码有极大的帮助，堪称神器。<br>安装完成后，在某个类的某个函数中，右键 –Sequence Diagaram 即可调出。<br>如下图是 Netty 的源码，可以通过该插件绘制出当前函数的调用链路。<br><img src="https://gitee.com/foam077/images/raw/master/img/9fcf9f6f-fca3-4e84-bde3-4fcae1d094cc.jpg/" alt="img"><br>双击顶部的类名可以跳转到对应类的源码中，双击调用的函数名可以直接调入某个函数的源码，总之非常强大。</p>
-<h2 id="Java-Stream-Debugger"><a href="#Java-Stream-Debugger" class="headerlink" title="Java Stream Debugger"></a>Java Stream Debugger</h2><p>Stream 非常好用，可以灵活对数据进行操作，但是对很多刚接触的人来说，不好理解。<br>那么 <a href="https://link.zhihu.com/?target=https://plugins.jetbrains.com/plugin/9696-java-stream-debugger/">Java Stream Debugger</a> 这款神器的 IDEA 就可以帮到你。它可以将 Stream 的操作步骤可视化，非常有助于我们的学习。<br><img src="https://gitee.com/foam077/images/raw/master/img/8ca3318a-0e7c-41a5-aeca-9fdd2f22fe64.png/" alt="img"><br><img src="https://gitee.com/foam077/images/raw/master/img/65dd07a0-1d0e-44e7-aa53-6d5214f41b67.png/" alt="img"></p>
-<h2 id="Key-promoter-X"><a href="#Key-promoter-X" class="headerlink" title="Key promoter X"></a>Key promoter X</h2><p>很多人不愿意切换 IDE 就是因为快捷键的习惯问题。刚好这个插件可以提醒快捷键，有代入感，提醒的多了你就会了。对于新手建议安装熟悉一下快捷键。<br><img src="https://gitee.com/foam077/images/raw/master/img/9c228208-bfc5-4266-9237-e6667719476d.gif/" alt="img"></p>
-<h2 id="IDEA-Mind-Map"><a href="#IDEA-Mind-Map" class="headerlink" title="IDEA Mind Map"></a>IDEA Mind Map</h2><p>思维导图对于我们需求分析和知识库关系梳理十分重要。有了这个插件以后 IDEA 也可以画思维导图了。而且功能还十分强大，贴图啥的应有尽有<br><img src="https://gitee.com/foam077/images/raw/master/img/fdeb2a29-dadd-46a8-8470-9dcaed28f538.jpg/" alt="img"></p>
-<h2 id="CodeGlance"><a href="#CodeGlance" class="headerlink" title="CodeGlance"></a>CodeGlance</h2><p>代码编辑区迷你缩放插件，可以进行代码的全局预览。来看看效果吧<br><img src="https://gitee.com/foam077/images/raw/master/img/8201434c-1af4-4541-814d-3319272e9dce.jpg/" alt="img"></p>
-<h2 id="CamelCase"><a href="#CamelCase" class="headerlink" title="CamelCase"></a>CamelCase</h2><p>命名风格转换插件，可以在 kebab-case，SNAKE_CASE，PascalCase，camelCase，snake_case 和 空格风格之间切换。快捷键苹果为 ⇧+⌥+ U ，windows 下为 Shift + Alt +U<br><img src="https://gitee.com/foam077/images/raw/master/img/fc0c56ed-3faa-4561-a62a-79972d781f99.jpg/" alt="img"></p>
-<h2 id="MybatisX"><a href="#MybatisX" class="headerlink" title="MybatisX"></a>MybatisX</h2><p>Mybatis-plus 团队为 Mybatis 开发的插件，提供了 Mapper 接口和 XML之间的跳转和自动生成模版的功能<br><img src="https://gitee.com/foam077/images/raw/master/img/049c45ce-b90f-4dd7-9a93-66ac59bba065.jpg/" alt="img"></p>
-<h2 id="MyBatis-Log-Plugin"><a href="#MyBatis-Log-Plugin" class="headerlink" title="MyBatis Log Plugin"></a>MyBatis Log Plugin</h2><p>另一款国人关于 Mybatis 的作品，评分也很高，作用是将 Mybatis 生成的 sql 还原为原始整个 sql。方便在开发中从日志中跟踪调试 sql语句<br><a href="https://vdn.vzuu.com/SD/04205f24-23a2-11eb-a602-d6a043673cc5.mp4?disable_local_cache=1&amp;bu=078babd7&amp;c=avc.0.0&amp;f=mp4&amp;expiration=1652064414&amp;auth_key=1652064414-0-0-ed4dc28442589dc4e9e6703457fc9811&amp;v=ali&amp;pu=078babd7">https://vdn.vzuu.com/SD/04205f24-23a2-11eb-a602-d6a043673cc5.mp4?disable_local_cache=1&amp;bu=078babd7&amp;c=avc.0.0&amp;f=mp4&amp;expiration=1652064414&amp;auth_key=1652064414-0-0-ed4dc28442589dc4e9e6703457fc9811&amp;v=ali&amp;pu=078babd7</a></p>
-<h2 id="Git-Commit-Template"><a href="#Git-Commit-Template" class="headerlink" title="Git Commit Template"></a>Git Commit Template</h2><p>老是有人吐槽你提交的 Git 不规范？你可以试试这个插件。它提供了很好的 Git 格式化模版，你可以按照实际情况格式化你的提交信息<br><img src="https://gitee.com/foam077/images/raw/master/img/4dec18c9-6b03-433c-a1e1-3c89624e4e9f.jpg/" alt="img"></p>
-<h2 id="Fast-Request"><a href="#Fast-Request" class="headerlink" title="Fast Request"></a>Fast Request</h2><p>Fast Request是一个基于springmvc的帮助你快速生成url和参数的插件,同时也是一个http client工具,调试API的时候只需要点击生成图标即可在工具窗口生成方法的url以及对应的参数，再点击发送请求按钮即可完成api调试，非常实用，相比于 Http client和restfultool，该插件拥有postman一样的界面和参数生成功能，域名管理功能，自定义参数解析功能，功能更加强大全面<br>【缺点】收费<br><img src="https://gitee.com/foam077/images/raw/master/img/b2cdd37b-7b10-468b-a35d-68489cda7605.png/" alt="img"></p>
-<h2 id="Easy-Javadoc"><a href="#Easy-Javadoc" class="headerlink" title="Easy Javadoc"></a>Easy Javadoc</h2><p>快速生成javadoc文档，点击快捷键生成方法或类或属性的javadoc，同时支持各种渠道的翻译(建议不要用有道翻译，不准)<br><img src="https://gitee.com/foam077/images/raw/master/img/d11428a5-ae8e-46a1-963b-5b84466de68c.png/" alt="img"></p>
-<h2 id="MybatisCodeHelperPro"><a href="#MybatisCodeHelperPro" class="headerlink" title="MybatisCodeHelperPro"></a>MybatisCodeHelperPro</h2><p>最好的Mybatis代码提示，完整支持Mybatis动态sql代码提示，代码检测，写sql几乎所有地方都有代码提示，支持基于方法名动态生成sql，生成基础实体类及mapper，功能非常强大<br><img src="https://gitee.com/foam077/images/raw/master/img/ac025a3e-6f41-45d5-b9a5-0aad8b58c91d.png/" alt="img"><br><img src="https://gitee.com/foam077/images/raw/master/img/c7d441d0-5520-4439-a385-ec72cd94b848.png/" alt="img"></p>
-<h2 id="Translation"><a href="#Translation" class="headerlink" title="Translation"></a>Translation</h2><p>对于英文不好的开发者来说，这款插件就是神器，在看各种框架源码的时候十分有用; 选择右键就可以翻译，对于方法或者类上面的注释，只要按下F1就自动被翻译成中文<br>(建议自定义快捷键)<br><img src="https://gitee.com/foam077/images/raw/master/img/9d5f6612-6196-467f-9e20-90a91ecdf4ad.png/" alt="img"></p>
-<h2 id="Jrebel"><a href="#Jrebel" class="headerlink" title="Jrebel"></a>Jrebel</h2><p>老牌插件了，支持热启动，修改一些代码不再需要重启应用，大大减小项目重启带来的时间浪费，同时也支持远程启动调试<br><img src="https://gitee.com/foam077/images/raw/master/img/14cc8906-e2a1-40e8-8a07-b22d04b267e9.png/" alt="img"></p>
-<h2 id="ignore"><a href="#ignore" class="headerlink" title=".ignore"></a>.ignore</h2><p>.ignore是IDEA的一款专用忽略文件的插件<br><img src="https://gitee.com/foam077/images/raw/master/img/73ede4ce-3971-4c68-abf7-1deefeb78152.png/" alt="img"></p>
-<h2 id="google-java-format"><a href="#google-java-format" class="headerlink" title="google-java-format"></a>google-java-format</h2><p>google-java-format插件可以帮助我们不通过对应的快捷键就可以实现特定方式下自动格式化代码</p>
-<h2 id="Leetcode-Editor"><a href="#Leetcode-Editor" class="headerlink" title="Leetcode Editor"></a>Leetcode Editor</h2><p>LeetCode插件，可以在IDEA中在线刷题。上班摸鱼属实方便，表面上我在干活，实际上我在刷算法题<br><img src="https://gitee.com/foam077/images/raw/master/img/7f7c5086-3d6a-4794-941e-b77d02a8a01c.png/" alt="img"></p>
-<h2 id="Json-Parser"><a href="#Json-Parser" class="headerlink" title="Json Parser"></a>Json Parser</h2><p>厌倦了打开浏览器格式化和验证JSON?为什么不安装JSON解析器并在IDE中使用离线支持呢?JSON解析器是一个用于验证和格式化JSON字符串的轻量级插件<br><img src="https://gitee.com/foam077/images/raw/master/img/11aa823f-4418-4d35-aeb9-c561d32ef62f.png/" alt="img"></p>
-]]></content>
-      <tags>
-        <tag>idea</tag>
-        <tag>插件</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>AOP解决内部方法调用不生效问题</title>
     <url>/2022/05/28/0.2.4-AOP%E8%A7%A3%E5%86%B3%E5%86%85%E9%83%A8%E6%96%B9%E6%B3%95%E8%B0%83%E7%94%A8%E4%B8%8D%E7%94%9F%E6%95%88%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<blockquote>
@@ -918,6 +918,10 @@
 </li>
 </ul>
 ]]></content>
+      <tags>
+        <tag>自定义注解</tag>
+        <tag>AOP</tag>
+      </tags>
   </entry>
   <entry>
     <title>定时任务使用总结</title>
@@ -1048,213 +1052,6 @@
 <li><a href="https://juejin.cn/post/6987191113689858084">分布式定时任务框架选型</a></li>
 </ul>
 ]]></content>
-  </entry>
-  <entry>
-    <title>aop的简单使用</title>
-    <url>/2022/04/25/0.1.2aop%E7%9A%84%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/</url>
-    <content><![CDATA[<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><blockquote>
-<p> AOP 的全称是“Aspect Oriented Programming”，即面向切面编程，和 OOP（面向对象编程）类似，也是一种编程思想</p>
-</blockquote>
-<p>AOP 采取横向抽取机制（动态代理），取代了传统纵向继承机制的重复性代码，其应用主要体现在事务处理、日志管理、权限控制、异常处理等方面。主要作用是分离功能性需求和非功能性需求，使开发人员可以集中处理某一个关注点或者横切逻辑，减少对业务代码的侵入，增强代码的可读性和可维护性。</p>
-<p><code>AOP 的作用就是保证开发者在不修改源代码的前提下，为系统中的业务组件添加某种通用功能</code>AOP 就是代理模式的典型应用。</p>
-<p>目前最流行的 AOP 框架有两个，分别为 <strong>Spring AOP 和 AspectJ</strong></p>
-<ul>
-<li>Spring AOP 是基于 AOP 编程模式的一个框架，它能够有效的减少系统间的重复代码，达到松耦合的目的。Spring AOP 使用纯 Java 实现，不需要专门的编译过程和类加载器，在运行期间通过代理方式向目标类植入增强的代码。有两种实现方式：基于接口的 JDK 动态代理和基于继承的 CGLIB 动态代理</li>
-<li>AspectJ 是一个基于 Java 语言的 AOP 框架，从 Spring 2.0 开始，Spring AOP 引入了对 AspectJ 的支持。AspectJ 扩展了 Java 语言，提供了一个专门的编译器，在编译时提供横向代码的植入</li>
-</ul>
-<h2 id="spring4-0执行顺序"><a href="#spring4-0执行顺序" class="headerlink" title="spring4.0执行顺序"></a>spring4.0执行顺序</h2><p><strong>正常执行顺序</strong></p>
-<blockquote>
-<p>around开始 – before – 方法调用 –  around结束 – after 执行 – afterReturning 执行</p>
-</blockquote>
-<p><strong>异常执行顺序</strong></p>
-<blockquote>
-<p>around开始 – before – 方法调用 –  around结束 – after 执行 – afterThrowing 执行</p>
-</blockquote>
-<h2 id="spring5-28执行顺序"><a href="#spring5-28执行顺序" class="headerlink" title="spring5.28执行顺序"></a>spring5.28执行顺序</h2><p><strong>正常执行顺序</strong></p>
-<blockquote>
-<p>around开始 – before – 方法调用 – afterReturning 执行 – after 执行 –  around结束</p>
-</blockquote>
-<p><strong>异常执行顺序</strong></p>
-<blockquote>
-<p>around开始 – before – 方法调用 – afterThrowing 执行 – after 执行 –  around结束</p>
-</blockquote>
-<h2 id="普通使用（直接匹配包）"><a href="#普通使用（直接匹配包）" class="headerlink" title="普通使用（直接匹配包）"></a>普通使用（直接匹配包）</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> org.aspectj.lang.JoinPoint;</span><br><span class="line"><span class="keyword">import</span> org.aspectj.lang.ProceedingJoinPoint;</span><br><span class="line"><span class="keyword">import</span> org.aspectj.lang.annotation.*;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.context.request.RequestContextHolder;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.context.request.ServletRequestAttributes;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletRequest;</span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> dw</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@ClassName</span> MyAop</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span> AOP 各个通知使用示例：</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@EnableAspectJAutoProxy</span> ： 默认已开启不需要再添加响应的注解</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/8/15 0:21</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyAop</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Logger log = LoggerFactory.getLogger(<span class="keyword">this</span>.getClass());</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 定义切入点 (一个切面类中可以定义多个切入点)</span></span><br><span class="line"><span class="comment">     * 拦截所有 com.dw.study.controller 包以及子包下所有类的所有方案</span></span><br><span class="line"><span class="comment">     * 第一个 * 表示所有返回值</span></span><br><span class="line"><span class="comment">     * 第二个 * 表示所有类</span></span><br><span class="line"><span class="comment">     * 第三个 * 表示所有的方法名</span></span><br><span class="line"><span class="comment">     * 两个 .. 表示当前包以及子包</span></span><br><span class="line"><span class="comment">     **/</span></span><br><span class="line">    <span class="meta">@Pointcut(&quot;execution(* com.dw.study.controller..*.*(..))&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">aspect</span><span class="params">()</span> </span>&#123;&#125;    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 前置通知，目标方法调用前被调用</span></span><br><span class="line"><span class="comment">     * 除<span class="doctag">@Around</span>外，每个方法里都可以加或者不加参数JoinPoint。</span></span><br><span class="line"><span class="comment">     * JoinPoint包含了类名、被切面的方法名、参数等属性。</span></span><br><span class="line"><span class="comment">     **/</span></span><br><span class="line">    <span class="meta">@Before(value = &quot;aspect()&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">before</span><span class="params">(JoinPoint joinPoint)</span> </span>&#123;</span><br><span class="line">        log.info(<span class="string">&quot;AOP before 执行... ：参数类型：&#123;&#125;&quot;</span>, joinPoint.getArgs());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 最终通知，目标方法执行完之后执行</span></span><br><span class="line"><span class="comment">     **/</span></span><br><span class="line">    <span class="meta">@After(value = &quot;aspect()&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">after</span><span class="params">(JoinPoint joinPoint)</span> </span>&#123;</span><br><span class="line">        log.info(<span class="string">&quot;AOP after 执行...  ：&#123;&#125;&quot;</span>, joinPoint.toLongString());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 后置返回通知</span></span><br><span class="line"><span class="comment">     * 如果参数中的第一个参数为JoinPoint，则第二个参数为返回值的信息</span></span><br><span class="line"><span class="comment">     * 如果参数中的第一个参数不为JoinPoint，则第一个参数为returning中对应的参数</span></span><br><span class="line"><span class="comment">     * returning 只有目标方法返回值与通知方法具有相应参数类型时才能执行后置返回通知，否则不执行</span></span><br><span class="line"><span class="comment">     * 除了使用上面定义好的切面aspect()， 也可以直接使用表达式。</span></span><br><span class="line"><span class="comment">     **/</span></span><br><span class="line">    <span class="meta">@AfterReturning(value = &quot;execution(* com.dw.study.controller..*.*(..))&quot;, returning = &quot;result&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterReturning</span><span class="params">(JoinPoint joinPoint, Object result)</span> </span>&#123;</span><br><span class="line">        log.info(<span class="string">&quot;AOP afterReturning 执行...  ：返回结果：&#123;&#125;&quot;</span>, result);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 环绕通知</span></span><br><span class="line"><span class="comment">     * 环绕通知非常强大，可以决定目标方法是否执行，什么时候执行，执行时是否需要替换方法参数，执行完毕是否需要替换返回值。</span></span><br><span class="line"><span class="comment">     * 环绕通知第一个参数必须是org.aspectj.lang.ProceedingJoinPoint类型</span></span><br><span class="line"><span class="comment">     * 2：proceedingJoinPoint.proceed() 执行被代理的方法</span></span><br><span class="line"><span class="comment">     **/</span></span><br><span class="line">    <span class="meta">@Around(value = &quot;aspect()&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">around</span><span class="params">(ProceedingJoinPoint proceedingJoinPoint)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            log.info(<span class="string">&quot;AOP around开始... 执行方法... ：&#123;&#125;&quot;</span>, proceedingJoinPoint.getSignature().getName());</span><br><span class="line">            Object proceed = proceedingJoinPoint.proceed();</span><br><span class="line">            log.info(<span class="string">&quot;AOP around结束... 执行方法... ：&#123;&#125;&quot;</span>, proceedingJoinPoint.getSignature().getName());</span><br><span class="line">            <span class="keyword">return</span> proceed;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable throwable) &#123;</span><br><span class="line">            log.info(<span class="string">&quot;AOP around 执行错误... error ：&#123;&#125;&quot;</span>, throwable.getMessage());</span><br><span class="line">            throwable.printStackTrace();</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;执行around出错。。。&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 后置异常通知</span></span><br><span class="line"><span class="comment">     * 定义一个名字，该名字用于匹配通知实现方法的一个参数名，当目标方法抛出异常返回后，将把目标方法抛出的异常传给通知方法；</span></span><br><span class="line"><span class="comment">     * throwing 只有目标方法抛出的异常与通知方法相应参数异常类型时才能执行后置异常通知，否则不执行，</span></span><br><span class="line"><span class="comment">     **/</span></span><br><span class="line">    <span class="meta">@AfterThrowing(value = &quot;aspect()&quot;, throwing = &quot;exception&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterThrowing</span><span class="params">(JoinPoint joinPoint, Throwable exception)</span> </span>&#123;</span><br><span class="line">        log.error(<span class="string">&quot;AOP afterThrowing 执行... , msg : &#123;&#125;&quot;</span>, exception.getMessage());</span><br><span class="line">        <span class="keyword">if</span> (exception <span class="keyword">instanceof</span> NullPointerException)</span><br><span class="line">            log.info(<span class="string">&quot;空指针异常&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="自定义注解匹配-无参"><a href="#自定义注解匹配-无参" class="headerlink" title="自定义注解匹配(无参)"></a>自定义注解匹配(无参)</h2><h3 id="1-自定义注解"><a href="#1-自定义注解" class="headerlink" title="1.自定义注解"></a>1.自定义注解</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target(ElementType.METHOD)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> MethodAspect &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-定义切面"><a href="#2-定义切面" class="headerlink" title="2.定义切面"></a>2.定义切面</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyAop</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Logger log = LoggerFactory.getLogger(<span class="keyword">this</span>.getClass());<span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 基于注解定义切入点 2</span></span><br><span class="line"><span class="comment">     * 对于注解了 <span class="doctag">@MethodAspect</span>的方法进行拦截</span></span><br><span class="line"><span class="comment">     * 表示标注了特定注解的目标方法链接点。如<span class="doctag">@annotation</span>(com.dw.study.TestAnnotation)表示任何标注了<span class="doctag">@TestAnnotation</span>注解的目标类方法。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Pointcut(&quot;@annotation(com.dw.study.customAnnotation.MethodAspect)&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testMyAnnotationAspect</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 前置通知，目标方法调用前被调用</span></span><br><span class="line"><span class="comment">     * 除<span class="doctag">@Around</span>外，每个方法里都可以加或者不加参数JoinPoint。</span></span><br><span class="line"><span class="comment">     * JoinPoint包含了类名、被切面的方法名、参数等属性。</span></span><br><span class="line"><span class="comment">     **/</span></span><br><span class="line">    <span class="meta">@Before(value = &quot;testMyAnnotationAspect()&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">before</span><span class="params">(JoinPoint joinPoint)</span> </span>&#123;</span><br><span class="line">        log.info(<span class="string">&quot;AOP before 执行... ：参数类型：&#123;&#125;&quot;</span>, joinPoint.getArgs());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-扫描"><a href="#3-扫描" class="headerlink" title="3.扫描"></a>3.扫描</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(&quot;hello&quot;)</span></span><br><span class="line"><span class="meta">@MethodAspect</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">hello</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;SpringBoot-HelloWorld&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="自定义注解匹配-带参"><a href="#自定义注解匹配-带参" class="headerlink" title="自定义注解匹配(带参)"></a>自定义注解匹配(带参)</h2><h3 id="1-自定义注解-1"><a href="#1-自定义注解-1" class="headerlink" title="1.自定义注解"></a>1.自定义注解</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target(ElementType.METHOD)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> MethodAspect &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 传值</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">String <span class="title">value</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 描述</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">String <span class="title">description</span><span class="params">()</span> <span class="keyword">default</span> &quot;<span class="keyword">default</span> description&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-定义切面-1"><a href="#2-定义切面-1" class="headerlink" title="2.定义切面"></a>2.定义切面</h3><p><strong><code>如果需要获取@annotation中的值，需要和方法参数名相同</code></strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyAop</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Logger log = LoggerFactory.getLogger(<span class="keyword">this</span>.getClass());</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 基于注解定义切入点 2</span></span><br><span class="line"><span class="comment">     * 对于注解了 <span class="doctag">@MethodAspect</span>的方法进行拦截</span></span><br><span class="line"><span class="comment">     * 表示标注了特定注解的目标方法链接点。如<span class="doctag">@annotation</span>(com.dw.study.TestAnnotation)表示任何标注了<span class="doctag">@TestAnnotation</span>注解的目标类方法。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Pointcut(&quot;@annotation(com.dw.study.customAnnotation.MethodAspect)&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testMyAnnotationAspect</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 前置通知，目标方法调用前被调用</span></span><br><span class="line"><span class="comment">     * 除<span class="doctag">@Around</span>外，每个方法里都可以加或者不加参数JoinPoint。</span></span><br><span class="line"><span class="comment">     * JoinPoint包含了类名、被切面的方法名、参数等属性。</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@annotation</span>中的值，需要和方法参数名相同(重要)</span></span><br><span class="line"><span class="comment">     **/</span></span><br><span class="line">    <span class="meta">@Before(value = &quot;testMyAnnotationAspect() &amp;&amp; @annotation(methodAspect)&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">before</span><span class="params">(JoinPoint joinPoint, MethodAspect methodAspect)</span> </span>&#123;</span><br><span class="line">        log.info(<span class="string">&quot;AOP before 执行... ：参数类型：&#123;&#125;&quot;</span>, joinPoint.getArgs());</span><br><span class="line">        log.info(<span class="string">&quot;before-value== &quot;</span>+ methodAspect.value() + <span class="string">&quot;before-description== &quot;</span> + methodAspect.description());</span><br><span class="line">        <span class="comment">// 接收到请求，记录请求内容</span></span><br><span class="line">        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();</span><br><span class="line">        HttpServletRequest request = attributes.getRequest();</span><br><span class="line">        <span class="comment">// 记录下请求内容</span></span><br><span class="line">        System.out.println(<span class="string">&quot;URL : &quot;</span> + request.getRequestURL().toString());</span><br><span class="line">        System.out.println(<span class="string">&quot;HTTP_METHOD : &quot;</span> + request.getMethod());</span><br><span class="line">        System.out.println(<span class="string">&quot;IP : &quot;</span> + request.getRemoteAddr());</span><br><span class="line">        System.out.println(<span class="string">&quot;CLASS_METHOD : &quot;</span> + joinPoint.getSignature().getDeclaringTypeName() + <span class="string">&quot;.&quot;</span> + joinPoint.getSignature().getName());</span><br><span class="line">        System.out.println(<span class="string">&quot;ARGS : &quot;</span> + Arrays.toString(joinPoint.getArgs()));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 环绕通知</span></span><br><span class="line"><span class="comment">     * 环绕通知非常强大，可以决定目标方法是否执行，什么时候执行，执行时是否需要替换方法参数，执行完毕是否需要替换返回值。</span></span><br><span class="line"><span class="comment">     * 环绕通知第一个参数必须是org.aspectj.lang.ProceedingJoinPoint类型</span></span><br><span class="line"><span class="comment">     * 2：proceedingJoinPoint.proceed() 执行被代理的方法</span></span><br><span class="line"><span class="comment">     *   <span class="doctag">@annotation</span>中的值，需要和方法参数名相同</span></span><br><span class="line"><span class="comment">     **/</span></span><br><span class="line">    <span class="meta">@Around(value = &quot;testMyAnnotationAspect() &amp;&amp; @annotation(methodAspect)&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">around</span><span class="params">(ProceedingJoinPoint proceedingJoinPoint, MethodAspect methodAspect)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            log.info(<span class="string">&quot;AOP around开始... 执行方法... ：&#123;&#125;&quot;</span>, proceedingJoinPoint.getSignature().getName());</span><br><span class="line">            log.info(<span class="string">&quot;around-value== &quot;</span>+ methodAspect.value() + <span class="string">&quot;around-description== &quot;</span> + methodAspect.description());</span><br><span class="line">            Object proceed = proceedingJoinPoint.proceed();</span><br><span class="line">            log.info(<span class="string">&quot;AOP around结束... 执行方法... ：&#123;&#125;&quot;</span>, proceedingJoinPoint.getSignature().getName());</span><br><span class="line">            <span class="keyword">return</span> proceed;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable throwable) &#123;</span><br><span class="line">            log.info(<span class="string">&quot;AOP around 执行错误... error ：&#123;&#125;&quot;</span>, throwable.getMessage());</span><br><span class="line">            throwable.printStackTrace();</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;执行around出错。。。&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="附文"><a href="#附文" class="headerlink" title="附文"></a>附文</h2><p>为了更好地理解 AOP，我们需要了解一些它的相关术语。这些专业术语并不是 Spring 特有的，有些也同样适用于其它 AOP 框架，如 AspectJ。</p>
-<p>它们的含义如下表所示：</p>
-<table>
-<thead>
-<tr>
-<th align="center">名称</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">Joinpoint（连接点）</td>
-<td align="center">指那些被拦截到的点，在 Spring 中，指可以被动态代理拦截目标类的方法。</td>
-</tr>
-<tr>
-<td align="center">Pointcut（切入点）</td>
-<td align="center">指要对哪些 Joinpoint 进行拦截，即被拦截的连接点。</td>
-</tr>
-<tr>
-<td align="center">Advice（通知）</td>
-<td align="center">指拦截到 Joinpoint 之后要做的事情，即对切入点增强的内容。</td>
-</tr>
-<tr>
-<td align="center">Target（目标）</td>
-<td align="center">指代理的目标对象。</td>
-</tr>
-<tr>
-<td align="center">Weaving（植入）</td>
-<td align="center">指把增强代码应用到目标上，生成代理对象的过程。</td>
-</tr>
-<tr>
-<td align="center">Proxy（代理）</td>
-<td align="center">指生成的代理对象。</td>
-</tr>
-<tr>
-<td align="center">Aspect（切面）</td>
-<td align="center">切入点和通知的结合。</td>
-</tr>
-</tbody></table>
-<p>Advice 直译为通知，也有的资料翻译为“增强处理”，共有 5 种类型，如下表所示：</p>
-<table>
-<thead>
-<tr>
-<th align="center">通知</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">before（前置通知）</td>
-<td align="center">通知方法在目标方法调用之前执行</td>
-</tr>
-<tr>
-<td align="center">after（后置通知）</td>
-<td align="center">通知方法在目标方法返回或异常后调用</td>
-</tr>
-<tr>
-<td align="center">after-returning（返回后通知）</td>
-<td align="center">通知方法会在目标方法返回后调用</td>
-</tr>
-<tr>
-<td align="center">after-throwing（抛出异常通知）</td>
-<td align="center">通知方法会在目标方法抛出异常后调用</td>
-</tr>
-<tr>
-<td align="center">around（环绕通知）</td>
-<td align="center">通知方法会将目标方法封装起来</td>
-</tr>
-</tbody></table>
-<h3 id="execution表达式："><a href="#execution表达式：" class="headerlink" title="execution表达式："></a>execution表达式：</h3><p>用于匹配方法执行的连接点，属于方法级别， 语法： <code>execution(修饰符 返回值类型 方法名（参数）异常)</code></p>
-<table>
-<thead>
-<tr>
-<th align="center"><strong>语法参数</strong></th>
-<th align="center"><strong>描述</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"><strong>修饰符</strong></td>
-<td align="center"><strong>可选，如public，protected，写在返回值前，任意修饰符填<code>*</code>号就可以</strong></td>
-</tr>
-<tr>
-<td align="center"><strong>返回值类型</strong></td>
-<td align="center"><strong><code>必选</code>，可以使用<code>*</code>来代表任意返回值</strong></td>
-</tr>
-<tr>
-<td align="center"><strong>方法名</strong></td>
-<td align="center"><strong><code>必选</code>，可以用<code>*</code>来代表任意方法</strong></td>
-</tr>
-<tr>
-<td align="center"><strong>参数</strong></td>
-<td align="center"><strong><code>必选， ()</code>代表是没有参数，<code>(..)</code>代表是匹配任意数量，任意类型的参数，当然也可以指定类型的参数进行匹配，如要接受一个String类型的参数，则<code>(java.lang.String)</code>, 任意数量的String类型参数：<code>(java.lang.String..)</code>等等。。。</strong></td>
-</tr>
-<tr>
-<td align="center"><strong>异常</strong></td>
-<td align="center"><strong>可选，语法：<code>throws 异常</code>，异常是完整带包名，可以是多个，用逗号分隔</strong></td>
-</tr>
-</tbody></table>
-<p><strong>execution()表达式案例</strong>：</p>
-<ul>
-<li><strong>拦截</strong><code>com.dw.study</code><strong>包下的所有子包里的任意类的任意方法</strong><br><strong><code>execution(* com.dw.study..*.*(..))</code></strong></li>
-<li><strong>拦截</strong><code>com.dw.study</code><strong>.Test2Controller下的任意方法</strong><br><strong><code>execution(* **</code>com.dw.study<code>**.Test2Controller.*(..))</code></strong></li>
-<li><strong>拦截任何修饰符为public的方法</strong><br><strong><code>execution(public * * (..))</code></strong></li>
-<li><strong>拦截</strong><code>com.dw.study</code><strong>下的所有子包里的以ok开头的方法</strong><br><strong><code>execution(* **</code>com.dw.study<code>**..*.ok* (..))</code></strong></li>
-</ul>
-<h3 id="JoinPoint"><a href="#JoinPoint" class="headerlink" title="JoinPoint"></a><strong>JoinPoint</strong></h3><p>JoinPoint对象封装了SpringAop中切面方法的信息,在切面方法中添加JoinPoint参数,就可以获取到封装了该方法信息的JoinPoint对象。 除 <strong>@Around</strong> 外，每个通知的方法里都可以加或者不加参数JoinPoint。JoinPoint包含了类名、被切面的方法名、参数等属性。@Around 参数必须为 ProceedingJoinPoint</p>
-<table>
-<thead>
-<tr>
-<th align="center">方法名</th>
-<th align="center">功能</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">Signature getSignature();</td>
-<td align="center">获取封装了署名信息的对象,在该对象中可以获取到目标方法名,所属类的Class等信息</td>
-</tr>
-<tr>
-<td align="center">Object[] getArgs();</td>
-<td align="center">获取传入目标方法的参数对象</td>
-</tr>
-<tr>
-<td align="center">Object getTarget();</td>
-<td align="center">获取被代理的对象</td>
-</tr>
-<tr>
-<td align="center">Object getThis();</td>
-<td align="center">获取代理对象</td>
-</tr>
-</tbody></table>
-<h3 id="ProceedingJoinPoint"><a href="#ProceedingJoinPoint" class="headerlink" title="ProceedingJoinPoint"></a><strong>ProceedingJoinPoint</strong></h3><p> ProceedingJoinPoint对象是JoinPoint 的子接口, 该对象只用在@Around的切面方法中：</p>
-<table>
-<thead>
-<tr>
-<th align="center">方法名</th>
-<th align="center">功能</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">Object proceed() throws Throwable</td>
-<td align="center">执行目标方法</td>
-</tr>
-<tr>
-<td align="center">Object proceed(Object[] var1) throws Throwable</td>
-<td align="center">传入的新的参数去执行目标方法</td>
-</tr>
-</tbody></table>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>AOP 是 Spring 的核心之一，在 Spring 中经常会使用 AOP 来简化编程。</p>
-<p> 在 Spring 框架中使用 AOP 主要有以下优势：</p>
-<ul>
-<li>提供声明式企业服务，特别是作为 EJB 声明式服务的替代品。最重要的是，这种服务是声明式事务管理。</li>
-<li>允许用户实现自定义切面。在某些不适合用 OOP 编程的场景中，采用 AOP 来补充。</li>
-<li>可以对业务逻辑的各个部分进行隔离，从而使业务逻辑各部分之间的耦合度降低，提高程序的可重用性，同时也提高了开发效率。</li>
-</ul>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><p><a href="https://www.cnblogs.com/dw3306/p/15077474.html"><strong>Spring AOP：基于AspectJ注解开发</strong></a></p>
-</li>
-<li><p><a href="https://blog.csdn.net/q982151756/article/details/80513340?spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-1.pc_relevant_default&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-1.pc_relevant_default&utm_relevant_index=2">细说SpringAop详解</a></p>
-</li>
-<li><p><a href="https://zhuanlan.zhihu.com/p/395709988">https://zhuanlan.zhihu.com/p/395709988</a></p>
-</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>aop</tag>
-      </tags>
   </entry>
   <entry>
     <title>mycat简单介绍</title>
@@ -1785,6 +1582,213 @@
         <tag>分库分表</tag>
         <tag>多数据源</tag>
         <tag>mysql</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>aop的简单使用</title>
+    <url>/2022/04/25/0.1.2aop%E7%9A%84%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><blockquote>
+<p> AOP 的全称是“Aspect Oriented Programming”，即面向切面编程，和 OOP（面向对象编程）类似，也是一种编程思想</p>
+</blockquote>
+<p>AOP 采取横向抽取机制（动态代理），取代了传统纵向继承机制的重复性代码，其应用主要体现在事务处理、日志管理、权限控制、异常处理等方面。主要作用是分离功能性需求和非功能性需求，使开发人员可以集中处理某一个关注点或者横切逻辑，减少对业务代码的侵入，增强代码的可读性和可维护性。</p>
+<p><code>AOP 的作用就是保证开发者在不修改源代码的前提下，为系统中的业务组件添加某种通用功能</code>AOP 就是代理模式的典型应用。</p>
+<p>目前最流行的 AOP 框架有两个，分别为 <strong>Spring AOP 和 AspectJ</strong></p>
+<ul>
+<li>Spring AOP 是基于 AOP 编程模式的一个框架，它能够有效的减少系统间的重复代码，达到松耦合的目的。Spring AOP 使用纯 Java 实现，不需要专门的编译过程和类加载器，在运行期间通过代理方式向目标类植入增强的代码。有两种实现方式：基于接口的 JDK 动态代理和基于继承的 CGLIB 动态代理</li>
+<li>AspectJ 是一个基于 Java 语言的 AOP 框架，从 Spring 2.0 开始，Spring AOP 引入了对 AspectJ 的支持。AspectJ 扩展了 Java 语言，提供了一个专门的编译器，在编译时提供横向代码的植入</li>
+</ul>
+<h2 id="spring4-0执行顺序"><a href="#spring4-0执行顺序" class="headerlink" title="spring4.0执行顺序"></a>spring4.0执行顺序</h2><p><strong>正常执行顺序</strong></p>
+<blockquote>
+<p>around开始 – before – 方法调用 –  around结束 – after 执行 – afterReturning 执行</p>
+</blockquote>
+<p><strong>异常执行顺序</strong></p>
+<blockquote>
+<p>around开始 – before – 方法调用 –  around结束 – after 执行 – afterThrowing 执行</p>
+</blockquote>
+<h2 id="spring5-28执行顺序"><a href="#spring5-28执行顺序" class="headerlink" title="spring5.28执行顺序"></a>spring5.28执行顺序</h2><p><strong>正常执行顺序</strong></p>
+<blockquote>
+<p>around开始 – before – 方法调用 – afterReturning 执行 – after 执行 –  around结束</p>
+</blockquote>
+<p><strong>异常执行顺序</strong></p>
+<blockquote>
+<p>around开始 – before – 方法调用 – afterThrowing 执行 – after 执行 –  around结束</p>
+</blockquote>
+<h2 id="普通使用（直接匹配包）"><a href="#普通使用（直接匹配包）" class="headerlink" title="普通使用（直接匹配包）"></a>普通使用（直接匹配包）</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> org.aspectj.lang.JoinPoint;</span><br><span class="line"><span class="keyword">import</span> org.aspectj.lang.ProceedingJoinPoint;</span><br><span class="line"><span class="keyword">import</span> org.aspectj.lang.annotation.*;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.context.request.RequestContextHolder;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.context.request.ServletRequestAttributes;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletRequest;</span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> dw</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@ClassName</span> MyAop</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span> AOP 各个通知使用示例：</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@EnableAspectJAutoProxy</span> ： 默认已开启不需要再添加响应的注解</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/8/15 0:21</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyAop</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Logger log = LoggerFactory.getLogger(<span class="keyword">this</span>.getClass());</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 定义切入点 (一个切面类中可以定义多个切入点)</span></span><br><span class="line"><span class="comment">     * 拦截所有 com.dw.study.controller 包以及子包下所有类的所有方案</span></span><br><span class="line"><span class="comment">     * 第一个 * 表示所有返回值</span></span><br><span class="line"><span class="comment">     * 第二个 * 表示所有类</span></span><br><span class="line"><span class="comment">     * 第三个 * 表示所有的方法名</span></span><br><span class="line"><span class="comment">     * 两个 .. 表示当前包以及子包</span></span><br><span class="line"><span class="comment">     **/</span></span><br><span class="line">    <span class="meta">@Pointcut(&quot;execution(* com.dw.study.controller..*.*(..))&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">aspect</span><span class="params">()</span> </span>&#123;&#125;    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 前置通知，目标方法调用前被调用</span></span><br><span class="line"><span class="comment">     * 除<span class="doctag">@Around</span>外，每个方法里都可以加或者不加参数JoinPoint。</span></span><br><span class="line"><span class="comment">     * JoinPoint包含了类名、被切面的方法名、参数等属性。</span></span><br><span class="line"><span class="comment">     **/</span></span><br><span class="line">    <span class="meta">@Before(value = &quot;aspect()&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">before</span><span class="params">(JoinPoint joinPoint)</span> </span>&#123;</span><br><span class="line">        log.info(<span class="string">&quot;AOP before 执行... ：参数类型：&#123;&#125;&quot;</span>, joinPoint.getArgs());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 最终通知，目标方法执行完之后执行</span></span><br><span class="line"><span class="comment">     **/</span></span><br><span class="line">    <span class="meta">@After(value = &quot;aspect()&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">after</span><span class="params">(JoinPoint joinPoint)</span> </span>&#123;</span><br><span class="line">        log.info(<span class="string">&quot;AOP after 执行...  ：&#123;&#125;&quot;</span>, joinPoint.toLongString());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 后置返回通知</span></span><br><span class="line"><span class="comment">     * 如果参数中的第一个参数为JoinPoint，则第二个参数为返回值的信息</span></span><br><span class="line"><span class="comment">     * 如果参数中的第一个参数不为JoinPoint，则第一个参数为returning中对应的参数</span></span><br><span class="line"><span class="comment">     * returning 只有目标方法返回值与通知方法具有相应参数类型时才能执行后置返回通知，否则不执行</span></span><br><span class="line"><span class="comment">     * 除了使用上面定义好的切面aspect()， 也可以直接使用表达式。</span></span><br><span class="line"><span class="comment">     **/</span></span><br><span class="line">    <span class="meta">@AfterReturning(value = &quot;execution(* com.dw.study.controller..*.*(..))&quot;, returning = &quot;result&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterReturning</span><span class="params">(JoinPoint joinPoint, Object result)</span> </span>&#123;</span><br><span class="line">        log.info(<span class="string">&quot;AOP afterReturning 执行...  ：返回结果：&#123;&#125;&quot;</span>, result);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 环绕通知</span></span><br><span class="line"><span class="comment">     * 环绕通知非常强大，可以决定目标方法是否执行，什么时候执行，执行时是否需要替换方法参数，执行完毕是否需要替换返回值。</span></span><br><span class="line"><span class="comment">     * 环绕通知第一个参数必须是org.aspectj.lang.ProceedingJoinPoint类型</span></span><br><span class="line"><span class="comment">     * 2：proceedingJoinPoint.proceed() 执行被代理的方法</span></span><br><span class="line"><span class="comment">     **/</span></span><br><span class="line">    <span class="meta">@Around(value = &quot;aspect()&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">around</span><span class="params">(ProceedingJoinPoint proceedingJoinPoint)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            log.info(<span class="string">&quot;AOP around开始... 执行方法... ：&#123;&#125;&quot;</span>, proceedingJoinPoint.getSignature().getName());</span><br><span class="line">            Object proceed = proceedingJoinPoint.proceed();</span><br><span class="line">            log.info(<span class="string">&quot;AOP around结束... 执行方法... ：&#123;&#125;&quot;</span>, proceedingJoinPoint.getSignature().getName());</span><br><span class="line">            <span class="keyword">return</span> proceed;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable throwable) &#123;</span><br><span class="line">            log.info(<span class="string">&quot;AOP around 执行错误... error ：&#123;&#125;&quot;</span>, throwable.getMessage());</span><br><span class="line">            throwable.printStackTrace();</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;执行around出错。。。&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 后置异常通知</span></span><br><span class="line"><span class="comment">     * 定义一个名字，该名字用于匹配通知实现方法的一个参数名，当目标方法抛出异常返回后，将把目标方法抛出的异常传给通知方法；</span></span><br><span class="line"><span class="comment">     * throwing 只有目标方法抛出的异常与通知方法相应参数异常类型时才能执行后置异常通知，否则不执行，</span></span><br><span class="line"><span class="comment">     **/</span></span><br><span class="line">    <span class="meta">@AfterThrowing(value = &quot;aspect()&quot;, throwing = &quot;exception&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterThrowing</span><span class="params">(JoinPoint joinPoint, Throwable exception)</span> </span>&#123;</span><br><span class="line">        log.error(<span class="string">&quot;AOP afterThrowing 执行... , msg : &#123;&#125;&quot;</span>, exception.getMessage());</span><br><span class="line">        <span class="keyword">if</span> (exception <span class="keyword">instanceof</span> NullPointerException)</span><br><span class="line">            log.info(<span class="string">&quot;空指针异常&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="自定义注解匹配-无参"><a href="#自定义注解匹配-无参" class="headerlink" title="自定义注解匹配(无参)"></a>自定义注解匹配(无参)</h2><h3 id="1-自定义注解"><a href="#1-自定义注解" class="headerlink" title="1.自定义注解"></a>1.自定义注解</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target(ElementType.METHOD)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> MethodAspect &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-定义切面"><a href="#2-定义切面" class="headerlink" title="2.定义切面"></a>2.定义切面</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyAop</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Logger log = LoggerFactory.getLogger(<span class="keyword">this</span>.getClass());<span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 基于注解定义切入点 2</span></span><br><span class="line"><span class="comment">     * 对于注解了 <span class="doctag">@MethodAspect</span>的方法进行拦截</span></span><br><span class="line"><span class="comment">     * 表示标注了特定注解的目标方法链接点。如<span class="doctag">@annotation</span>(com.dw.study.TestAnnotation)表示任何标注了<span class="doctag">@TestAnnotation</span>注解的目标类方法。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Pointcut(&quot;@annotation(com.dw.study.customAnnotation.MethodAspect)&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testMyAnnotationAspect</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 前置通知，目标方法调用前被调用</span></span><br><span class="line"><span class="comment">     * 除<span class="doctag">@Around</span>外，每个方法里都可以加或者不加参数JoinPoint。</span></span><br><span class="line"><span class="comment">     * JoinPoint包含了类名、被切面的方法名、参数等属性。</span></span><br><span class="line"><span class="comment">     **/</span></span><br><span class="line">    <span class="meta">@Before(value = &quot;testMyAnnotationAspect()&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">before</span><span class="params">(JoinPoint joinPoint)</span> </span>&#123;</span><br><span class="line">        log.info(<span class="string">&quot;AOP before 执行... ：参数类型：&#123;&#125;&quot;</span>, joinPoint.getArgs());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-扫描"><a href="#3-扫描" class="headerlink" title="3.扫描"></a>3.扫描</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(&quot;hello&quot;)</span></span><br><span class="line"><span class="meta">@MethodAspect</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">hello</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;SpringBoot-HelloWorld&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="自定义注解匹配-带参"><a href="#自定义注解匹配-带参" class="headerlink" title="自定义注解匹配(带参)"></a>自定义注解匹配(带参)</h2><h3 id="1-自定义注解-1"><a href="#1-自定义注解-1" class="headerlink" title="1.自定义注解"></a>1.自定义注解</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target(ElementType.METHOD)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> MethodAspect &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 传值</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">String <span class="title">value</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 描述</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">String <span class="title">description</span><span class="params">()</span> <span class="keyword">default</span> &quot;<span class="keyword">default</span> description&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-定义切面-1"><a href="#2-定义切面-1" class="headerlink" title="2.定义切面"></a>2.定义切面</h3><p><strong><code>如果需要获取@annotation中的值，需要和方法参数名相同</code></strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyAop</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Logger log = LoggerFactory.getLogger(<span class="keyword">this</span>.getClass());</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 基于注解定义切入点 2</span></span><br><span class="line"><span class="comment">     * 对于注解了 <span class="doctag">@MethodAspect</span>的方法进行拦截</span></span><br><span class="line"><span class="comment">     * 表示标注了特定注解的目标方法链接点。如<span class="doctag">@annotation</span>(com.dw.study.TestAnnotation)表示任何标注了<span class="doctag">@TestAnnotation</span>注解的目标类方法。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Pointcut(&quot;@annotation(com.dw.study.customAnnotation.MethodAspect)&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testMyAnnotationAspect</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 前置通知，目标方法调用前被调用</span></span><br><span class="line"><span class="comment">     * 除<span class="doctag">@Around</span>外，每个方法里都可以加或者不加参数JoinPoint。</span></span><br><span class="line"><span class="comment">     * JoinPoint包含了类名、被切面的方法名、参数等属性。</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@annotation</span>中的值，需要和方法参数名相同(重要)</span></span><br><span class="line"><span class="comment">     **/</span></span><br><span class="line">    <span class="meta">@Before(value = &quot;testMyAnnotationAspect() &amp;&amp; @annotation(methodAspect)&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">before</span><span class="params">(JoinPoint joinPoint, MethodAspect methodAspect)</span> </span>&#123;</span><br><span class="line">        log.info(<span class="string">&quot;AOP before 执行... ：参数类型：&#123;&#125;&quot;</span>, joinPoint.getArgs());</span><br><span class="line">        log.info(<span class="string">&quot;before-value== &quot;</span>+ methodAspect.value() + <span class="string">&quot;before-description== &quot;</span> + methodAspect.description());</span><br><span class="line">        <span class="comment">// 接收到请求，记录请求内容</span></span><br><span class="line">        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();</span><br><span class="line">        HttpServletRequest request = attributes.getRequest();</span><br><span class="line">        <span class="comment">// 记录下请求内容</span></span><br><span class="line">        System.out.println(<span class="string">&quot;URL : &quot;</span> + request.getRequestURL().toString());</span><br><span class="line">        System.out.println(<span class="string">&quot;HTTP_METHOD : &quot;</span> + request.getMethod());</span><br><span class="line">        System.out.println(<span class="string">&quot;IP : &quot;</span> + request.getRemoteAddr());</span><br><span class="line">        System.out.println(<span class="string">&quot;CLASS_METHOD : &quot;</span> + joinPoint.getSignature().getDeclaringTypeName() + <span class="string">&quot;.&quot;</span> + joinPoint.getSignature().getName());</span><br><span class="line">        System.out.println(<span class="string">&quot;ARGS : &quot;</span> + Arrays.toString(joinPoint.getArgs()));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 环绕通知</span></span><br><span class="line"><span class="comment">     * 环绕通知非常强大，可以决定目标方法是否执行，什么时候执行，执行时是否需要替换方法参数，执行完毕是否需要替换返回值。</span></span><br><span class="line"><span class="comment">     * 环绕通知第一个参数必须是org.aspectj.lang.ProceedingJoinPoint类型</span></span><br><span class="line"><span class="comment">     * 2：proceedingJoinPoint.proceed() 执行被代理的方法</span></span><br><span class="line"><span class="comment">     *   <span class="doctag">@annotation</span>中的值，需要和方法参数名相同</span></span><br><span class="line"><span class="comment">     **/</span></span><br><span class="line">    <span class="meta">@Around(value = &quot;testMyAnnotationAspect() &amp;&amp; @annotation(methodAspect)&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">around</span><span class="params">(ProceedingJoinPoint proceedingJoinPoint, MethodAspect methodAspect)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            log.info(<span class="string">&quot;AOP around开始... 执行方法... ：&#123;&#125;&quot;</span>, proceedingJoinPoint.getSignature().getName());</span><br><span class="line">            log.info(<span class="string">&quot;around-value== &quot;</span>+ methodAspect.value() + <span class="string">&quot;around-description== &quot;</span> + methodAspect.description());</span><br><span class="line">            Object proceed = proceedingJoinPoint.proceed();</span><br><span class="line">            log.info(<span class="string">&quot;AOP around结束... 执行方法... ：&#123;&#125;&quot;</span>, proceedingJoinPoint.getSignature().getName());</span><br><span class="line">            <span class="keyword">return</span> proceed;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable throwable) &#123;</span><br><span class="line">            log.info(<span class="string">&quot;AOP around 执行错误... error ：&#123;&#125;&quot;</span>, throwable.getMessage());</span><br><span class="line">            throwable.printStackTrace();</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;执行around出错。。。&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="附文"><a href="#附文" class="headerlink" title="附文"></a>附文</h2><p>为了更好地理解 AOP，我们需要了解一些它的相关术语。这些专业术语并不是 Spring 特有的，有些也同样适用于其它 AOP 框架，如 AspectJ。</p>
+<p>它们的含义如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th align="center">名称</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Joinpoint（连接点）</td>
+<td align="center">指那些被拦截到的点，在 Spring 中，指可以被动态代理拦截目标类的方法。</td>
+</tr>
+<tr>
+<td align="center">Pointcut（切入点）</td>
+<td align="center">指要对哪些 Joinpoint 进行拦截，即被拦截的连接点。</td>
+</tr>
+<tr>
+<td align="center">Advice（通知）</td>
+<td align="center">指拦截到 Joinpoint 之后要做的事情，即对切入点增强的内容。</td>
+</tr>
+<tr>
+<td align="center">Target（目标）</td>
+<td align="center">指代理的目标对象。</td>
+</tr>
+<tr>
+<td align="center">Weaving（植入）</td>
+<td align="center">指把增强代码应用到目标上，生成代理对象的过程。</td>
+</tr>
+<tr>
+<td align="center">Proxy（代理）</td>
+<td align="center">指生成的代理对象。</td>
+</tr>
+<tr>
+<td align="center">Aspect（切面）</td>
+<td align="center">切入点和通知的结合。</td>
+</tr>
+</tbody></table>
+<p>Advice 直译为通知，也有的资料翻译为“增强处理”，共有 5 种类型，如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th align="center">通知</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">before（前置通知）</td>
+<td align="center">通知方法在目标方法调用之前执行</td>
+</tr>
+<tr>
+<td align="center">after（后置通知）</td>
+<td align="center">通知方法在目标方法返回或异常后调用</td>
+</tr>
+<tr>
+<td align="center">after-returning（返回后通知）</td>
+<td align="center">通知方法会在目标方法返回后调用</td>
+</tr>
+<tr>
+<td align="center">after-throwing（抛出异常通知）</td>
+<td align="center">通知方法会在目标方法抛出异常后调用</td>
+</tr>
+<tr>
+<td align="center">around（环绕通知）</td>
+<td align="center">通知方法会将目标方法封装起来</td>
+</tr>
+</tbody></table>
+<h3 id="execution表达式："><a href="#execution表达式：" class="headerlink" title="execution表达式："></a>execution表达式：</h3><p>用于匹配方法执行的连接点，属于方法级别， 语法： <code>execution(修饰符 返回值类型 方法名（参数）异常)</code></p>
+<table>
+<thead>
+<tr>
+<th align="center"><strong>语法参数</strong></th>
+<th align="center"><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong>修饰符</strong></td>
+<td align="center"><strong>可选，如public，protected，写在返回值前，任意修饰符填<code>*</code>号就可以</strong></td>
+</tr>
+<tr>
+<td align="center"><strong>返回值类型</strong></td>
+<td align="center"><strong><code>必选</code>，可以使用<code>*</code>来代表任意返回值</strong></td>
+</tr>
+<tr>
+<td align="center"><strong>方法名</strong></td>
+<td align="center"><strong><code>必选</code>，可以用<code>*</code>来代表任意方法</strong></td>
+</tr>
+<tr>
+<td align="center"><strong>参数</strong></td>
+<td align="center"><strong><code>必选， ()</code>代表是没有参数，<code>(..)</code>代表是匹配任意数量，任意类型的参数，当然也可以指定类型的参数进行匹配，如要接受一个String类型的参数，则<code>(java.lang.String)</code>, 任意数量的String类型参数：<code>(java.lang.String..)</code>等等。。。</strong></td>
+</tr>
+<tr>
+<td align="center"><strong>异常</strong></td>
+<td align="center"><strong>可选，语法：<code>throws 异常</code>，异常是完整带包名，可以是多个，用逗号分隔</strong></td>
+</tr>
+</tbody></table>
+<p><strong>execution()表达式案例</strong>：</p>
+<ul>
+<li><strong>拦截</strong><code>com.dw.study</code><strong>包下的所有子包里的任意类的任意方法</strong><br><strong><code>execution(* com.dw.study..*.*(..))</code></strong></li>
+<li><strong>拦截</strong><code>com.dw.study</code><strong>.Test2Controller下的任意方法</strong><br><strong><code>execution(* **</code>com.dw.study<code>**.Test2Controller.*(..))</code></strong></li>
+<li><strong>拦截任何修饰符为public的方法</strong><br><strong><code>execution(public * * (..))</code></strong></li>
+<li><strong>拦截</strong><code>com.dw.study</code><strong>下的所有子包里的以ok开头的方法</strong><br><strong><code>execution(* **</code>com.dw.study<code>**..*.ok* (..))</code></strong></li>
+</ul>
+<h3 id="JoinPoint"><a href="#JoinPoint" class="headerlink" title="JoinPoint"></a><strong>JoinPoint</strong></h3><p>JoinPoint对象封装了SpringAop中切面方法的信息,在切面方法中添加JoinPoint参数,就可以获取到封装了该方法信息的JoinPoint对象。 除 <strong>@Around</strong> 外，每个通知的方法里都可以加或者不加参数JoinPoint。JoinPoint包含了类名、被切面的方法名、参数等属性。@Around 参数必须为 ProceedingJoinPoint</p>
+<table>
+<thead>
+<tr>
+<th align="center">方法名</th>
+<th align="center">功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Signature getSignature();</td>
+<td align="center">获取封装了署名信息的对象,在该对象中可以获取到目标方法名,所属类的Class等信息</td>
+</tr>
+<tr>
+<td align="center">Object[] getArgs();</td>
+<td align="center">获取传入目标方法的参数对象</td>
+</tr>
+<tr>
+<td align="center">Object getTarget();</td>
+<td align="center">获取被代理的对象</td>
+</tr>
+<tr>
+<td align="center">Object getThis();</td>
+<td align="center">获取代理对象</td>
+</tr>
+</tbody></table>
+<h3 id="ProceedingJoinPoint"><a href="#ProceedingJoinPoint" class="headerlink" title="ProceedingJoinPoint"></a><strong>ProceedingJoinPoint</strong></h3><p> ProceedingJoinPoint对象是JoinPoint 的子接口, 该对象只用在@Around的切面方法中：</p>
+<table>
+<thead>
+<tr>
+<th align="center">方法名</th>
+<th align="center">功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Object proceed() throws Throwable</td>
+<td align="center">执行目标方法</td>
+</tr>
+<tr>
+<td align="center">Object proceed(Object[] var1) throws Throwable</td>
+<td align="center">传入的新的参数去执行目标方法</td>
+</tr>
+</tbody></table>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>AOP 是 Spring 的核心之一，在 Spring 中经常会使用 AOP 来简化编程。</p>
+<p> 在 Spring 框架中使用 AOP 主要有以下优势：</p>
+<ul>
+<li>提供声明式企业服务，特别是作为 EJB 声明式服务的替代品。最重要的是，这种服务是声明式事务管理。</li>
+<li>允许用户实现自定义切面。在某些不适合用 OOP 编程的场景中，采用 AOP 来补充。</li>
+<li>可以对业务逻辑的各个部分进行隔离，从而使业务逻辑各部分之间的耦合度降低，提高程序的可重用性，同时也提高了开发效率。</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><p><a href="https://www.cnblogs.com/dw3306/p/15077474.html"><strong>Spring AOP：基于AspectJ注解开发</strong></a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/q982151756/article/details/80513340?spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-1.pc_relevant_default&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-1.pc_relevant_default&utm_relevant_index=2">细说SpringAop详解</a></p>
+</li>
+<li><p><a href="https://zhuanlan.zhihu.com/p/395709988">https://zhuanlan.zhihu.com/p/395709988</a></p>
+</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>aop</tag>
       </tags>
   </entry>
 </search>
